@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help — Stock Management</title>
+<meta name="description" content="How to use Stock Management: products, stock in and out, locations and transfers, barcode scanning, stocktake, selling and bills, reports, import, backup and remote access.">
+<style>
+  :root {
+    --bg: #f6f9f9; --surface: #ffffff; --text: #10201f; --muted: #5b6b6a;
+    --primary: #0f5f63; --primary-soft: #dcefef; --border: #dde7e6;
+    --note-bg: #fff7e6; --note-border: #f0d79a; --note-text: #6b4b00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1717; --surface: #162222; --text: #e2ecec; --muted: #94a8a7;
+      --primary: #86d4d6; --primary-soft: #1d3b3c; --border: #2a3b3b;
+      --note-bg: #2e2612; --note-border: #5e4b1c; --note-text: #f2d9a0;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 40px 24px 96px; }
+  header { border-radius: 16px; padding: 32px 28px; margin-bottom: 18px;
+    background: linear-gradient(135deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); color: #fff; }
+  header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+  header p { margin: 0; opacity: 0.92; font-size: 15px; }
+  .searchbar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; }
+  .searchbar input { width: 100%; font: inherit; font-size: 16px; padding: 12px 16px;
+    border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); }
+  .searchbar input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+  #noresults { display: none; text-align: center; color: var(--muted); padding: 24px 0; }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; padding: 0; list-style: none; }
+  .toc a { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 14px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+  .toc a:hover { border-color: var(--primary); text-decoration: none; }
+  .card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 24px; margin: 14px 0; }
+  h2 { font-size: 20px; font-weight: 650; margin: 0 0 4px; letter-spacing: -0.005em; }
+  .card > .lead { color: var(--muted); font-size: 14.5px; margin: 0 0 10px; }
+  details { border-top: 1px solid var(--border); }
+  details:first-of-type { border-top: none; }
+  summary { cursor: pointer; padding: 11px 28px 11px 0; font-weight: 600; list-style: none; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; right: 4px; top: 9px; font-size: 20px;
+    font-weight: 400; color: var(--muted); }
+  details[open] > summary::after { content: "\2212"; }
+  details > div { padding: 0 0 14px; }
+  details:target > summary, details.hit > summary { color: var(--primary); }
+  p, ul, ol { margin: 0 0 10px; }
+  ul, ol { padding-left: 22px; } li { margin-bottom: 5px; }
+  .ui { font-weight: 600; white-space: nowrap; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .note { background: var(--note-bg); border: 1px solid var(--note-border); color: var(--note-text);
+    border-radius: 10px; padding: 10px 14px; font-size: 14.5px; margin: 10px 0; }
+  .permalink { font-size: 13px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); background: var(--primary-soft); }
+  tr:last-child td { border-bottom: none; }
+  code { background: var(--primary-soft); padding: 1px 6px; border-radius: 4px;
+    font-size: 13px; font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
+  a { color: var(--primary); text-decoration: none; } a:hover { text-decoration: underline; }
+  footer { margin-top: 32px; text-align: center; color: var(--muted); font-size: 13px; }
+  .hidden { display: none !important; }
+  @media (max-width: 480px) {
+    .wrap { padding: 20px 16px 64px; }
+    header { padding: 24px 20px; } header h1 { font-size: 24px; }
+    .card { padding: 16px 18px; } h2 { font-size: 18px; }
+    .ui { white-space: normal; }
+    table { font-size: 13px; } th, td { padding: 7px 8px; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header>
+  <h1>Stock Management — Help</h1>
+  <p>How to do everything in the app &middot; written for version 1.98 &middot; last updated <time datetime="2026-10-01">Oct 1, 2026</time></p>
+</header>
+
+<div class="searchbar">
+  <input id="q" type="search" placeholder="Search the help — e.g. move stock, barcode, backup, bill" aria-label="Search the help" autocomplete="off">
+</div>
+
+<nav aria-label="Topics">
+  <ul class="toc">
+    <li><a href="#start">Getting started</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#stock">Stock in &amp; out</a></li>
+    <li><a href="#locations">Locations &amp; transfers</a></li>
+    <li><a href="#lots">Lots, expiry, serials</a></li>
+    <li><a href="#scanner">Barcode scanner</a></li>
+    <li><a href="#stocktake">Stocktake</a></li>
+    <li><a href="#sell">Selling &amp; bills</a></li>
+    <li><a href="#history">History &amp; corrections</a></li>
+    <li><a href="#reports">Reports &amp; labels</a></li>
+    <li><a href="#import">Import</a></li>
+    <li><a href="#backup">Backup &amp; new phone</a></li>
+    <li><a href="#remote">Use it from a PC</a></li>
+    <li><a href="#notifications">Notifications</a></li>
+    <li><a href="#customize">Customize</a></li>
+    <li><a href="#trash">Trash</a></li>
+    <li><a href="#trouble">Problems &amp; contact</a></li>
+  </ul>
+</nav>
+
+<div class="note"><strong>Can&rsquo;t find something described here?</strong> Update the app from Google Play first. This page describes the current version, and many features (moving stock between locations, lots, selling, bills) only arrived in recent updates. You can see what each update added in <span class="ui">Settings &rarr; What&rsquo;s new</span>.</div>
+
+<p id="noresults">Nothing matches that search. Try a shorter word, or <a href="#contact">ask us</a>.</p>
+
+<!-- ============================================================ -->
+<section class="card" id="start">
+  <h2>Getting started</h2>
+  <p class="lead">What the app is, the first screen, and finding your way around.</p>
+
+  <details id="what-is-it"><summary>What is Stock Management?</summary><div>
+    <p>An inventory app for shops, warehouses and small businesses. You keep a list of products with SKUs and barcodes, record stock coming in and going out, and always know how much you have, where it is, and what it is worth. It also does stocktakes, sales with printed bills, reports, labels and backups.</p>
+    <p>Everything is stored <strong>on your phone</strong>. There is no account to create and no subscription.</p>
+  </div></details>
+
+  <details id="internet"><summary>Do I need an account or an internet connection?</summary><div>
+    <p>No. The app works fully offline and has no sign-in. Your data never leaves the device unless you send it somewhere yourself (a backup, an exported report).</p>
+    <p>Only a few things use a network: sending feedback, opening the Google Play page, backups to an FTP or SMB server, and Remote access (which uses your local Wi-Fi, not the internet).</p>
+  </div></details>
+
+  <details id="first-screen"><summary>The first screen asks how I want to start. What should I choose?</summary><div>
+    <ul>
+      <li><span class="ui">Restore a backup</span> &mdash; you already used the app on another phone and have a backup. See <a href="#new-phone">moving to a new phone</a>.</li>
+      <li><span class="ui">Import from a spreadsheet</span> &mdash; your products are already in Excel or Google Sheets. See <a href="#import">Import</a>.</li>
+      <li><span class="ui">Start with my own inventory</span> &mdash; an empty app; add products one by one.</li>
+      <li>A <strong>sample set</strong> (General store, Clothing shop, Bookstore) &mdash; fills the app with demo products so you can look around.</li>
+    </ul>
+    <p>This screen only appears once, but nothing is lost by choosing: you can import, restore or add products at any time later.</p>
+  </div></details>
+
+  <details id="sample-data"><summary>How do I load or remove the sample data?</summary><div>
+    <p>Sample data can only be added while the app is empty: on the welcome screen, or from the <span class="ui">Try it with sample data</span> card on the Dashboard. The app tells you exactly how many products, categories, suppliers and locations it will add before it adds them.</p>
+    <p>To remove it, tap <span class="ui">Clear sample data</span> on the Dashboard banner. Only the sample records are removed.</p>
+  </div></details>
+
+  <details id="menu"><summary>Where are all the screens? I only see four at the bottom.</summary><div>
+    <p>On a phone the bottom bar shows the Dashboard and the first three screens of your menu. Everything else is in the <span class="ui">&#8942;</span> menu at the top right of each screen: Sell, Stocktake, Transactions, Reports, Categories, Suppliers, Locations, Labels, Import, Backup, Trash, Remote access and Settings. On a tablet they are all in the side rail.</p>
+    <p>To choose which screens get the bottom bar, go to <span class="ui">Settings &rarr; Menu configuration</span> and move them up or down. You can hide screens you never use too (Dashboard and Settings always stay).</p>
+  </div></details>
+
+  <details id="language"><summary>How do I change the language?</summary><div>
+    <p><span class="ui">Settings &rarr; Language</span>. The app is available in English, Español, Français, Português, Русский, 中文, العربية, हिन्दी, বাংলা, اردو and Bahasa Indonesia.</p>
+  </div></details>
+
+  <details id="dashboard"><summary>What does the Dashboard show?</summary><div>
+    <p>Total products, low stock, stock value, recent moves, alerts and charts (stock levels, products and value by category, movements over 7 and 30 days, what needs reordering, stock value by location and by supplier, most moved products, and lots expiring soon).</p>
+    <p>Tap <span class="ui">Customize dashboard</span> at the foot of the Dashboard, or go to <span class="ui">Settings &rarr; Dashboard</span>, to hide cards, change their order and set how wide each one is.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="products">
+  <h2>Products</h2>
+  <p class="lead">Adding, editing, organizing and finding products.</p>
+
+  <details id="add-product"><summary>How do I add a product?</summary><div>
+    <ol>
+      <li>Open <span class="ui">Products</span> and tap <span class="ui">+</span>.</li>
+      <li>Fill in <span class="ui">SKU</span> and <span class="ui">Name</span> (both required). The SKU is your own code for the item and must be unique.</li>
+      <li>Optionally add a photo, description, category, location, supplier, unit (units, kg, litres&hellip;), min and max stock, cost price, selling price and barcode. The barcode field has a scan button.</li>
+      <li>Enter the <span class="ui">Quantity</span> you have right now. This is recorded as the product&rsquo;s initial stock.</li>
+      <li>Tap <span class="ui">Save product</span>.</li>
+    </ol>
+    <p>Faster ways: scan an unknown barcode in the <a href="#scanner">Scanner</a> and tap <span class="ui">Add product with this barcode</span>, or <a href="#import">import</a> a whole list from a spreadsheet.</p>
+  </div></details>
+
+  <details id="edit-quantity"><summary>Why can&rsquo;t I change the quantity when I edit a product?</summary><div>
+    <p>On purpose. Every change of stock is recorded as a movement (who, when, why, before and after), so the history always adds up. Change quantities with <a href="#stock-in-out">Stock in / Stock out</a>, <a href="#quick-stock">Quick stock</a>, the <a href="#scanner">Scanner</a> or a <a href="#stocktake">Stocktake</a>. Everything else on the product (name, prices, barcode, category&hellip;) is edited with the pencil on the product page.</p>
+  </div></details>
+
+  <details id="product-photo"><summary>How do I add a photo to a product?</summary><div>
+    <p>On the product form tap <span class="ui">Add photo</span>, then <span class="ui">Take photo</span> or <span class="ui">Choose from gallery</span>. Products without a photo show a parcel picture in their category&rsquo;s colour.</p>
+  </div></details>
+
+  <details id="delete-product"><summary>How do I delete a product, and can I get it back?</summary><div>
+    <p>Open the product and tap the bin icon at the top. Its past movements stay in the history. The product goes to the <a href="#trash">Trash</a>, where you can restore it later.</p>
+  </div></details>
+
+  <details id="find-product"><summary>How do I search, sort and filter the product list?</summary><div>
+    <p>The search box finds products by name, SKU or barcode; the scan button beside it searches by scanning. The sort and filter button sorts by name, quantity, stock value or recently updated, narrows the list to one category, and tapping <span class="ui">Low stock</span> on the Dashboard opens the list showing only low products. On a tablet you can also choose how many columns the list uses.</p>
+  </div></details>
+
+  <details id="product-card"><summary>Can I choose what each product shows in the list?</summary><div>
+    <p>Yes: <span class="ui">Settings &rarr; Product card &rarr; Customize product card</span>. Show or hide the photo, category, supplier, location, prices, cost, description, stock bar and more, and put them in your own order. A live preview shows the result.</p>
+  </div></details>
+
+  <details id="categories"><summary>How do categories, suppliers and locations work?</summary><div>
+    <p>They are lists you file products under. Create them from their own screens in the <span class="ui">&#8942;</span> menu (<span class="ui">Categories</span>, <span class="ui">Suppliers</span>, <span class="ui">Locations</span>) with <span class="ui">+</span>, or let an import create them. Then pick them on the product form.</p>
+    <p>Tap any category, supplier or location to see the products filed under it and how much of each is in stock.</p>
+    <p>Deleting one never deletes products: they are simply left without that category, supplier or location, and restoring it from the Trash links them back.</p>
+  </div></details>
+
+  <details id="low-stock"><summary>How does &ldquo;low stock&rdquo; work?</summary><div>
+    <p>Each product has its own <span class="ui">Min stock</span>. When the quantity is at or below it, the product is marked low (and out of stock at zero). If it has a <span class="ui">Max stock</span> and goes above it, it is marked overstock.</p>
+    <p>The value pre-filled for new products is set in <span class="ui">Settings &rarr; Default Low Stock Threshold</span>. Low products show on the Dashboard, in the product list (tap the Low stock tile), in the low stock report and in the daily <a href="#notifications">low stock alert</a>.</p>
+  </div></details>
+
+  <details id="currency"><summary>How do I change the currency?</summary><div>
+    <p><span class="ui">Settings &rarr; General &rarr; Currency Symbol</span>. Type the symbol you use (for example $, &euro;, MAD, &#8377;). It changes how prices are shown; it does not convert amounts.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stock">
+  <h2>Stock in &amp; out</h2>
+  <p class="lead">Recording what arrives and what leaves.</p>
+
+  <details id="stock-in-out"><summary>How do I add or remove stock?</summary><div>
+    <ol>
+      <li>Open the product and tap <span class="ui">Adjust stock</span>.</li>
+      <li>Choose <span class="ui">Stock in</span> (a delivery, a return) or <span class="ui">Stock out</span> (a sale, damage, use).</li>
+      <li>Enter the quantity, and a reason if you like (&ldquo;Order #123&rdquo;, &ldquo;Damaged&rdquo;).</li>
+      <li>If you use locations, choose where the stock goes in or comes out from.</li>
+      <li>Confirm. The new quantity shows straight away and the movement is added to <a href="#history">Transactions</a>.</li>
+    </ol>
+    <p>The same sheet opens from the product list, from <a href="#quick-stock">Quick stock</a> and after a scan in the <a href="#scanner">Scanner</a>.</p>
+  </div></details>
+
+  <details id="quick-stock"><summary>What is Quick stock?</summary><div>
+    <p>A grid of your products with <span class="ui">+</span> and <span class="ui">&minus;</span> on each tile: one tap adds or removes one. Handy at a counter, and for items without a barcode (the <span class="ui">No barcode</span> filter shows just those). Tap a tile for the full stock sheet.</p>
+    <p>After a + or &minus;, an undo arrow replaces the price on that tile for a few seconds. Taps made while the list is scrolling are ignored, so you won&rsquo;t change stock by accident.</p>
+  </div></details>
+
+  <details id="set-exact"><summary>How do I set an exact quantity after counting?</summary><div>
+    <p>Use <a href="#stocktake">Stocktake</a>. You type what you counted, and the app works out the difference and records it as an adjustment. That way you never have to do the subtraction yourself.</p>
+  </div></details>
+
+  <details id="negative"><summary>Why does it say &ldquo;Only N here&rdquo; or refuse to go below zero?</summary><div>
+    <p>Stock can&rsquo;t go below zero. If a product is held in several places, a stock-out takes from the place you chose (or the default location). When that place doesn&rsquo;t hold enough, the message tells you where the rest is (for example &ldquo;Only 3 units here. In stock: Store A 5, Van 2&rdquo;). Choose that place in <span class="ui">Stock out from</span>, or <a href="#move-stock">move the stock</a> first.</p>
+  </div></details>
+
+  <details id="mistake"><summary>I entered the wrong amount. How do I fix it?</summary><div>
+    <p>See <a href="#fix-movement">correcting or undoing a movement</a>.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="locations">
+  <h2>Locations &amp; transfers</h2>
+  <p class="lead">Keeping stock in several places &mdash; warehouse, shop, van, shelf &mdash; and moving it between them.</p>
+
+  <details id="move-stock"><summary>How do I move (transfer) stock from one location to another?</summary><div>
+    <p><strong>1. Create your locations</strong> (once): <span class="ui">&#8942; &rarr; Locations &rarr; +</span>, give each one a name and a short code (e.g. <code>Main Warehouse</code>, <code>WH-MN</code>), and save.</p>
+    <p><strong>2. Move the stock:</strong></p>
+    <ol>
+      <li>Open the product. The <span class="ui">Where it is</span> card lists every place that holds some of its stock.</li>
+      <li>Tap the line for where the stock is <em>now</em>, then <span class="ui">Move</span>.</li>
+      <li>Under <span class="ui">To</span>, pick the destination and enter the amount (it shows how much is available).</li>
+      <li>Confirm. Only that amount moves; the rest stays where it was.</li>
+    </ol>
+    <p><strong>From a location instead:</strong> <span class="ui">&#8942; &rarr; Locations</span>, tap the location, and use <span class="ui">Move</span> next to any product held there.</p>
+    <p>Each transfer appears in <span class="ui">Transactions</span> as <span class="ui">Transfer</span> (&ldquo;Warehouse &rarr; Store A&rdquo;) and in the <span class="ui">Transfers log</span> report. Made a mistake? Open it in Transactions and tap <span class="ui">Revert</span>.</p>
+    <p class="muted">Moving <em>all</em> of a product: you can also edit the product and change its <span class="ui">Location</span>. If all its stock is in one place, it moves with it.</p>
+  </div></details>
+
+  <details id="no-where-card"><summary>I don&rsquo;t see the &ldquo;Where it is&rdquo; card or the Move button.</summary><div>
+    <ul>
+      <li>Create at least one location first. The card only appears once there is somewhere to move stock to.</li>
+      <li>Update the app. Moving part of a product&rsquo;s stock arrived in version 1.79; older versions can only change the location of the whole product.</li>
+    </ul>
+  </div></details>
+
+  <details id="no-location"><summary>My stock shows &ldquo;No location&rdquo;. How do I put it somewhere?</summary><div>
+    <p>Stock added before you created locations (or whose location was deleted) is held under <span class="ui">No location</span>. Move it like any other stock: open the product, tap the <span class="ui">No location</span> line in <span class="ui">Where it is</span>, then <span class="ui">Move</span> and choose the location.</p>
+  </div></details>
+
+  <details id="default-location"><summary>What is the default location?</summary><div>
+    <p>The place new stock goes and stock-outs come from when you don&rsquo;t choose. In <span class="ui">Locations</span>, edit a location and switch on <span class="ui">Set as default</span>. A product sitting in just one place always uses that place.</p>
+  </div></details>
+
+  <details id="stock-out-from"><summary>How do I choose where a stock-out or a sale takes from?</summary><div>
+    <p>When a product is held in more than one place or batch, the stock sheet shows <span class="ui">Stock out from</span>. Leave it on <span class="ui">Automatic (earliest expiry first)</span> or pick the exact place or lot. In <a href="#sell">Sell</a>, tap <span class="ui">Take from: usual place</span> to choose a location for the sale.</p>
+    <p>Quick stock&rsquo;s + and &minus; ask where when a product is split. To always use the default location instead, turn off <span class="ui">Settings &rarr; Stock movements &rarr; Ask where, when stock is split</span>.</p>
+  </div></details>
+
+  <details id="condition"><summary>Can I mark stock as damaged, reserved or in quarantine?</summary><div>
+    <p>Yes. Move it as above and change the <span class="ui">Condition</span> (Good, Damaged, Reserved, Quarantine) instead of, or as well as, the location. It stays counted, but only good stock is sold or taken out automatically.</p>
+  </div></details>
+
+  <details id="delete-location"><summary>What happens to the stock if I delete a location?</summary><div>
+    <p>Nothing is lost. Its stock is moved to <span class="ui">No location</span>, and its products are left without that location. Restoring the location from the Trash links the products back, but the stock stays under No location until you move it back.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="lots">
+  <h2>Lots, expiry dates &amp; serial numbers</h2>
+  <p class="lead">For food, medicine, cosmetics, electronics &mdash; anything that expires or has a serial number.</p>
+
+  <details id="record-lot"><summary>How do I record a lot, expiry date or serial numbers?</summary><div>
+    <p>When stock comes in, open the <span class="ui">Lot, expiry, serial numbers</span> section on the Stock in sheet. Fill in what you need: <span class="ui">Lot code</span>, <span class="ui">Expiry date</span>, <span class="ui">Supplier</span>, <span class="ui">Cost per unit</span>, <span class="ui">Serial numbers</span>. Leave it closed for ordinary stock.</p>
+    <p>For serial numbers, type one per line, one per unit: the number of lines must equal the quantity. If you fill these fields on most deliveries, the section opens by itself.</p>
+  </div></details>
+
+  <details id="fefo"><summary>Which lot is used first when stock goes out?</summary><div>
+    <p>By default, the earliest expiry date first, then the oldest delivery. You can always pick a specific lot in <span class="ui">Stock out from</span>.</p>
+  </div></details>
+
+  <details id="expiring"><summary>How do I see what is about to expire?</summary><div>
+    <p>The Dashboard shows an <span class="ui">Expiring soon</span> card (expired, or within 30 days) whenever there is one. The <span class="ui">Expiry dates</span> report lists every lot with its days left, earliest first.</p>
+  </div></details>
+
+  <details id="valuation"><summary>How is stock value calculated?</summary><div>
+    <p>Each delivery keeps the cost it came in at. In <span class="ui">Settings &rarr; Stock movements &rarr; Value stock at</span> choose one of: the average cost of stock on hand, the latest receipt cost, or the product&rsquo;s cost price. This is used by the Inventory valuation report and the stock value on the product page.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="scanner">
+  <h2>Barcode scanner</h2>
+  <p class="lead">Using the phone&rsquo;s camera to find products, book stock and check prices.</p>
+
+  <details id="scan-basics"><summary>How do I scan a barcode?</summary><div>
+    <p>Open <span class="ui">Scanner</span> and point the camera at the code. If a product has that barcode, its stock sheet opens: choose <span class="ui">Stock in</span> or <span class="ui">Stock out</span> and the quantity. The flashlight button helps in dark places.</p>
+  </div></details>
+
+  <details id="unknown-barcode"><summary>It says &ldquo;Unknown barcode&rdquo;.</summary><div>
+    <p>No product has that barcode yet. Tap <span class="ui">Add product with this barcode</span> to create one with the code already filled in, or <span class="ui">Search products for this code</span> to attach it to an existing product.</p>
+    <p>If the scanned code matches a product&rsquo;s SKU instead, the app says <span class="ui">Found by SKU</span> and offers to save the code as its barcode.</p>
+  </div></details>
+
+  <details id="batch-scan"><summary>Can I scan many items in a row (a delivery)?</summary><div>
+    <p>Yes: turn on <span class="ui">Batch</span> in the scanner. Each scan adds the product to a list; scanning the same product again adds one more. Then save the whole list as stock in or stock out in one go. Unknown codes are listed separately and skipped.</p>
+  </div></details>
+
+  <details id="price-check"><summary>How do I check a price by scanning?</summary><div>
+    <p>Turn on the <span class="ui">Price check</span> chip in the scanner. Each scan shows the selling price in large type, then cost and profit, stock value, cost by batch and recent sales. The camera keeps scanning, so you can check one item after another. The eye icon hides costs and profit when a customer can see the screen.</p>
+  </div></details>
+
+  <details id="formats"><summary>Which barcodes are supported? It scans slowly or reads wrong codes.</summary><div>
+    <p>EAN-13, EAN-8, UPC-A, UPC-E, Code-128, Code-39, Code-93, QR code and Data Matrix. In <span class="ui">Settings &rarr; Barcode formats</span>, switch off the ones you never use. Fewer formats scan faster and make fewer false reads. Beep and vibration are under <span class="ui">Settings &rarr; Scan feedback</span>.</p>
+  </div></details>
+
+  <details id="camera-permission"><summary>The scanner says it needs the camera.</summary><div>
+    <p>Tap <span class="ui">Allow camera</span>. If you refused before, Android won&rsquo;t ask again: tap <span class="ui">Open app settings</span> and allow the camera under Permissions. The camera is only used while the scanner (or a photo) is open, and images are processed on the phone.</p>
+  </div></details>
+
+  <details id="hardware-scanner"><summary>Can I use a handheld (USB / Bluetooth / PDA) barcode scanner?</summary><div>
+    <p>Yes, through <a href="#remote">Remote access</a>: open the app in the device&rsquo;s browser and use the Scanner page or the handheld view, which reads the codes your scanner types. See <a href="#handheld">handheld scanners</a>.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stocktake">
+  <h2>Stocktake (counting stock)</h2>
+  <p class="lead">Count what is really on the shelves and correct the app in one step.</p>
+
+  <details id="do-stocktake"><summary>How do I do a stocktake?</summary><div>
+    <ol>
+      <li>Open <span class="ui">Stocktake</span> from the <span class="ui">&#8942;</span> menu.</li>
+      <li>Choose where you are counting under <span class="ui">Counting at</span> (or All locations).</li>
+      <li>For each product, swipe its counter up or down, tap it to type the exact count, or scan items to tally them. Leave a product blank to skip it.</li>
+      <li>Tap <span class="ui">Apply stock take</span>. Only the products you changed are adjusted, and each difference is recorded as an adjustment.</li>
+    </ol>
+    <p>A product held as several lots is counted lot by lot. Sales made while you count are taken into account, so they are not counted twice.</p>
+    <div class="note">Tap <strong>Apply stock take</strong> before you leave the screen. Counts that haven&rsquo;t been applied are not kept.</div>
+  </div></details>
+
+  <details id="stocktake-reminder"><summary>Can the app remind me to count?</summary><div>
+    <p>Yes: <span class="ui">Settings &rarr; Stock check reminder &rarr; Remind me to do a stock check</span>. Choose every day, every week (on a weekday) or every month (on a date), and a time.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="sell">
+  <h2>Selling &amp; bills</h2>
+  <p class="lead">A simple till: sell, take the stock out and print or share a bill.</p>
+
+  <details id="make-sale"><summary>How do I sell and make a bill?</summary><div>
+    <ol>
+      <li>Open <span class="ui">Sell</span> from the <span class="ui">&#8942;</span> menu.</li>
+      <li>Tap products, or scan their barcodes, to add them to the cart. Change quantities, prices and line discounts in the cart.</li>
+      <li>Tap <span class="ui">Checkout</span>. Optionally add the customer&rsquo;s name and phone, the payment method (Cash, Card, Bank transfer, Mobile wallet, On credit), a discount, tax, and the amount received. The change is worked out for you.</li>
+      <li>Tap <span class="ui">Complete sale</span>, then print or share the bill.</li>
+    </ol>
+    <p>The stock is taken out at the same moment, and the sale appears in Transactions and in the Sales &amp; margin report. If any item doesn&rsquo;t have enough stock, nothing is sold and the app tells you which one.</p>
+  </div></details>
+
+  <details id="bills"><summary>Where are my past bills? Can I reprint one?</summary><div>
+    <p>On the Sell screen, tap <span class="ui">Bills</span> at the top. Search by bill number, customer or phone, filter by Today, 7 days, 30 days or All, then open a bill to print or share it again. Scanning the barcode printed on a bill opens it.</p>
+  </div></details>
+
+  <details id="void-bill"><summary>How do I cancel a sale or handle a return?</summary><div>
+    <p>Open the bill in <span class="ui">Bills</span> and tap <span class="ui">Void bill</span>. Every item goes back into stock, and the bill is kept, marked VOID, so its number can still be found. Voiding cancels the whole bill: for a partial return, void it and make a new sale, or record a Stock in for the returned item.</p>
+  </div></details>
+
+  <details id="bill-design"><summary>How do I change how the bill looks (shop name, logo, paper size)?</summary><div>
+    <p>On the Sell screen, tap <span class="ui">Bill design</span>. Pick a default design: <span class="ui">Receipt 58 mm</span> or <span class="ui">Receipt 80 mm</span> for thermal receipt printers, <span class="ui">Half page (A5)</span> or <span class="ui">Invoice (A4)</span> for ordinary printers. Then set your shop name, address and contact lines, tax or registration number, title, footer text, tax name and rate, number prefix and next bill number. The preview is the real bill. <span class="ui">Print as soon as a sale is saved</span> skips a step at the counter.</p>
+  </div></details>
+
+  <details id="receipt-printer"><summary>How do I print to a thermal / Bluetooth / USB receipt printer?</summary><div>
+    <p>Bills print through Android&rsquo;s print dialog, so any printer with an Android print service works. Install your printer&rsquo;s print service app (or a universal one) from Google Play, choose the 58 mm or 80 mm design, and pick the printer in the print dialog. Without a printer you can always save as PDF and share it.</p>
+  </div></details>
+
+  <details id="tax-invoice"><summary>Is the bill a legal tax invoice?</summary><div>
+    <p>The bill can show your tax or registration number and tax lines, but it is not certified for any country&rsquo;s official tax or e-invoicing system. Check what your local rules require.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="history">
+  <h2>History &amp; corrections</h2>
+  <p class="lead">Every change of stock is recorded, and every mistake can be undone.</p>
+
+  <details id="transactions"><summary>Where do I see all stock movements?</summary><div>
+    <p><span class="ui">Transactions</span> lists every movement: stock in, stock out, adjustments and transfers, with who made it, why, and the stock before and after. Filter by date range and type, or search by product, SKU or reason. Each product&rsquo;s page also shows its own activity.</p>
+  </div></details>
+
+  <details id="fix-movement"><summary>How do I correct or undo a movement?</summary><div>
+    <ul>
+      <li><strong>Undo it completely:</strong> tap it in <span class="ui">Transactions</span> (or in the product&rsquo;s activity) and choose <span class="ui">Revert</span>. The stock goes back as it was and the movement goes to the Trash.</li>
+      <li><strong>Correct it in place:</strong> in the product&rsquo;s activity, tap the movement and choose <span class="ui">Edit</span> to fix the amount, reason, lot, supplier, expiry or cost. It keeps its date and is marked as edited.</li>
+      <li><strong>Just did it in Quick stock?</strong> Tap the undo arrow on the tile.</li>
+    </ul>
+    <p>A revert or edit is refused when it would leave stock below zero (for example, the delivery you want to undo has already been sold).</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="reports">
+  <h2>Reports, exports &amp; labels</h2>
+  <p class="lead">Getting your data out as CSV or PDF, and printing labels.</p>
+
+  <details id="export-report"><summary>How do I export a report (Excel / PDF)?</summary><div>
+    <ol>
+      <li>Open <span class="ui">Reports</span>.</li>
+      <li>Set the scope: a category for inventory reports, a date range for movement reports. Each report shows how many rows it will hold.</li>
+      <li>Tap a report, then <span class="ui">CSV</span> (opens in Excel, Google Sheets, LibreOffice) or <span class="ui">PDF</span>.</li>
+    </ol>
+    <table>
+      <thead><tr><th>Inventory (now)</th><th>Movement (over a period)</th></tr></thead>
+      <tbody><tr>
+        <td>Stock on hand &middot; Low stock &middot; Out of stock &middot; Overstock &middot; Inventory valuation &middot; Product catalogue &middot; Stock by location &middot; Expiry dates</td>
+        <td>Stock movements &middot; Stock in &middot; Stock out &middot; Adjustments audit &middot; Transfers log &middot; Cost price changes &middot; Sales &amp; margin</td>
+      </tr></tbody>
+    </table>
+  </div></details>
+
+  <details id="report-design"><summary>Can I put my logo and company name on PDF reports?</summary><div>
+    <p>Yes. In <span class="ui">Reports</span>, tap <span class="ui">Report design</span> at the top (also in <span class="ui">Settings &rarr; PDF Report</span>). Set paper size, orientation, margins, logo, company name, fonts, table style, footer, page numbers and an accent colour, or start from one of four presets. The preview is the real PDF.</p>
+  </div></details>
+
+  <details id="labels"><summary>How do I print barcode or price labels?</summary><div>
+    <ol>
+      <li>Open <span class="ui">Labels</span> from the <span class="ui">&#8942;</span> menu.</li>
+      <li>Tap <span class="ui">Presets</span> and add a ready-made design (retail price tag, shelf edge label, small barcode sticker, thermal roll label, QR tag&hellip;), or create your own with <span class="ui">New label</span>: size, layout, font, fields and barcode type.</li>
+      <li>Tap <span class="ui">Print</span>, select the products, and print. All the labels come out as one PDF.</li>
+    </ol>
+    <p>For one product, open it and tap <span class="ui">Print label</span> at the top. Printing to a physical printer needs a print service (your printer maker&rsquo;s app, or Mopria) from Google Play; otherwise save as PDF.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="import">
+  <h2>Import from a spreadsheet</h2>
+  <p class="lead">Bringing in products, categories, suppliers or locations from a CSV file.</p>
+
+  <details id="how-import"><summary>How do I import my products from Excel or Google Sheets?</summary><div>
+    <ol>
+      <li>In Excel or Google Sheets, save or download your sheet as <strong>CSV</strong>. The app reads CSV files, not .xlsx.</li>
+      <li>Open <span class="ui">Import</span> from the <span class="ui">&#8942;</span> menu and choose what you are importing (Products, Categories, Suppliers or Locations).</li>
+      <li>Tap <span class="ui">Pick CSV file</span>. Not sure about the columns? Tap <span class="ui">Save a template CSV</span>, fill it in and pick that.</li>
+      <li>Review the preview. Every row is marked NEW or UPDATE, with any warnings and rejected rows explained. Choose your options, then tap <span class="ui">Import</span>.</li>
+    </ol>
+    <p>Nothing is written until you confirm.</p>
+  </div></details>
+
+  <details id="import-columns"><summary>What columns does the file need?</summary><div>
+    <p>For products only <code>sku</code> and <code>name</code> are required. Others you can include: description, category, location, quantity, unit, min, max, cost, price, barcode, supplier, image. The first row must name the columns. Common spellings are understood (<code>qty</code>, <code>stock</code>, <code>unit price</code>&hellip;), and the Import screen lists every accepted name. Example:</p>
+    <p><code>sku,name,category,quantity,unit,cost,price,barcode</code><br><code>A-100,Widget,Hardware,25,units,4.50,9.99,4006381333931</code></p>
+    <p>Commas, semicolons or tabs, decimal commas, currency signs and most date formats are all handled. When a value has to be guessed, the preview says how it was read.</p>
+  </div></details>
+
+  <details id="import-update"><summary>Will importing overwrite products I already have?</summary><div>
+    <p>Only if you want it to. Products are matched by SKU. With <span class="ui">Update records that already exist</span> on, a matching product gets the values in your file, and only the columns your file contains. A file with just <code>sku,name,quantity</code> won&rsquo;t erase prices or categories. Turn it off to add new products only.</p>
+    <p>If a product&rsquo;s stock is spread over several locations or lots, the file can&rsquo;t say where a new quantity belongs, so change that product&rsquo;s stock from its page instead.</p>
+  </div></details>
+
+  <details id="export-to-excel"><summary>How do I get my whole product list into Excel?</summary><div>
+    <p>Export the <span class="ui">Product catalogue</span> or <span class="ui">Stock on hand</span> report as CSV (see <a href="#export-report">reports</a>). The CSV can also be imported back into the app.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="backup">
+  <h2>Backup, restore &amp; changing phones</h2>
+  <p class="lead">Your data lives on the phone. A backup elsewhere is what saves it if the phone is lost or reset.</p>
+
+  <div class="note"><strong>Uninstalling the app or clearing its storage deletes all your data.</strong> Set up a backup before you do either.</div>
+
+  <details id="setup-backup"><summary>How do I back up my data?</summary><div>
+    <ol>
+      <li>Open <span class="ui">Backup</span> from the <span class="ui">&#8942;</span> menu.</li>
+      <li>Tap <span class="ui">Add destination</span> and choose where backups go: <span class="ui">Folder on this device</span> (internal storage, SD card, USB drive, or a folder your cloud drive app syncs), <span class="ui">FTP server</span>, or <span class="ui">Shared folder (SMB)</span> (a NAS or a shared folder on a Windows PC).</li>
+      <li>For a server, enter the address and sign-in, then <span class="ui">Test connection</span>. It checks that a file can really be written there.</li>
+      <li>Tap <span class="ui">Back up now</span>, and turn on <span class="ui">Automatic backups</span> to save a copy about once a day.</li>
+    </ol>
+    <p>Every backup goes to all your destinations. If one stops working, you get a notification and a Dashboard banner until it is fixed.</p>
+  </div></details>
+
+  <details id="restore"><summary>How do I restore a backup?</summary><div>
+    <p>In <span class="ui">Backup</span>, find the backup in the saved list and tap <span class="ui">Restore</span>. You choose which data to bring back and see what it contains before anything changes. Restoring replaces your current data with the backup&rsquo;s.</p>
+    <p>&ldquo;This backup was made by a newer version of the app&rdquo; means the phone needs the latest version from Google Play first.</p>
+  </div></details>
+
+  <details id="new-phone"><summary>How do I move my data to a new phone?</summary><div>
+    <ol>
+      <li>On the old phone, back up to somewhere the new phone can reach: an FTP/SMB server, a cloud-synced folder, or a file you copy across.</li>
+      <li>On the new phone, install Stock Management. On the welcome screen choose <span class="ui">Restore a backup</span>, then <span class="ui">From a file</span>, <span class="ui">From a server</span> or <span class="ui">From a folder</span>.</li>
+    </ol>
+    <p>Server passwords are not saved inside backups, for your security. Enter them again on the new phone.</p>
+  </div></details>
+
+  <details id="two-phones"><summary>Can two phones share the same stock?</summary><div>
+    <p>The app has no online account, so two phones don&rsquo;t sync with each other. To have several people work on the same stock, keep it on one phone and let the others use it through <a href="#remote">Remote access</a> from a browser on the same Wi-Fi. A backup restored on another phone is a copy; changes on one won&rsquo;t appear on the other.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="remote">
+  <h2>Use it from a PC, tablet or handheld (Remote access)</h2>
+  <p class="lead">Other devices on the same Wi-Fi open your stock in a web browser, with their own sign-ins and permissions.</p>
+
+  <details id="remote-setup"><summary>How do I open the app on my computer?</summary><div>
+    <ol>
+      <li>On the phone, open <span class="ui">Remote access</span> from the <span class="ui">&#8942;</span> menu. If the phone has a screen lock, confirm it.</li>
+      <li>Tap <span class="ui">Start server</span>. The screen shows an address such as <code>http://192.168.1.24:8080</code> and a QR code.</li>
+      <li>Tap <span class="ui">Add someone</span> and create a sign-in: a name, a user name and a password.</li>
+      <li>Tap <span class="ui">Choose</span> on that person and tick the screens and actions they get (or a preset: <span class="ui">Look only</span>, <span class="ui">Stocktaker</span>, <span class="ui">Price checker</span>, <span class="ui">Everything</span>). Nothing is allowed until you tick it.</li>
+      <li>On the computer, type the address into a browser (Chrome, Edge, Firefox, Safari) and sign in.</li>
+      <li>When you are finished, tap <span class="ui">Stop server</span>.</li>
+    </ol>
+    <p>Every change made in the browser lands on the phone under that person&rsquo;s name. The server never starts by itself.</p>
+  </div></details>
+
+  <details id="remote-cant-connect"><summary>The browser can&rsquo;t open the address.</summary><div>
+    <ul>
+      <li>Both devices must be on the <strong>same Wi-Fi</strong> (or the computer joined to the phone&rsquo;s hotspot). Mobile data won&rsquo;t work.</li>
+      <li>Guest or public Wi-Fi networks often stop devices from seeing each other. Use your main network or the phone&rsquo;s hotspot.</li>
+      <li>Type the whole address including <code>http://</code> and the port (<code>:8080</code>).</li>
+      <li>Check that the server is still running. Swiping the app away from the recent apps screen stops it, and so does a change of network.</li>
+      <li>The name address (ending in <code>.local</code>) only works if your router supports it. Use the number address instead.</li>
+      <li>Allow the app&rsquo;s notifications. While the server runs, its notification holds the Stop button.</li>
+    </ul>
+  </div></details>
+
+  <details id="remote-can-do"><summary>What can people do from the browser?</summary><div>
+    <p>Whatever you allow: Dashboard, Products (view, add, edit), Scanner, Quick stock, Stocktake, History, Reports (CSV/PDF), Categories, Suppliers, Locations, moving stock between locations, printing labels, and Price check. Backup, import, the Trash, label design, settings, selling and Remote access itself stay on the phone. Nothing can be deleted from a browser.</p>
+    <p>Each browser can choose its own light or dark mode, theme, text size and list view under <span class="ui">Display</span>.</p>
+  </div></details>
+
+  <details id="handheld"><summary>Using a handheld (PDA) or USB barcode scanner</summary><div>
+    <p>Open the address in the device&rsquo;s browser and sign in with an account allowed to use the Scanner. Tap the handheld icon at the top, choose <span class="ui">Receiving</span> or <span class="ui">Dispatch</span>, and scan. Each code is added to a list (scan again to add one more), and one button saves the whole run. Turn on <span class="ui">Read scanner keys anywhere</span> so the on-screen keyboard stays out of the way.</p>
+    <p>Unsaved lists are kept on the device if the Wi-Fi drops, so you can save them when you&rsquo;re back. A browser can&rsquo;t use the device&rsquo;s camera to scan (it needs a secure connection), so use a scanner or type the code.</p>
+  </div></details>
+
+  <details id="price-checker-screen"><summary>Can customers check prices themselves on a screen?</summary><div>
+    <p>Yes. Create a sign-in with the <span class="ui">Price checker</span> preset, open Price check on a counter PC or tablet with a scanner, and choose <span class="ui">Price checker screen</span>. It shows your logo and company name (from the report design) and offers a full-screen button. What it shows and when it clears are set in <span class="ui">Settings &rarr; Price checker screen</span>.</p>
+  </div></details>
+
+  <details id="remote-safety"><summary>Is Remote access safe?</summary><div>
+    <ul>
+      <li>It only works on private networks (home or office Wi-Fi, hotspot), never on the open internet.</li>
+      <li>Each person has their own password and only sees what you ticked. You can see who is connected, disconnect them, switch an account off or reset its password, and read the recent activity.</li>
+      <li>The connection is <strong>not encrypted</strong>, so use it on a network you trust, not on public Wi-Fi.</li>
+      <li>If the phone has no screen lock, anyone holding it can open Remote access. Adding a screen lock to the phone protects it.</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="notifications">
+  <h2>Notifications</h2>
+  <p class="lead">Low stock alerts, stock check reminders and backup warnings.</p>
+
+  <details id="low-stock-alert"><summary>How do low stock alerts work? Can I choose the time?</summary><div>
+    <p>Once a day the app sends one summary of the products below their minimum. Pick the time in <span class="ui">Settings &rarr; Notifications &rarr; Low stock alert</span>. It arrives <em>around</em> that time, because Android may delay it by a few minutes to save battery.</p>
+  </div></details>
+
+  <details id="no-notifications"><summary>I don&rsquo;t get any notifications.</summary><div>
+    <ul>
+      <li>Check that <span class="ui">Settings &rarr; Notifications &rarr; Enable Notifications</span> is on.</li>
+      <li>Allow notifications for the app: tap <span class="ui">Turn on alerts</span> on the Dashboard card, or go to Android Settings &rarr; Apps &rarr; Stock Management &rarr; Notifications.</li>
+      <li>Each type (Low stock alerts, Stock check reminders, Backup problems, Remote access) can be switched on or off separately in Android&rsquo;s notification settings for the app.</li>
+      <li>Some phones (Xiaomi, Huawei, Oppo, Vivo, Samsung&hellip;) stop background apps to save battery. Allow the app to run in the background, or set its battery use to &ldquo;no restrictions&rdquo;.</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="customize">
+  <h2>Customize the app</h2>
+  <p class="lead">Everything below is in Settings.</p>
+
+  <details id="themes"><summary>Themes, dark mode and colours</summary><div>
+    <p><span class="ui">Settings &rarr; Theme</span>: <span class="ui">Appearance</span> (System, Light, Dark), <span class="ui">App theme</span> (Harbor, Graphite, Kraft, Midnight), and <span class="ui">Dynamic Color</span> to take colours from your wallpaper (Android 12+).</p>
+  </div></details>
+
+  <details id="all-settings"><summary>What else can I change?</summary><div>
+    <table>
+      <tbody>
+        <tr><td><span class="ui">Menu configuration</span></td><td>Which screens are in the bottom bar and menu, and their order</td></tr>
+        <tr><td><span class="ui">Dashboard</span></td><td>Which cards and charts show, their order and width</td></tr>
+        <tr><td><span class="ui">Product card</span></td><td>What each product in the list shows</td></tr>
+        <tr><td><span class="ui">Default Low Stock Threshold</span></td><td>Min stock pre-filled for new products</td></tr>
+        <tr><td><span class="ui">Stock movements</span></td><td>Ask where when stock is split; how stock is valued</td></tr>
+        <tr><td><span class="ui">Barcode formats</span> &middot; <span class="ui">Scan feedback</span></td><td>Which codes the scanner reads; beep and vibration</td></tr>
+        <tr><td><span class="ui">PDF Report</span></td><td>How exported PDF reports look</td></tr>
+        <tr><td><span class="ui">Price checker screen</span></td><td>What the customer price screen shows</td></tr>
+        <tr><td><span class="ui">General</span></td><td>Currency symbol, language</td></tr>
+        <tr><td><span class="ui">Notifications</span></td><td>Low stock alert time, stock check reminder</td></tr>
+      </tbody>
+    </table>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trash">
+  <h2>Trash</h2>
+  <p class="lead">Nothing you delete is gone for good until you empty it.</p>
+
+  <details id="restore-deleted"><summary>How do I get back something I deleted?</summary><div>
+    <p>Open <span class="ui">Trash</span> from the <span class="ui">&#8942;</span> menu. Deleted products, categories, suppliers, locations, labels and reverted movements are all there. Tap <span class="ui">Restore</span>: the app first tells you exactly what will happen. Restoring only adds back; it never overwrites anything you have now (a clashing SKU or name is given a new one, such as <code>A-100-2</code>).</p>
+    <p><span class="ui">Delete forever</span> removes one entry; <span class="ui">Empty</span> clears the whole Trash. Neither affects your current data.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trouble">
+  <h2>Problems &amp; contact</h2>
+
+  <details id="old-version"><summary>A feature on this page is missing from my app.</summary><div>
+    <p>Update Stock Management from Google Play. Recent updates added moving stock between locations, lots and serial numbers, selling and bills, price check and more. Your data is kept when you update.</p>
+  </div></details>
+
+  <details id="privacy"><summary>Where is my data stored? Who can see it?</summary><div>
+    <p>Only on your phone, in the app&rsquo;s private storage. We don&rsquo;t receive your products, stock or sales. Read the <a href="../">privacy policy</a>.</p>
+  </div></details>
+
+  <details id="contact" open><summary>How do I ask a question or report a problem?</summary><div>
+    <p>In the app: <span class="ui">Settings &rarr; Send feedback</span> (or the speech bubble at the top of the main screens). Choose the type, write your message, and <strong>put your email in the Contact field if you&rsquo;d like an answer</strong>. Without it we can read your message but can&rsquo;t reply. Sending needs an internet connection.</p>
+    <p>Or email us at <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>. We read every message, in any language.</p>
+  </div></details>
+</section>
+
+<footer>
+  <p>Stock Management &middot; <a href="../">Privacy policy</a> &middot; <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a></p>
+  <p>&copy; 2026 Cool App Helpdesk</p>
+</footer>
+
+</main>
+<script>
+(function () {
+  var q = document.getElementById('q');
+  var none = document.getElementById('noresults');
+  var items = Array.prototype.slice.call(document.querySelectorAll('section.card details'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('section.card'));
+
+  // Each answer gets a link to itself, so one answer can be sent to a user.
+  items.forEach(function (d) {
+    if (!d.id) return;
+    var body = d.querySelector(':scope > div');
+    var p = document.createElement('p');
+    p.className = 'permalink';
+    p.innerHTML = '<a href="#' + d.id + '">Link to this answer</a>';
+    body.appendChild(p);
+  });
+
+  // Opening a link to an answer (help/#move-stock) opens that answer.
+  function openTarget() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    // A link followed mid-search (“ask us”) must not land on an answer the filter hides.
+    if (q.value) { q.value = ''; q.dispatchEvent(new Event('input')); }
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'DETAILS') el.open = true;
+    el.scrollIntoView({ block: 'start', behavior: 'instant' });
+  }
+
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  var texts = items.map(function (d) { return norm(d.textContent); });
+  var toc = document.querySelector('nav[aria-label="Topics"]');
+
+  q.addEventListener('input', function () {
+    var words = norm(q.value).split(/\s+/).filter(Boolean);
+    var searching = words.length > 0;
+    var hits = items.map(function (d, i) {
+      return words.every(function (w) { return texts[i].indexOf(w) !== -1; });
+    });
+    var count = hits.filter(Boolean).length;
+    items.forEach(function (d, i) {
+      d.classList.toggle('hidden', searching && !hits[i]);
+      d.classList.toggle('hit', searching && hits[i]);
+      // A narrow search opens its answers; a broad one leaves them closed to scan.
+      d.open = searching ? hits[i] && count <= 3 : d.id === 'contact';
+    });
+    cards.forEach(function (c) {
+      c.classList.toggle('hidden', searching && !c.querySelector('details:not(.hidden)'));
+    });
+    toc.classList.toggle('hidden', searching);
+    none.style.display = searching && count === 0 ? 'block' : 'none';
+  });
+
+  window.addEventListener('hashchange', openTarget);
+  openTarget();
+})();
+</script>
+</body>
+</html>
