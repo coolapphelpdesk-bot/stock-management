@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدد — Stock Management</title>
+<meta name="description" content="Stock Management کیسے استعمال کریں: مصنوعات، اسٹاک کی آمد و رفت، مقامات اور منتقلی، بارکوڈ اسکینر، اسٹاک گنتی، فروخت اور بل، رپورٹیں، امپورٹ، بیک اپ اور ریموٹ رسائی۔">
+<style>
+  :root {
+    --bg: #f6f9f9; --surface: #ffffff; --text: #10201f; --muted: #5b6b6a;
+    --primary: #0f5f63; --primary-soft: #dcefef; --border: #dde7e6;
+    --note-bg: #fff7e6; --note-border: #f0d79a; --note-text: #6b4b00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1717; --surface: #162222; --text: #e2ecec; --muted: #94a8a7;
+      --primary: #86d4d6; --primary-soft: #1d3b3c; --border: #2a3b3b;
+      --note-bg: #2e2612; --note-border: #5e4b1c; --note-text: #f2d9a0;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+    line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  html[lang="ur"] body { font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Noto Sans Arabic", sans-serif; line-height: 2; }
+  html[lang="ar"] body { font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 40px 24px 96px; }
+  header { border-radius: 16px; padding: 28px 28px 30px; margin-bottom: 18px;
+    background: linear-gradient(135deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); color: #fff; }
+  html[dir="rtl"] header { background: linear-gradient(225deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); }
+  .langbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+  .langbar select { font: inherit; font-size: 14px; color: #fff; background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 12px; cursor: pointer; }
+  .langbar select option { color: #10201f; background: #fff; }
+  header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+  header p { margin: 0; opacity: 0.92; font-size: 15px; }
+  #offer { display: none; margin: 0 0 12px; padding: 10px 14px; border-radius: 10px;
+    background: var(--primary-soft); border: 1px solid var(--border); font-weight: 600; }
+  .searchbar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; }
+  .searchbar input { width: 100%; font: inherit; font-size: 16px; padding: 12px 16px;
+    border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); }
+  .searchbar input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+  #noresults { display: none; text-align: center; color: var(--muted); padding: 24px 0; }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; padding: 0; list-style: none; }
+  .toc li { margin: 0; }
+  .toc a { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 14px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+  .toc a:hover { border-color: var(--primary); text-decoration: none; }
+  .card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 24px; margin: 14px 0; }
+  h2 { font-size: 20px; font-weight: 650; margin: 0 0 4px; letter-spacing: -0.005em; }
+  .card > .lead { color: var(--muted); font-size: 14.5px; margin: 0 0 10px; }
+  details { border-top: 1px solid var(--border); }
+  details:first-of-type { border-top: none; }
+  summary { cursor: pointer; padding-block: 11px; padding-inline: 0 28px; font-weight: 600;
+    list-style: none; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; inset-inline-end: 4px; top: 9px; font-size: 20px;
+    font-weight: 400; color: var(--muted); }
+  details[open] > summary::after { content: "\2212"; }
+  details > div { padding: 0 0 14px; }
+  details:target > summary, details.hit > summary { color: var(--primary); }
+  p, ul, ol { margin: 0 0 10px; }
+  ul, ol { padding-inline-start: 22px; padding-inline-end: 0; } li { margin-bottom: 5px; }
+  .ui { font-weight: 600; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .note { background: var(--note-bg); border: 1px solid var(--note-border); color: var(--note-text);
+    border-radius: 10px; padding: 10px 14px; font-size: 14.5px; margin: 10px 0; }
+  .permalink { font-size: 13px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 14px; }
+  th, td { text-align: start; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); background: var(--primary-soft); }
+  tr:last-child td { border-bottom: none; }
+  code { background: var(--primary-soft); padding: 1px 6px; border-radius: 4px; direction: ltr; unicode-bidi: isolate;
+    font-size: 13px; font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
+  a { color: var(--primary); text-decoration: none; } a:hover { text-decoration: underline; }
+  footer { margin-top: 32px; text-align: center; color: var(--muted); font-size: 13px; }
+  footer .langs { line-height: 2; }
+  .hidden { display: none !important; }
+  @media (max-width: 480px) {
+    .wrap { padding: 20px 16px 64px; }
+    header { padding: 20px 20px 24px; } header h1 { font-size: 24px; }
+    .card { padding: 16px 18px; } h2 { font-size: 18px; }
+    table { font-size: 13px; } th, td { padding: 7px 8px; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header>
+  <div class="langbar">
+    <select id="lang" aria-label="زبان">
+<option value="../">English</option>
+<option value="../es/">Español</option>
+<option value="../fr/">Français</option>
+<option value="../pt/">Português</option>
+<option value="../ru/">Русский</option>
+<option value="../zh/">中文</option>
+<option value="../ar/">العربية</option>
+<option value="../hi/">हिन्दी</option>
+<option value="../bn/">বাংলা</option>
+<option value="../ur/" selected>اردو</option>
+<option value="../id/">Bahasa Indonesia</option>
+    </select>
+  </div>
+  <h1>Stock Management مدد</h1>
+  <p>ایپ میں ہر کام کیسے کریں &middot; ورژن 1.98 کے لیے &middot; اکتوبر 2026 میں تازہ کاری</p>
+</header>
+
+<p id="offer"></p>
+
+<div class="searchbar">
+  <input id="q" type="search" placeholder="مدد میں تلاش کریں — مثلاً: اسٹاک منتقل، بارکوڈ، بیک اپ، بل" aria-label="مدد میں تلاش کریں — مثلاً: اسٹاک منتقل، بارکوڈ، بیک اپ، بل" autocomplete="off">
+</div>
+
+<nav class="topics" aria-label="موضوعات">
+  <ul class="toc">
+    <li><a href="#start">آغاز</a></li>
+    <li><a href="#products">مصنوعات</a></li>
+    <li><a href="#stock">اسٹاک آمد و رفت</a></li>
+    <li><a href="#locations">مقامات اور منتقلی</a></li>
+    <li><a href="#lots">لاٹ، میعاد، سیریل</a></li>
+    <li><a href="#scanner">اسکینر</a></li>
+    <li><a href="#stocktake">اسٹاک گنتی</a></li>
+    <li><a href="#sell">فروخت اور بل</a></li>
+    <li><a href="#history">تاریخ اور درستی</a></li>
+    <li><a href="#reports">رپورٹیں اور لیبل</a></li>
+    <li><a href="#import">امپورٹ</a></li>
+    <li><a href="#backup">بیک اپ اور نیا فون</a></li>
+    <li><a href="#remote">کمپیوٹر سے استعمال</a></li>
+    <li><a href="#notifications">اطلاعات</a></li>
+    <li><a href="#customize">اپنی مرضی سے</a></li>
+    <li><a href="#trash">ردی</a></li>
+    <li><a href="#trouble">مسائل اور رابطہ</a></li>
+  </ul>
+</nav>
+
+<div class="note"><strong>یہاں بتائی گئی کوئی چیز نہیں مل رہی؟</strong> پہلے Google Play سے ایپ اپ ڈیٹ کریں۔ یہ صفحہ موجودہ ورژن کے بارے میں ہے، اور بہت سی سہولتیں (مقامات کے درمیان اسٹاک منتقل کرنا، لاٹ، فروخت، بل) حالیہ اپ ڈیٹس میں آئی ہیں۔ ہر اپ ڈیٹ میں کیا آیا، یہ <span class="ui">ترتیبات ← کیا نیا ہے</span> میں دیکھیں۔</div>
+
+<p id="noresults">کچھ نہیں ملا۔ چھوٹا لفظ آزمائیں، یا <a href="#contact">ہم سے پوچھیں</a>۔</p>
+
+<!-- ============================================================ -->
+<section class="card" id="start">
+  <h2>آغاز</h2>
+  <p class="lead">ایپ کیا ہے، پہلی اسکرین، اور ہر چیز کہاں ملتی ہے۔</p>
+
+  <details id="what-is-it"><summary>Stock Management کیا ہے؟</summary><div>
+    <p>دکانوں، گوداموں اور چھوٹے کاروبار کے لیے اسٹاک سنبھالنے کی ایپ۔ آپ SKU اور بارکوڈ والی مصنوعات کی فہرست رکھتے ہیں، آنے اور جانے والا اسٹاک درج کرتے ہیں، اور ہمیشہ جانتے ہیں کہ کتنا مال ہے، کہاں ہے اور کتنے کا ہے۔ یہ اسٹاک گنتی، چھپے بل کے ساتھ فروخت، رپورٹیں، لیبل اور بیک اپ بھی کرتی ہے۔</p>
+    <p>سب کچھ <strong>آپ کے فون میں</strong> محفوظ ہوتا ہے۔ نہ کوئی اکاؤنٹ بنانا ہے، نہ کوئی سبسکرپشن۔</p>
+  </div></details>
+
+  <details id="internet"><summary>کیا اکاؤنٹ یا انٹرنیٹ چاہیے؟</summary><div>
+    <p>نہیں۔ ایپ مکمل طور پر بغیر انٹرنیٹ کے چلتی ہے اور اس میں لاگ اِن نہیں۔ آپ کا ڈیٹا فون سے باہر تبھی جاتا ہے جب آپ خود اسے کہیں بھیجیں (بیک اپ، ایکسپورٹ کی گئی رپورٹ)۔</p>
+    <p>صرف چند کام نیٹ ورک استعمال کرتے ہیں: رائے بھیجنا، Google Play کا صفحہ کھولنا، FTP یا SMB سرور پر بیک اپ، اور ریموٹ رسائی (جو آپ کے مقامی Wi-Fi سے چلتی ہے، انٹرنیٹ سے نہیں)۔</p>
+  </div></details>
+
+  <details id="first-screen"><summary>پہلی اسکرین پوچھتی ہے کہ کیسے شروع کروں۔ کیا چنوں؟</summary><div>
+    <ul>
+      <li><span class="ui">بیک اپ بحال کریں</span> &mdash; آپ پہلے کسی دوسرے فون پر ایپ چلاتے تھے اور آپ کے پاس بیک اپ ہے۔ دیکھیں <a href="#new-phone">نئے فون پر جانا</a>۔</li>
+      <li><span class="ui">اسپریڈشیٹ سے درآمد کریں</span> &mdash; آپ کی مصنوعات پہلے سے Excel یا Google Sheets میں ہیں۔ دیکھیں <a href="#import">امپورٹ</a>۔</li>
+      <li><span class="ui">اپنی انوینٹری سے شروع کریں</span> &mdash; خالی ایپ؛ مصنوعات ایک ایک کر کے شامل کریں۔</li>
+      <li><strong>نمونہ ڈیٹا</strong> (جنرل اسٹور، کپڑوں کی دکان، کتابوں کی دکان) &mdash; ایپ کو ڈیمو مصنوعات سے بھر دیتا ہے تاکہ آپ سب کچھ دیکھ سکیں۔</li>
+    </ul>
+    <p>یہ اسکرین ایک ہی بار آتی ہے، مگر چننے سے کچھ ضائع نہیں ہوتا: بعد میں کبھی بھی امپورٹ، بحال یا مصنوعات شامل کر سکتے ہیں۔</p>
+  </div></details>
+
+  <details id="sample-data"><summary>نمونہ ڈیٹا کیسے لوڈ کریں یا ہٹائیں؟</summary><div>
+    <p>نمونہ ڈیٹا صرف خالی ایپ میں شامل ہو سکتا ہے: خوش آمدید اسکرین پر، یا ڈیش بورڈ کے <span class="ui">نمونہ ڈیٹا کے ساتھ آزمائیں</span> کارڈ سے۔ شامل کرنے سے پہلے ایپ ٹھیک ٹھیک بتاتی ہے کہ کتنی مصنوعات، زمرے، سپلائر اور مقامات بنیں گے۔</p>
+    <p>ہٹانے کے لیے ڈیش بورڈ کی پٹی پر <span class="ui">نمونہ ڈیٹا ہٹائیں</span> دبائیں۔ صرف نمونے کے ریکارڈ ہٹتے ہیں۔</p>
+  </div></details>
+
+  <details id="menu"><summary>ساری اسکرینیں کہاں ہیں؟ نیچے صرف چار نظر آتی ہیں۔</summary><div>
+    <p>فون پر نیچے کی پٹی میں ڈیش بورڈ اور آپ کے مینو کی پہلی تین اسکرینیں ہوتی ہیں۔ باقی سب ہر اسکرین کے اوپر <span class="ui">&#8942;</span> مینو میں ہیں: فروخت، اسٹاک گنتی، لین دین، رپورٹس، زمرے، سپلائرز، مقامات، لیبل، درآمد، بیک اپ، ردی، ریموٹ رسائی اور ترتیبات۔ ٹیبلٹ پر یہ سب سائیڈ کی پٹی میں ہوتی ہیں۔</p>
+    <p>نیچے کی پٹی میں کون سی اسکرینیں ہوں، یہ چننے کے لیے <span class="ui">ترتیبات ← مینو کی ترتیب</span> میں جا کر انہیں اوپر نیچے کریں۔ جو اسکرینیں کبھی استعمال نہیں کرتے انہیں چھپا بھی سکتے ہیں (ڈیش بورڈ اور ترتیبات ہمیشہ رہتی ہیں)۔</p>
+  </div></details>
+
+  <details id="language"><summary>زبان کیسے بدلیں؟</summary><div>
+    <p><span class="ui">ترتیبات ← زبان</span>۔ ایپ ان زبانوں میں ہے: انگریزی، ہسپانوی، فرانسیسی، پرتگالی، روسی، چینی، عربی، ہندی، بنگالی، اردو اور انڈونیشیائی۔</p>
+  </div></details>
+
+  <details id="dashboard"><summary>ڈیش بورڈ پر کیا دکھتا ہے؟</summary><div>
+    <p>کل مصنوعات، کم اسٹاک، اسٹاک کی مالیت، حالیہ نقل و حرکت، انتباہات اور چارٹ (اسٹاک کی سطح، زمرے کے لحاظ سے مصنوعات اور مالیت، 7 اور 30 دن کی نقل و حرکت، کیا دوبارہ منگوانا ہے، مقام اور سپلائر کے لحاظ سے مالیت، سب سے زیادہ چلنے والی مصنوعات، اور جلد میعاد ختم ہونے والے لاٹ)۔</p>
+    <p>ڈیش بورڈ کے نیچے <span class="ui">ڈیش بورڈ حسب منشا بنائیں</span> دبائیں، یا <span class="ui">ترتیبات ← ڈیش بورڈ</span> میں جائیں، اور کارڈ چھپائیں، ترتیب بدلیں اور ہر کارڈ کی چوڑائی طے کریں۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="products">
+  <h2>مصنوعات</h2>
+  <p class="lead">مصنوعات شامل کرنا، بدلنا، ترتیب دینا اور ڈھونڈنا۔</p>
+
+  <details id="add-product"><summary>مصنوع کیسے شامل کریں؟</summary><div>
+    <ol>
+      <li><span class="ui">مصنوعات</span> کھولیں اور <span class="ui">+</span> دبائیں۔</li>
+      <li><span class="ui">SKU</span> اور <span class="ui">نام</span> بھریں (دونوں ضروری ہیں)۔ SKU چیز کے لیے آپ کا اپنا کوڈ ہے اور دہرایا نہیں جا سکتا۔</li>
+      <li>چاہیں تو تصویر، تفصیل، زمرہ، مقام، سپلائر، اکائی (عدد، کلو، لیٹر&hellip;)، کم از کم اور زیادہ سے زیادہ اسٹاک، لاگت قیمت، فروخت قیمت اور بارکوڈ شامل کریں۔ بارکوڈ والے خانے میں اسکین کا بٹن ہے۔</li>
+      <li><span class="ui">مقدار</span> میں ابھی جتنا مال ہے وہ لکھیں۔ یہ مصنوع کے ابتدائی اسٹاک کے طور پر درج ہوتا ہے۔</li>
+      <li><span class="ui">مصنوع محفوظ کریں</span> دبائیں۔</li>
+    </ol>
+    <p>تیز طریقے: <a href="#scanner">اسکینر</a> میں کوئی نامعلوم بارکوڈ اسکین کریں اور <span class="ui">اس بارکوڈ کے ساتھ مصنوع شامل کریں</span> دبائیں، یا اسپریڈشیٹ سے پوری فہرست <a href="#import">امپورٹ</a> کریں۔</p>
+  </div></details>
+
+  <details id="edit-quantity"><summary>مصنوع بدلتے وقت مقدار کیوں نہیں بدل سکتے؟</summary><div>
+    <p>یہ جان بوجھ کر ہے۔ اسٹاک کی ہر تبدیلی ایک نقل و حرکت کے طور پر درج ہوتی ہے (کس نے، کب، کیوں، پہلے اور بعد)، تاکہ حساب ہمیشہ ملتا رہے۔ مقدار <a href="#stock-in-out">اسٹاک اِن / اسٹاک آؤٹ</a>، <a href="#quick-stock">فوری اسٹاک</a>، <a href="#scanner">اسکینر</a> یا <a href="#stocktake">اسٹاک گنتی</a> سے بدلیں۔ مصنوع کی باقی معلومات (نام، قیمتیں، بارکوڈ، زمرہ&hellip;) مصنوع کے صفحے پر پنسل سے بدلیں۔</p>
+  </div></details>
+
+  <details id="product-photo"><summary>مصنوع کی تصویر کیسے لگائیں؟</summary><div>
+    <p>مصنوع کے فارم میں <span class="ui">تصویر شامل کریں</span> دبائیں، پھر <span class="ui">تصویر لیں</span> یا <span class="ui">گیلری سے منتخب کریں</span>۔ جن مصنوعات کی تصویر نہیں، ان پر ان کے زمرے کے رنگ میں ایک پارسل کی تصویر دکھتی ہے۔</p>
+  </div></details>
+
+  <details id="delete-product"><summary>مصنوع کیسے حذف کریں، اور کیا واپس مل سکتا ہے؟</summary><div>
+    <p>مصنوع کھولیں اور اوپر کوڑے دان کا آئیکن دبائیں۔ اس کی پرانی نقل و حرکت تاریخ میں رہتی ہے۔ مصنوع <a href="#trash">ردی</a> میں جاتا ہے، جہاں سے آپ اسے بعد میں بحال کر سکتے ہیں۔</p>
+  </div></details>
+
+  <details id="find-product"><summary>مصنوعات کی فہرست میں کیسے تلاش، ترتیب اور فلٹر کریں؟</summary><div>
+    <p>تلاش کا خانہ نام، SKU یا بارکوڈ سے مصنوعات ڈھونڈتا ہے؛ اس کے ساتھ کا اسکین بٹن اسکین کر کے ڈھونڈتا ہے۔ ترتیب اور فلٹر کا بٹن نام، مقدار، اسٹاک مالیت یا حالیہ تبدیلی کے حساب سے ترتیب دیتا ہے اور فہرست کو ایک زمرے تک محدود کرتا ہے۔ ڈیش بورڈ پر <span class="ui">کم اسٹاک</span> دبانے سے صرف کم اسٹاک والی مصنوعات کی فہرست کھلتی ہے۔ ٹیبلٹ پر آپ یہ بھی چن سکتے ہیں کہ فہرست کتنے کالموں میں دکھے۔</p>
+  </div></details>
+
+  <details id="product-card"><summary>کیا میں چن سکتا ہوں کہ فہرست میں ہر مصنوع کیا دکھائے؟</summary><div>
+    <p>جی ہاں: <span class="ui">ترتیبات ← مصنوع کا کارڈ ← مصنوع کا کارڈ حسبِ منشا بنائیں</span>۔ تصویر، زمرہ، سپلائر، مقام، قیمتیں، لاگت، تفصیل، اسٹاک کی پٹی وغیرہ دکھائیں یا چھپائیں، اور اپنی ترتیب میں رکھیں۔ لائیو پیش منظر نتیجہ دکھاتا ہے۔</p>
+  </div></details>
+
+  <details id="categories"><summary>زمرے، سپلائر اور مقامات کیسے کام کرتے ہیں؟</summary><div>
+    <p>یہ فہرستیں ہیں جن میں آپ مصنوعات کو بانٹتے ہیں۔ انہیں <span class="ui">&#8942;</span> مینو میں ان کی اپنی اسکرین (<span class="ui">زمرے</span>، <span class="ui">سپلائرز</span>، <span class="ui">مقامات</span>) پر <span class="ui">+</span> سے بنائیں، یا امپورٹ کو بنانے دیں۔ پھر مصنوع کے فارم میں انہیں چنیں۔</p>
+    <p>کسی بھی زمرے، سپلائر یا مقام کو دبا کر اس میں رکھی مصنوعات اور ہر ایک کا اسٹاک دیکھیں۔</p>
+    <p>ان میں سے کسی کو حذف کرنے سے مصنوعات کبھی حذف نہیں ہوتیں: وہ بس اس زمرے، سپلائر یا مقام کے بغیر رہ جاتی ہیں، اور ردی سے بحال کرنے پر دوبارہ جڑ جاتی ہیں۔</p>
+  </div></details>
+
+  <details id="low-stock"><summary>"کم اسٹاک" کیسے طے ہوتا ہے؟</summary><div>
+    <p>ہر مصنوع کا اپنا <span class="ui">کم از کم اسٹاک</span> ہوتا ہے۔ مقدار اس کے برابر یا کم ہونے پر مصنوع کم اسٹاک میں دکھتا ہے (اور صفر پر ختم)۔ اگر <span class="ui">زیادہ سے زیادہ اسٹاک</span> بھرا ہو اور مقدار اس سے بڑھ جائے، تو ضرورت سے زیادہ اسٹاک دکھتا ہے۔</p>
+    <p>نئی مصنوعات میں پہلے سے بھری قدر <span class="ui">ترتیبات ← طے شدہ کم اسٹاک حد</span> میں طے ہوتی ہے۔ کم اسٹاک والی مصنوعات ڈیش بورڈ پر، مصنوعات کی فہرست میں (کم اسٹاک والا ٹائل دبائیں)، کم اسٹاک رپورٹ میں اور <a href="#notifications">روزانہ کم اسٹاک اطلاع</a> میں دکھتی ہیں۔</p>
+  </div></details>
+
+  <details id="currency"><summary>کرنسی کیسے بدلیں؟</summary><div>
+    <p><span class="ui">ترتیبات ← عمومی ← کرنسی کی علامت</span>۔ اپنی علامت لکھیں (مثلاً Rs، روپے، &#8377;)۔ اس سے صرف قیمتیں دکھنے کا انداز بدلتا ہے؛ رقم تبدیل نہیں ہوتی۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stock">
+  <h2>اسٹاک کی آمد و رفت</h2>
+  <p class="lead">جو مال آیا اور جو گیا، اسے درج کرنا۔</p>
+
+  <details id="stock-in-out"><summary>اسٹاک کیسے بڑھائیں یا گھٹائیں؟</summary><div>
+    <ol>
+      <li>مصنوع کھولیں اور <span class="ui">اسٹاک ایڈجسٹ کریں</span> دبائیں۔</li>
+      <li><span class="ui">اسٹاک اِن</span> (مال آیا، واپسی) یا <span class="ui">اسٹاک آؤٹ</span> (فروخت، ٹوٹ پھوٹ، استعمال) چنیں۔</li>
+      <li>مقدار لکھیں، اور چاہیں تو وجہ ("آرڈر 123"، "خراب")۔</li>
+      <li>اگر آپ مقامات استعمال کرتے ہیں، تو چنیں کہ اسٹاک کہاں آئے یا کہاں سے جائے۔</li>
+      <li>تصدیق کریں۔ نئی مقدار فوراً دکھتی ہے اور نقل و حرکت <a href="#history">لین دین</a> میں شامل ہو جاتی ہے۔</li>
+    </ol>
+    <p>یہی ونڈو مصنوعات کی فہرست سے، <a href="#quick-stock">فوری اسٹاک</a> سے اور <a href="#scanner">اسکینر</a> میں اسکین کے بعد بھی کھلتی ہے۔</p>
+  </div></details>
+
+  <details id="quick-stock"><summary>فوری اسٹاک کیا ہے؟</summary><div>
+    <p>آپ کی مصنوعات کا ایک گرڈ، ہر ٹائل پر <span class="ui">+</span> اور <span class="ui">&minus;</span>: ایک بار دبانے سے ایک بڑھتا یا گھٹتا ہے۔ کاؤنٹر پر اور بغیر بارکوڈ والی چیزوں کے لیے آسان (<span class="ui">بارکوڈ نہیں</span> فلٹر صرف وہی دکھاتا ہے)۔ پوری اسٹاک ونڈو کے لیے ٹائل دبائیں۔</p>
+    <p>+ یا &minus; کے بعد چند سیکنڈ تک اس ٹائل پر قیمت کی جگہ "واپس" کا تیر دکھتا ہے۔ فہرست اسکرول ہوتے وقت دبانا نظرانداز ہوتا ہے، تاکہ غلطی سے اسٹاک نہ بدلے۔</p>
+  </div></details>
+
+  <details id="set-exact"><summary>گنتی کے بعد درست مقدار کیسے لگائیں؟</summary><div>
+    <p><a href="#stocktake">اسٹاک گنتی</a> استعمال کریں۔ آپ جتنا گنا وہ لکھتے ہیں، ایپ فرق نکال کر اسے ایڈجسٹمنٹ کے طور پر درج کرتی ہے۔ گھٹانے کا حساب آپ کو نہیں کرنا پڑتا۔</p>
+  </div></details>
+
+  <details id="negative"><summary>ایپ اسٹاک گھٹانے سے کیوں انکار کرتی ہے، یا کہتی ہے کہ یہاں کم ہے؟</summary><div>
+    <p>اسٹاک صفر سے نیچے نہیں جا سکتا۔ اگر مصنوع کئی جگہ رکھا ہے، تو گھٹانا آپ کی چنی جگہ (یا ڈیفالٹ مقام) سے ہوتا ہے۔ وہاں کافی نہ ہو تو پیغام بتاتا ہے کہ باقی کہاں ہے، مثلاً: "یہاں صرف 3 عدد ہے۔ اسٹاک میں: دکان A 5، وین 2"۔ وہ جگہ <span class="ui">کہاں سے نکالیں</span> میں چنیں، یا پہلے <a href="#move-stock">اسٹاک منتقل کریں</a>۔</p>
+  </div></details>
+
+  <details id="mistake"><summary>غلط مقدار ڈال دی۔ کیسے ٹھیک کروں؟</summary><div>
+    <p>دیکھیں <a href="#fix-movement">نقل و حرکت درست کرنا یا واپس لینا</a>۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="locations">
+  <h2>مقامات اور منتقلی</h2>
+  <p class="lead">اسٹاک کئی جگہ رکھنا &mdash; گودام، دکان، وین، شیلف &mdash; اور ان کے درمیان منتقل کرنا۔</p>
+
+  <details id="move-stock"><summary>اسٹاک ایک مقام سے دوسرے مقام پر کیسے منتقل کریں؟</summary><div>
+    <p><strong>1. اپنے مقامات بنائیں</strong> (ایک بار): <span class="ui">&#8942; ← مقامات ← +</span>، ہر مقام کو نام اور مختصر کوڈ دیں (مثلاً "مرکزی گودام" اور <code>WH-1</code>)، اور محفوظ کریں۔</p>
+    <p><strong>2. اسٹاک منتقل کریں:</strong></p>
+    <ol>
+      <li>مصنوع کھولیں۔ <span class="ui">کہاں رکھا ہے</span> کارڈ ہر اس جگہ کو دکھاتا ہے جہاں اس کا کچھ اسٹاک ہے۔</li>
+      <li>جہاں اسٹاک <em>ابھی</em> ہے اس قطار کو دبائیں، پھر <span class="ui">منتقل کریں</span>۔</li>
+      <li><span class="ui">کہاں</span> میں منزل چنیں اور مقدار لکھیں (دستیاب مقدار دکھتی ہے)۔</li>
+      <li>تصدیق کریں۔ صرف اتنی مقدار منتقل ہوتی ہے؛ باقی وہیں رہتا ہے۔</li>
+    </ol>
+    <p><strong>مقام سے بھی:</strong> <span class="ui">&#8942; ← مقامات</span>، مقام دبائیں، اور وہاں رکھے کسی بھی مصنوع کے ساتھ <span class="ui">منتقل کریں</span> استعمال کریں۔</p>
+    <p>ہر منتقلی <span class="ui">لین دین</span> میں <span class="ui">منتقلی</span> کے طور پر ("گودام ← دکان A") اور <span class="ui">منتقلی لاگ</span> رپورٹ میں دکھتی ہے۔ غلطی ہو گئی؟ اسے لین دین میں کھولیں اور <span class="ui">واپس کریں</span> دبائیں۔</p>
+    <p class="muted">پورا مصنوع منتقل کرنا ہو تو اسے بدل کر اس کا <span class="ui">مقام</span> بھی بدل سکتے ہیں۔ اگر اس کا سارا اسٹاک ایک ہی جگہ ہے، تو ساتھ چلا جاتا ہے۔</p>
+  </div></details>
+
+  <details id="no-where-card"><summary>"کہاں رکھا ہے" کارڈ یا منتقلی کا بٹن نظر نہیں آ رہا۔</summary><div>
+    <ul>
+      <li>پہلے کم از کم ایک مقام بنائیں۔ کارڈ تبھی دکھتا ہے جب اسٹاک منتقل کرنے کے لیے کوئی جگہ ہو۔</li>
+      <li>ایپ اپ ڈیٹ کریں۔ مصنوع کے اسٹاک کا کچھ حصہ منتقل کرنا ورژن 1.79 میں آیا؛ پرانے ورژن صرف پورے مصنوع کا مقام بدل سکتے ہیں۔</li>
+    </ul>
+  </div></details>
+
+  <details id="no-location"><summary>میرا اسٹاک "کوئی مقام نہیں" دکھاتا ہے۔ اسے کسی جگہ کیسے رکھوں؟</summary><div>
+    <p>مقامات بنانے سے پہلے شامل کیا گیا اسٹاک (یا جس کا مقام حذف ہو گیا) <span class="ui">کوئی مقام نہیں</span> میں رہتا ہے۔ اسے باقی اسٹاک کی طرح منتقل کریں: مصنوع کھولیں، <span class="ui">کہاں رکھا ہے</span> میں <span class="ui">کوئی مقام نہیں</span> والی قطار دبائیں، پھر <span class="ui">منتقل کریں</span> دبا کر مقام چنیں۔</p>
+  </div></details>
+
+  <details id="default-location"><summary>ڈیفالٹ مقام کیا ہے؟</summary><div>
+    <p>وہ جگہ جہاں نیا اسٹاک جاتا ہے اور جہاں سے گھٹایا جاتا ہے، جب آپ کچھ اور نہ چنیں۔ <span class="ui">مقامات</span> میں کسی مقام کو بدلیں اور <span class="ui">طے شدہ بنائیں</span> چالو کریں۔ ایک ہی جگہ رکھا مصنوع ہمیشہ وہی جگہ استعمال کرتا ہے۔</p>
+  </div></details>
+
+  <details id="stock-out-from"><summary>اسٹاک گھٹانا یا فروخت کہاں سے ہو، یہ کیسے چنیں؟</summary><div>
+    <p>جب مصنوع ایک سے زیادہ جگہ یا لاٹ میں ہو، تو اسٹاک ونڈو میں <span class="ui">کہاں سے نکالیں</span> دکھتا ہے۔ اسے <span class="ui">خودکار (پہلے ختم ہونے والا پہلے)</span> پر رہنے دیں یا درست جگہ یا لاٹ چنیں۔ <a href="#sell">فروخت</a> میں فروخت کا مقام چننے کے لیے <span class="ui">یہاں سے لیں: معمول کی جگہ</span> دبائیں۔</p>
+    <p>مصنوع بٹا ہو تو فوری اسٹاک کے + اور &minus; پوچھتے ہیں کہ کہاں سے۔ ہمیشہ ڈیفالٹ مقام استعمال کرنا ہو تو <span class="ui">ترتیبات ← اسٹاک کی نقل و حرکت ← اسٹاک تقسیم ہو تو پوچھیں کہاں</span> بند کریں۔</p>
+  </div></details>
+
+  <details id="condition"><summary>کیا اسٹاک کو خراب، محفوظ یا قرنطینہ میں نشان زد کر سکتے ہیں؟</summary><div>
+    <p>جی ہاں۔ اوپر کی طرح منتقل کریں اور مقام کی جگہ، یا اس کے ساتھ، <span class="ui">حالت</span> (اچھا، خراب، محفوظ شدہ، قرنطینہ) بدلیں۔ وہ گنتی میں رہتا ہے، مگر خود بخود صرف اچھا اسٹاک ہی بکتا یا گھٹتا ہے۔</p>
+  </div></details>
+
+  <details id="delete-location"><summary>مقام حذف کرنے پر اس کے اسٹاک کا کیا ہوتا ہے؟</summary><div>
+    <p>کچھ ضائع نہیں ہوتا۔ اس کا اسٹاک <span class="ui">کوئی مقام نہیں</span> میں چلا جاتا ہے، اور اس کی مصنوعات اس مقام کے بغیر رہ جاتی ہیں۔ ردی سے مقام بحال کرنے پر مصنوعات پھر جڑ جاتی ہیں، مگر اسٹاک "کوئی مقام نہیں" میں ہی رہتا ہے جب تک آپ اسے واپس منتقل نہ کریں۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="lots">
+  <h2>لاٹ، میعاد کی تاریخ اور سیریل نمبر</h2>
+  <p class="lead">کھانے پینے کا سامان، دوائیں، کاسمیٹکس، الیکٹرانکس&hellip; جس کی میعاد ختم ہوتی ہے یا جس کا سیریل نمبر ہوتا ہے۔</p>
+
+  <details id="record-lot"><summary>لاٹ، میعاد کی تاریخ یا سیریل نمبر کیسے درج کریں؟</summary><div>
+    <p>اسٹاک آنے پر اسٹاک اِن ونڈو میں <span class="ui">لاٹ، میعاد، سیریل نمبر</span> حصہ کھولیں۔ جو چاہیے وہ بھریں: <span class="ui">لاٹ کوڈ</span>، <span class="ui">میعاد ختم ہونے کی تاریخ</span>، <span class="ui">سپلائر</span>، <span class="ui">فی یونٹ لاگت</span>، <span class="ui">سیریل نمبر</span>۔ عام اسٹاک کے لیے اسے بند رہنے دیں۔</p>
+    <p>سیریل نمبر ہر سطر میں ایک، ہر عدد کا ایک: سطروں کی تعداد مقدار کے برابر ہونی چاہیے۔ اگر آپ زیادہ تر مال آنے پر یہ خانے بھرتے ہیں، تو یہ حصہ خود کھلنے لگتا ہے۔</p>
+  </div></details>
+
+  <details id="fefo"><summary>اسٹاک گھٹنے پر پہلے کون سا لاٹ جاتا ہے؟</summary><div>
+    <p>ڈیفالٹ طور پر سب سے پہلے میعاد ختم ہونے والا، پھر سب سے پرانی آمد۔ آپ <span class="ui">کہاں سے نکالیں</span> میں ہمیشہ کوئی خاص لاٹ چن سکتے ہیں۔</p>
+  </div></details>
+
+  <details id="expiring"><summary>جلد میعاد ختم ہونے والا مال کیسے دیکھیں؟</summary><div>
+    <p>ایسا کچھ ہو تو ڈیش بورڈ پر <span class="ui">جلد میعاد ختم</span> کارڈ دکھتا ہے (میعاد ختم یا 30 دن کے اندر)۔ <span class="ui">میعاد کی تاریخیں</span> رپورٹ ہر لاٹ کو باقی دنوں کے ساتھ دکھاتی ہے، سب سے قریب پہلے۔</p>
+  </div></details>
+
+  <details id="valuation"><summary>اسٹاک کی مالیت کیسے نکلتی ہے؟</summary><div>
+    <p>ہر آمد اپنی لاگت یاد رکھتی ہے۔ <span class="ui">ترتیبات ← اسٹاک کی نقل و حرکت ← اسٹاک کی قدر بمطابق</span> میں چنیں: موجود اسٹاک کی اوسط لاگت، آخری وصولی کی لاگت یا پروڈکٹ کی قیمتِ لاگت۔ یہ انوینٹری کی مالیت رپورٹ اور مصنوع کے صفحے کی اسٹاک مالیت میں استعمال ہوتا ہے۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="scanner">
+  <h2>بارکوڈ اسکینر</h2>
+  <p class="lead">فون کے کیمرے سے مصنوعات ڈھونڈنا، اسٹاک درج کرنا اور قیمت دیکھنا۔</p>
+
+  <details id="scan-basics"><summary>بارکوڈ کیسے اسکین کریں؟</summary><div>
+    <p><span class="ui">اسکینر</span> کھولیں اور کیمرا کوڈ کی طرف کریں۔ اگر کسی مصنوع کا یہی بارکوڈ ہے، تو اس کی اسٹاک ونڈو کھلتی ہے: <span class="ui">اسٹاک اِن</span> یا <span class="ui">اسٹاک آؤٹ</span> اور مقدار چنیں۔ اندھیرے میں ٹارچ کا بٹن مدد کرتا ہے۔</p>
+  </div></details>
+
+  <details id="unknown-barcode"><summary>"نامعلوم بارکوڈ" دکھ رہا ہے۔</summary><div>
+    <p>ابھی کسی مصنوع کا یہ بارکوڈ نہیں ہے۔ کوڈ بھرا ہوا نیا مصنوع بنانے کے لیے <span class="ui">اس بارکوڈ کے ساتھ مصنوع شامل کریں</span> دبائیں، یا کسی موجودہ مصنوع سے جوڑنے کے لیے <span class="ui">مصنوعات میں یہ کوڈ تلاش کریں</span>۔</p>
+    <p>اگر اسکین کیا کوڈ کسی مصنوع کے SKU سے ملتا ہے، تو ایپ "SKU سے ملا — اس پروڈکٹ کے لیے ابھی کوئی بارکوڈ محفوظ نہیں ہے۔" دکھاتی ہے اور اسے اس مصنوع کا بارکوڈ بنانے کی پیشکش کرتی ہے۔</p>
+  </div></details>
+
+  <details id="batch-scan"><summary>کیا ایک ساتھ بہت سا سامان (پوری آمد) اسکین کر سکتے ہیں؟</summary><div>
+    <p>جی ہاں: اسکینر میں <span class="ui">بیچ آن</span> چالو کریں۔ ہر اسکین مصنوع کو فہرست میں جوڑتا ہے؛ وہی مصنوع دوبارہ اسکین کرنے پر ایک اور جڑتا ہے۔ پھر پوری فہرست ایک بار میں اسٹاک اِن یا اسٹاک آؤٹ کے طور پر محفوظ کریں۔ نامعلوم کوڈ الگ دکھتے ہیں اور چھوڑ دیے جاتے ہیں۔</p>
+  </div></details>
+
+  <details id="price-check"><summary>اسکین کر کے قیمت کیسے دیکھیں؟</summary><div>
+    <p>اسکینر میں <span class="ui">قیمت چیک</span> چالو کریں۔ ہر اسکین بڑے حروف میں فروخت قیمت دکھاتا ہے، پھر لاگت اور منافع، اسٹاک مالیت، لاٹ کے لحاظ سے لاگت اور حالیہ فروخت۔ کیمرا اسکین کرتا رہتا ہے، تو ایک کے بعد ایک چیز دیکھ سکتے ہیں۔ گاہک اسکرین دیکھ رہا ہو تو آنکھ کا آئیکن لاگت اور منافع چھپا دیتا ہے۔</p>
+  </div></details>
+
+  <details id="formats"><summary>کون سے بارکوڈ چلتے ہیں؟ اسکین سست ہے یا غلط کوڈ پڑھتا ہے۔</summary><div>
+    <p>EAN-13، EAN-8، UPC-A، UPC-E، Code-128، Code-39، Code-93، QR کوڈ اور Data Matrix۔ <span class="ui">ترتیبات ← بارکوڈ فارمیٹس</span> میں جو کبھی استعمال نہیں کرتے انہیں بند کریں: کم فارمیٹ سے اسکین تیز اور غلطیاں کم ہوتی ہیں۔ بیپ اور وائبریشن <span class="ui">ترتیبات ← اسکین کی اطلاع</span> میں ہیں۔</p>
+  </div></details>
+
+  <details id="camera-permission"><summary>اسکینر کیمرے کی اجازت مانگ رہا ہے۔</summary><div>
+    <p><span class="ui">کیمرے کی اجازت دیں</span> دبائیں۔ اگر پہلے انکار کر دیا تھا، تو Android دوبارہ نہیں پوچھتا: <span class="ui">ایپ کی ترتیبات کھولیں</span> دبائیں اور اجازتوں میں کیمرا چالو کریں۔ کیمرا صرف تب استعمال ہوتا ہے جب اسکینر (یا تصویر) کھلا ہو، اور تصاویر فون پر ہی پروسیس ہوتی ہیں۔</p>
+  </div></details>
+
+  <details id="hardware-scanner"><summary>کیا ہاتھ والا بارکوڈ اسکینر (USB / بلوٹوتھ / PDA) استعمال کر سکتے ہیں؟</summary><div>
+    <p>جی ہاں، <a href="#remote">ریموٹ رسائی</a> کے ذریعے: اس ڈیوائس کے براؤزر میں ایپ کھولیں اور اسکینر صفحہ یا ہینڈ ہیلڈ ویو استعمال کریں، جو آپ کے اسکینر سے ٹائپ ہونے والے کوڈ پڑھتا ہے۔ دیکھیں <a href="#handheld">ہینڈ ہیلڈ اسکینر</a>۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stocktake">
+  <h2>اسٹاک گنتی</h2>
+  <p class="lead">شیلف پر اصل میں جو ہے اسے گنیں اور ایک ہی قدم میں ایپ درست کریں۔</p>
+
+  <details id="do-stocktake"><summary>اسٹاک گنتی کیسے کریں؟</summary><div>
+    <ol>
+      <li><span class="ui">&#8942;</span> مینو سے <span class="ui">اسٹاک گنتی</span> کھولیں۔</li>
+      <li><span class="ui">گنتی کی جگہ</span> میں چنیں کہ کہاں گن رہے ہیں (یا تمام مقامات)۔</li>
+      <li>ہر مصنوع کے کاؤنٹر کو اوپر یا نیچے سوائپ کریں، درست گنتی لکھنے کے لیے اسے دبائیں، یا چیزیں اسکین کر کے جوڑیں۔ مصنوع خالی چھوڑنے پر وہ چھوٹ جاتا ہے۔</li>
+      <li><span class="ui">اسٹاک گنتی لاگو کریں</span> دبائیں۔ صرف بدلی گئی مصنوعات درست ہوتی ہیں، اور ہر فرق ایڈجسٹمنٹ کے طور پر درج ہوتا ہے۔</li>
+    </ol>
+    <p>کئی لاٹ میں رکھا مصنوع لاٹ وار گنا جاتا ہے۔ گنتی کے دوران ہونے والی فروخت کا خیال رکھا جاتا ہے، اس لیے وہ دو بار نہیں گنی جاتی۔</p>
+    <div class="note">اسکرین چھوڑنے سے پہلے <strong>اسٹاک گنتی لاگو کریں</strong> دبائیں۔ لاگو نہ کی گئی گنتی محفوظ نہیں ہوتی۔</div>
+  </div></details>
+
+  <details id="stocktake-reminder"><summary>کیا ایپ گنتی کی یاد دلا سکتی ہے؟</summary><div>
+    <p>جی ہاں: <span class="ui">ترتیبات ← اسٹاک جانچ کی یاد دہانی ← اسٹاک جانچ کی یاد دہانی کریں</span>۔ ہر روز، ہر ہفتے (ہفتے کے کسی دن) یا ہر مہینے (کسی تاریخ کو) اور وقت چنیں۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="sell">
+  <h2>فروخت اور بل</h2>
+  <p class="lead">ایک آسان کاؤنٹر: بیچیں، اسٹاک گھٹائیں، اور بل چھاپیں یا بھیجیں۔</p>
+
+  <details id="make-sale"><summary>فروخت کیسے کریں اور بل کیسے بنائیں؟</summary><div>
+    <ol>
+      <li><span class="ui">&#8942;</span> مینو سے <span class="ui">فروخت</span> کھولیں۔</li>
+      <li>مصنوعات دبائیں، یا ان کے بارکوڈ اسکین کریں، تاکہ وہ کارٹ میں جڑیں۔ کارٹ میں مقدار، قیمت اور ہر لائن کی رعایت بدل سکتے ہیں۔</li>
+      <li><span class="ui">چیک آؤٹ</span> دبائیں۔ چاہیں تو گاہک کا نام اور فون، ادائیگی کا طریقہ (نقد، کارڈ، بینک ٹرانسفر، موبائل والٹ، ادھار)، رعایت، ٹیکس اور ملی رقم شامل کریں۔ بقایا خود حساب ہو جاتا ہے۔</li>
+      <li><span class="ui">فروخت مکمل کریں</span> دبائیں، پھر بل چھاپیں یا بھیجیں۔</li>
+    </ol>
+    <p>اسٹاک اسی وقت گھٹتا ہے، اور فروخت لین دین اور فروخت اور مارجن رپورٹ میں دکھتی ہے۔ اگر کسی چیز کا اسٹاک کم ہو، تو کچھ نہیں بکتا اور ایپ بتاتی ہے کہ کون سی۔</p>
+  </div></details>
+
+  <details id="bills"><summary>پرانے بل کہاں ہیں؟ کیا دوبارہ چھاپ سکتے ہیں؟</summary><div>
+    <p>فروخت اسکرین پر اوپر <span class="ui">بل</span> دبائیں۔ بل نمبر، گاہک یا فون سے تلاش کریں، آج، 7 دن، 30 دن یا سب سے فلٹر کریں، اور بل کھول کر دوبارہ چھاپیں یا بھیجیں۔ بل پر چھپا بارکوڈ اسکین کرنے سے بھی وہ کھل جاتا ہے۔</p>
+  </div></details>
+
+  <details id="void-bill"><summary>فروخت منسوخ کیسے کریں یا واپسی کیسے سنبھالیں؟</summary><div>
+    <p><span class="ui">بل</span> میں بل کھولیں اور <span class="ui">بل منسوخ کریں</span> دبائیں۔ سارا سامان اسٹاک میں واپس آ جاتا ہے، اور بل "منسوخ" لکھا ہوا رکھا رہتا ہے تاکہ اس کا نمبر پھر بھی مل سکے۔ منسوخی پورے بل پر لاگو ہوتی ہے: جزوی واپسی کے لیے بل منسوخ کر کے نئی فروخت کریں، یا واپس آئی چیز کے لیے اسٹاک اِن درج کریں۔</p>
+  </div></details>
+
+  <details id="bill-design"><summary>بل کی شکل کیسے بدلیں (دکان کا نام، لوگو، کاغذ کا سائز)؟</summary><div>
+    <p>فروخت اسکرین پر <span class="ui">بل ڈیزائن</span> دبائیں۔ ایک ڈیفالٹ ڈیزائن چنیں: تھرمل رسید پرنٹر کے لیے <span class="ui">رسید 58 ملی میٹر</span> یا <span class="ui">رسید 80 ملی میٹر</span>، عام پرنٹر کے لیے <span class="ui">آدھا صفحہ (A5)</span> یا <span class="ui">انوائس (A4)</span>۔ پھر دکان کا نام، پتہ اور رابطے کی سطریں، ٹیکس یا رجسٹریشن نمبر (جیسے NTN)، عنوان، نیچے کی تحریر، ٹیکس کا نام اور شرح، نمبر کا سابقہ اور اگلا بل نمبر ڈالیں۔ پیش منظر اصل بل ہے۔ <span class="ui">فروخت محفوظ ہوتے ہی پرنٹ کریں</span> کاؤنٹر پر ایک قدم بچاتا ہے۔</p>
+  </div></details>
+
+  <details id="receipt-printer"><summary>تھرمل / بلوٹوتھ / USB رسید پرنٹر پر کیسے چھاپیں؟</summary><div>
+    <p>بل Android کے پرنٹ ڈائیلاگ سے چھپتے ہیں، اس لیے ہر وہ پرنٹر چلتا ہے جس کی Android پرنٹ سروس ہو۔ Google Play سے اپنے پرنٹر کی پرنٹ سروس والی ایپ (یا کوئی عام ایپ) انسٹال کریں، 58 mm یا 80 mm ڈیزائن چنیں، اور پرنٹ ڈائیلاگ میں پرنٹر چنیں۔ پرنٹر نہ ہو تو PDF محفوظ کر کے بھیج سکتے ہیں۔</p>
+  </div></details>
+
+  <details id="tax-invoice"><summary>کیا بل قانونی ٹیکس انوائس ہے؟</summary><div>
+    <p>بل پر آپ کا ٹیکس یا رجسٹریشن نمبر اور ٹیکس کی سطریں دکھ سکتی ہیں، مگر یہ کسی ملک کے سرکاری ٹیکس یا ای انوائس نظام سے تصدیق شدہ نہیں۔ اپنے ملک کے قواعد دیکھ لیں۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="history">
+  <h2>تاریخ اور درستی</h2>
+  <p class="lead">اسٹاک کی ہر تبدیلی درج ہوتی ہے، اور ہر غلطی واپس لی جا سکتی ہے۔</p>
+
+  <details id="transactions"><summary>اسٹاک کی ساری نقل و حرکت کہاں دیکھیں؟</summary><div>
+    <p><span class="ui">لین دین</span> ہر نقل و حرکت دکھاتا ہے: آمد، اخراج، ایڈجسٹمنٹ اور منتقلی، کس نے کی، کیوں، اور پہلے اور بعد کا اسٹاک۔ تاریخ اور قسم سے فلٹر کریں، یا مصنوع، SKU یا وجہ سے تلاش کریں۔ ہر مصنوع کا صفحہ بھی اس کی اپنی نقل و حرکت دکھاتا ہے۔</p>
+  </div></details>
+
+  <details id="fix-movement"><summary>نقل و حرکت کو کیسے درست کریں یا واپس لیں؟</summary><div>
+    <ul>
+      <li><strong>مکمل واپس لینا:</strong> اسے <span class="ui">لین دین</span> (یا مصنوع کی نقل و حرکت) میں دبائیں اور <span class="ui">واپس کریں</span> چنیں۔ اسٹاک پہلے جیسا ہو جاتا ہے اور نقل و حرکت ردی میں چلی جاتی ہے۔</li>
+      <li><strong>وہیں درست کرنا:</strong> مصنوع کی نقل و حرکت میں اسے دبائیں اور <span class="ui">ترمیم</span> چن کر مقدار، وجہ، لاٹ، سپلائر، میعاد یا لاگت درست کریں۔ تاریخ وہی رہتی ہے اور وہ "ترمیم شدہ" نشان زد ہوتی ہے۔</li>
+      <li><strong>ابھی ابھی فوری اسٹاک میں کیا؟</strong> ٹائل پر واپسی کا تیر دبائیں۔</li>
+    </ul>
+    <p>اگر واپس لینے یا بدلنے سے اسٹاک صفر سے نیچے جائے (مثلاً جو آمد ہٹانی ہے وہ بک چکی ہو)، تو یہ رد کر دیا جاتا ہے۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="reports">
+  <h2>رپورٹیں، ایکسپورٹ اور لیبل</h2>
+  <p class="lead">اپنا ڈیٹا CSV یا PDF میں نکالنا، اور لیبل چھاپنا۔</p>
+
+  <details id="export-report"><summary>رپورٹ کیسے ایکسپورٹ کریں (Excel / PDF)؟</summary><div>
+    <ol>
+      <li><span class="ui">رپورٹس</span> کھولیں۔</li>
+      <li>دائرہ طے کریں: اسٹاک رپورٹوں کے لیے زمرہ، نقل و حرکت کی رپورٹوں کے لیے تاریخ کی مدت۔ ہر رپورٹ بتاتی ہے کہ اس میں کتنی قطاریں ہوں گی۔</li>
+      <li>رپورٹ دبائیں، پھر <span class="ui">CSV</span> (Excel، Google Sheets، LibreOffice میں کھلتی ہے) یا <span class="ui">PDF</span>۔</li>
+    </ol>
+    <table>
+      <thead><tr><th>انوینٹری</th><th>نقل و حرکت</th></tr></thead>
+      <tbody><tr>
+        <td>موجود اسٹاک &middot; کم اسٹاک &middot; اسٹاک ختم &middot; زائد اسٹاک &middot; انوینٹری کی مالیت &middot; مصنوعات کی فہرست &middot; مقام کے لحاظ سے اسٹاک &middot; میعاد کی تاریخیں</td>
+        <td>اسٹاک کی نقل و حرکت &middot; اسٹاک اِن &middot; اسٹاک آؤٹ &middot; ایڈجسٹمنٹ آڈٹ &middot; منتقلی لاگ &middot; قیمتِ لاگت میں تبدیلیاں &middot; فروخت اور مارجن</td>
+      </tr></tbody>
+    </table>
+  </div></details>
+
+  <details id="report-design"><summary>کیا PDF رپورٹ پر اپنا لوگو اور کمپنی کا نام لگا سکتے ہیں؟</summary><div>
+    <p>جی ہاں۔ <span class="ui">رپورٹس</span> میں اوپر <span class="ui">رپورٹ کا ڈیزائن</span> دبائیں (یہ <span class="ui">ترتیبات ← PDF رپورٹ</span> میں بھی ہے)۔ کاغذ کا سائز، رخ، حاشیے، لوگو، کمپنی کا نام، فونٹ، ٹیبل کا انداز، فوٹر، صفحہ نمبر اور ایک نمایاں رنگ طے کریں، یا چار تیار ڈیزائنوں میں سے ایک سے شروع کریں۔ پیش منظر اصل PDF ہے۔</p>
+  </div></details>
+
+  <details id="labels"><summary>بارکوڈ یا قیمت کے لیبل کیسے چھاپیں؟</summary><div>
+    <ol>
+      <li><span class="ui">&#8942;</span> مینو سے <span class="ui">لیبل</span> کھولیں۔</li>
+      <li><span class="ui">پہلے سے تیار</span> دبائیں اور تیار ڈیزائن شامل کریں (ریٹیل قیمت ٹیگ، شیلف کنارے کا لیبل، چھوٹا بارکوڈ اسٹیکر، تھرمل رول لیبل، QR اثاثہ ٹیگ&hellip;)، یا <span class="ui">نیا لیبل</span> سے اپنا بنائیں: سائز، ترتیب، فونٹ، خانے اور بارکوڈ کی قسم۔</li>
+      <li><span class="ui">پرنٹ کریں</span> دبائیں، مصنوعات چنیں، اور چھاپیں۔ سارے لیبل ایک ہی PDF میں آتے ہیں۔</li>
+    </ol>
+    <p>ایک مصنوع کے لیے اسے کھول کر اوپر <span class="ui">لیبل پرنٹ کریں</span> دبائیں۔ اصل پرنٹر پر چھاپنے کے لیے Google Play سے پرنٹ سروس (پرنٹر کمپنی کی ایپ، یا Mopria) چاہیے؛ ورنہ PDF محفوظ کریں۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="import">
+  <h2>اسپریڈشیٹ سے امپورٹ</h2>
+  <p class="lead">CSV فائل سے مصنوعات، زمرے، سپلائر یا مقامات لانا۔</p>
+
+  <details id="how-import"><summary>Excel یا Google Sheets سے اپنی مصنوعات کیسے امپورٹ کریں؟</summary><div>
+    <ol>
+      <li>Excel یا Google Sheets میں اپنی شیٹ کو <strong>CSV</strong> کے طور پر محفوظ یا ڈاؤن لوڈ کریں۔ ایپ CSV فائل پڑھتی ہے، ‎.xlsx نہیں۔</li>
+      <li><span class="ui">&#8942;</span> مینو سے <span class="ui">درآمد</span> کھولیں اور چنیں کہ کیا امپورٹ کر رہے ہیں (مصنوعات، زمرے، سپلائرز یا مقامات)۔</li>
+      <li><span class="ui">CSV فائل منتخب کریں</span> دبائیں۔ کالموں کا یقین نہیں؟ <span class="ui">ایک نمونہ CSV محفوظ کریں</span> دبائیں، اسے بھریں اور وہی چنیں۔</li>
+      <li>پیش منظر دیکھیں۔ ہر قطار نیا یا اپ ڈیٹ نشان زد ہوتی ہے، اور انتباہات اور رد شدہ قطاریں سمجھائی جاتی ہیں۔ اختیارات چنیں، پھر <span class="ui">درآمد کریں</span> دبائیں۔</li>
+    </ol>
+    <p>آپ کی تصدیق سے پہلے کچھ بھی نہیں لکھا جاتا۔</p>
+  </div></details>
+
+  <details id="import-columns"><summary>فائل میں کون سے کالم چاہئیں؟</summary><div>
+    <p>مصنوعات کے لیے صرف <code>sku</code> اور <code>name</code> ضروری ہیں۔ یہ بھی ڈال سکتے ہیں: description، category، location، quantity، unit، min، max، cost، price، barcode، supplier، image۔ پہلی قطار میں کالموں کے نام ہونے چاہئیں۔ بہت سے عام نام سمجھے جاتے ہیں (<code>qty</code>، <code>stock</code>، <code>unit price</code>&hellip;، اور ایپ خود جو اردو عنوانات ایکسپورٹ کرتی ہے وہ بھی)، اور امپورٹ اسکرین سب قابلِ قبول نام دکھاتی ہے۔ مثال:</p>
+    <p><code>sku,name,category,quantity,unit,cost,price,barcode</code><br><code>A-100,Screw,Hardware,25,pcs,4.50,9.99,4006381333931</code></p>
+    <p>کوما، سیمی کولن یا ٹیب، اعشاری کوما، کرنسی کی علامتیں اور زیادہ تر تاریخ کے فارمیٹ سنبھالے جاتے ہیں۔ کسی قدر کا اندازہ لگانا پڑے تو پیش منظر بتاتا ہے کہ اسے کیسے پڑھا گیا۔</p>
+  </div></details>
+
+  <details id="import-update"><summary>کیا امپورٹ میری موجودہ مصنوعات کو بدل دے گا؟</summary><div>
+    <p>تبھی جب آپ چاہیں۔ مصنوعات SKU سے ملائی جاتی ہیں۔ <span class="ui">پہلے سے موجود ریکارڈ اپ ڈیٹ کریں</span> چالو ہو تو ملنے والے مصنوع کو آپ کی فائل کی قدریں ملتی ہیں، اور صرف فائل میں موجود کالموں کی۔ صرف <code>sku,name,quantity</code> والی فائل قیمتیں یا زمرے نہیں مٹائے گی۔ صرف نئی مصنوعات شامل کرنی ہوں تو اسے بند کریں۔</p>
+    <p>اگر کسی مصنوع کا اسٹاک کئی مقامات یا لاٹ میں بٹا ہے، تو فائل یہ نہیں بتا سکتی کہ نئی مقدار کہاں جائے؛ ایسے مصنوع کا اسٹاک اس کے صفحے سے بدلیں۔</p>
+  </div></details>
+
+  <details id="export-to-excel"><summary>پوری مصنوعات کی فہرست Excel میں کیسے لائیں؟</summary><div>
+    <p><span class="ui">مصنوعات کی فہرست</span> یا <span class="ui">موجود اسٹاک</span> رپورٹ کو CSV میں ایکسپورٹ کریں (دیکھیں <a href="#export-report">رپورٹیں</a>)۔ یہ CSV ایپ میں واپس امپورٹ بھی ہو سکتی ہے۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="backup">
+  <h2>بیک اپ، بحالی اور فون بدلنا</h2>
+  <p class="lead">آپ کا ڈیٹا فون میں رہتا ہے۔ فون گم ہونے یا ری سیٹ ہونے پر کہیں اور رکھا بیک اپ ہی اسے بچاتا ہے۔</p>
+
+  <div class="note"><strong>ایپ ان انسٹال کرنے یا اس کا اسٹوریج صاف کرنے سے آپ کا سارا ڈیٹا مٹ جاتا ہے۔</strong> ان میں سے کچھ بھی کرنے سے پہلے بیک اپ سیٹ کریں۔</div>
+
+  <details id="setup-backup"><summary>اپنے ڈیٹا کا بیک اپ کیسے لیں؟</summary><div>
+    <ol>
+      <li><span class="ui">&#8942;</span> مینو سے <span class="ui">بیک اپ</span> کھولیں۔</li>
+      <li><span class="ui">منزل شامل کریں</span> دبائیں اور چنیں کہ بیک اپ کہاں جائیں: <span class="ui">اس آلے کا فولڈر</span> (فون کی میموری، SD کارڈ، USB ڈرائیو، یا کلاؤڈ ایپ سے ہم آہنگ ہونے والا فولڈر)، <span class="ui">FTP سرور</span>، یا <span class="ui">مشترکہ فولڈر (SMB)</span> (NAS یا Windows کمپیوٹر کا مشترکہ فولڈر)۔</li>
+      <li>سرور کے لیے پتہ اور لاگ اِن ڈالیں، پھر <span class="ui">کنکشن آزمائیں</span>۔ یہ جانچتا ہے کہ وہاں واقعی فائل لکھی جا سکتی ہے۔</li>
+      <li><span class="ui">ابھی بیک اپ لیں</span> دبائیں، اور تقریباً روزانہ ایک کاپی کے لیے <span class="ui">خودکار بیک اپ</span> چالو کریں۔</li>
+    </ol>
+    <p>ہر بیک اپ آپ کی سبھی جگہوں پر جاتا ہے۔ کوئی جگہ کام کرنا بند کرے تو اطلاع آتی ہے اور ڈیش بورڈ پر پٹی دکھتی ہے، جب تک ٹھیک نہ ہو۔</p>
+  </div></details>
+
+  <details id="restore"><summary>بیک اپ کیسے بحال کریں؟</summary><div>
+    <p><span class="ui">بیک اپ</span> میں فہرست سے بیک اپ ڈھونڈیں اور <span class="ui">بحال کریں</span> دبائیں۔ کچھ بھی بدلنے سے پہلے آپ چنتے ہیں کہ کون سا ڈیٹا واپس لانا ہے اور دیکھتے ہیں کہ بیک اپ میں کیا ہے۔ بحالی آپ کے موجودہ ڈیٹا کی جگہ بیک اپ کا ڈیٹا رکھ دیتی ہے۔</p>
+    <p>"یہ بیک اپ ایپ کے نئے ورژن سے بنا ہے۔ ایپ اپ ڈیٹ کریں، پھر اسے بحال کریں۔" کا مطلب ہے کہ پہلے Google Play سے نیا ورژن انسٹال کرنا ہوگا۔</p>
+  </div></details>
+
+  <details id="new-phone"><summary>ڈیٹا نئے فون پر کیسے لے جائیں؟</summary><div>
+    <ol>
+      <li>پرانے فون پر ایسی جگہ بیک اپ لیں جہاں نیا فون پہنچ سکے: FTP/SMB سرور، کلاؤڈ سے ہم آہنگ فولڈر، یا خود کاپی کی گئی فائل۔</li>
+      <li>نئے فون پر Stock Management انسٹال کریں۔ خوش آمدید اسکرین پر <span class="ui">بیک اپ بحال کریں</span> چنیں، پھر <span class="ui">فائل سے</span>، <span class="ui">سرور سے</span> یا <span class="ui">فولڈر سے</span>۔</li>
+    </ol>
+    <p>حفاظت کے لیے سرور کے پاس ورڈ بیک اپ میں نہیں رکھے جاتے۔ نئے فون پر انہیں دوبارہ ڈالیں۔</p>
+  </div></details>
+
+  <details id="two-phones"><summary>کیا دو فون ایک ہی اسٹاک بانٹ سکتے ہیں؟</summary><div>
+    <p>ایپ میں کوئی آن لائن اکاؤنٹ نہیں، اس لیے دو فون آپس میں ہم آہنگ نہیں ہوتے۔ کئی لوگ ایک ہی اسٹاک پر کام کریں، اس کے لیے ڈیٹا ایک فون پر رکھیں اور باقی لوگ اسی Wi-Fi پر براؤزر سے <a href="#remote">ریموٹ رسائی</a> کے ذریعے استعمال کریں۔ دوسرے فون پر بحال کیا گیا بیک اپ ایک کاپی ہے: ایک پر کی گئی تبدیلیاں دوسرے پر نہیں دکھتیں۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="remote">
+  <h2>کمپیوٹر، ٹیبلٹ یا ہینڈ ہیلڈ سے استعمال (ریموٹ رسائی)</h2>
+  <p class="lead">اسی Wi-Fi پر دوسری ڈیوائسز براؤزر میں آپ کا اسٹاک کھولتی ہیں، ہر ایک کا اپنا لاگ اِن اور اپنی اجازتیں۔</p>
+
+  <details id="remote-setup"><summary>کمپیوٹر پر ایپ کیسے کھولیں؟</summary><div>
+    <ol>
+      <li>فون پر <span class="ui">&#8942;</span> مینو سے <span class="ui">ریموٹ رسائی</span> کھولیں۔ فون پر اسکرین لاک ہو تو اس کی تصدیق کریں۔</li>
+      <li><span class="ui">سرور شروع کریں</span> دبائیں۔ اسکرین پر <code>http://192.168.1.24:8080</code> جیسا پتہ اور QR کوڈ دکھتا ہے۔</li>
+      <li><span class="ui">کسی کو شامل کریں</span> دبائیں اور لاگ اِن بنائیں: نام، صارف نام اور پاس ورڈ۔</li>
+      <li>اس شخص پر <span class="ui">منتخب کریں</span> دبائیں اور اسے ملنے والی اسکرینیں اور کام چنیں (یا ایک پری سیٹ: <span class="ui">صرف دیکھنا</span>، <span class="ui">اسٹاک گنتی کرنے والا</span>، <span class="ui">قیمت چیکر</span>، <span class="ui">سب کچھ</span>)۔ جب تک آپ نشان نہ لگائیں، کچھ بھی اجازت میں نہیں۔</li>
+      <li>کمپیوٹر کے براؤزر (Chrome، Edge، Firefox، Safari) میں پتہ لکھیں اور لاگ اِن کریں۔</li>
+      <li>کام ختم ہو جائے تو <span class="ui">سرور روکیں</span> دبائیں۔</li>
+    </ol>
+    <p>براؤزر سے کی گئی ہر تبدیلی اس شخص کے نام سے فون پر آتی ہے۔ سرور کبھی خود بخود شروع نہیں ہوتا۔</p>
+  </div></details>
+
+  <details id="remote-cant-connect"><summary>براؤزر پتہ نہیں کھول پا رہا۔</summary><div>
+    <ul>
+      <li>دونوں ڈیوائسز <strong>ایک ہی Wi-Fi</strong> پر ہونی چاہئیں (یا کمپیوٹر فون کے ہاٹ اسپاٹ سے جڑا ہو)۔ موبائل ڈیٹا سے کام نہیں چلتا۔</li>
+      <li>مہمان یا عوامی Wi-Fi اکثر ڈیوائسز کو ایک دوسرے سے جڑنے نہیں دیتے۔ اپنا اصل نیٹ ورک یا فون کا ہاٹ اسپاٹ استعمال کریں۔</li>
+      <li>پورا پتہ لکھیں، <code>http://</code> اور پورٹ (<code>:8080</code>) کے ساتھ۔</li>
+      <li>دیکھیں کہ سرور ابھی چل رہا ہے۔ حالیہ ایپس سے ایپ کو سوائپ کر کے بند کرنے پر وہ رک جاتا ہے، اور نیٹ ورک بدلنے پر بھی۔</li>
+      <li>نام والا پتہ (<code>.local</code> پر ختم ہونے والا) تبھی چلتا ہے جب آپ کا راؤٹر اسے سپورٹ کرے۔ نمبروں والا پتہ استعمال کریں۔</li>
+      <li>ایپ کی اطلاعات کی اجازت دیں۔ سرور چلتے وقت اس کی اطلاع میں روکنے کا بٹن ہوتا ہے۔</li>
+    </ul>
+  </div></details>
+
+  <details id="remote-can-do"><summary>براؤزر سے کیا کیا کر سکتے ہیں؟</summary><div>
+    <p>جو آپ اجازت دیں: ڈیش بورڈ، مصنوعات (دیکھنا، شامل کرنا، بدلنا)، اسکینر، فوری اسٹاک، اسٹاک گنتی، تاریخ، رپورٹس (CSV/PDF)، زمرے، سپلائرز، مقامات، مقامات کے درمیان اسٹاک منتقل کرنا، لیبل چھاپنا اور قیمت چیک۔ بیک اپ، امپورٹ، ردی، لیبل ڈیزائن، ترتیبات، فروخت اور خود ریموٹ رسائی فون پر ہی رہتے ہیں۔ براؤزر سے کچھ بھی حذف نہیں کیا جا سکتا۔</p>
+    <p>ہر براؤزر <span class="ui">ڈسپلے</span> میں اپنا لائٹ یا ڈارک موڈ، تھیم، حروف کا سائز اور فہرست کا انداز چن سکتا ہے۔</p>
+  </div></details>
+
+  <details id="handheld"><summary>ہینڈ ہیلڈ (PDA) یا USB بارکوڈ اسکینر استعمال کرنا</summary><div>
+    <p>اس ڈیوائس کے براؤزر میں پتہ کھولیں اور ایسے اکاؤنٹ سے لاگ اِن کریں جسے اسکینر کی اجازت ہو۔ اوپر ہینڈ ہیلڈ آئیکن دبائیں، <span class="ui">وصولی</span> یا <span class="ui">اجرا</span> چنیں، اور اسکین کریں۔ ہر کوڈ فہرست میں جڑتا ہے (دوبارہ اسکین سے ایک اور)، اور ایک بٹن پوری فہرست محفوظ کر دیتا ہے۔ <span class="ui">اسکینر کی کلیدیں کہیں سے بھی پڑھیں</span> چالو کریں تاکہ اسکرین کا کی بورڈ بیچ میں نہ آئے۔</p>
+    <p>Wi-Fi کٹ جائے تو غیر محفوظ فہرست ڈیوائس پر رہتی ہے، واپس آنے پر محفوظ کر لیں۔ براؤزر ڈیوائس کے کیمرے سے اسکین نہیں کر سکتا (اس کے لیے محفوظ کنکشن چاہیے)، اس لیے اسکینر استعمال کریں یا کوڈ ٹائپ کریں۔</p>
+  </div></details>
+
+  <details id="price-checker-screen"><summary>کیا گاہک خود اسکرین پر قیمت دیکھ سکتے ہیں؟</summary><div>
+    <p>جی ہاں۔ <span class="ui">قیمت چیکر</span> پری سیٹ سے ایک لاگ اِن بنائیں، کاؤنٹر کے کمپیوٹر یا ٹیبلٹ پر اسکینر کے ساتھ قیمت چیک کھولیں، اور <span class="ui">قیمت چیک اسکرین</span> چنیں۔ یہ آپ کا لوگو اور کمپنی کا نام (رپورٹ ڈیزائن سے) دکھاتی ہے اور پوری اسکرین کا بٹن دیتی ہے۔ یہ کیا دکھائے اور کب صاف ہو، یہ <span class="ui">ترتیبات ← قیمت چیک اسکرین</span> میں طے ہوتا ہے۔</p>
+  </div></details>
+
+  <details id="remote-safety"><summary>کیا ریموٹ رسائی محفوظ ہے؟</summary><div>
+    <ul>
+      <li>یہ صرف نجی نیٹ ورک (گھر یا دفتر کا Wi-Fi، فون کا ہاٹ اسپاٹ) پر چلتی ہے، کھلے انٹرنیٹ پر کبھی نہیں۔</li>
+      <li>ہر شخص کا اپنا پاس ورڈ ہے اور وہ صرف وہی دیکھتا ہے جس پر آپ نے نشان لگایا۔ آپ دیکھ سکتے ہیں کہ کون جڑا ہے، اسے الگ کر سکتے ہیں، اکاؤنٹ بند کر سکتے ہیں یا پاس ورڈ بدل سکتے ہیں، اور حالیہ سرگرمی پڑھ سکتے ہیں۔</li>
+      <li>کنکشن <strong>انکرپٹڈ نہیں ہے</strong>: اسے قابلِ اعتماد نیٹ ورک پر استعمال کریں، عوامی Wi-Fi پر نہیں۔</li>
+      <li>اگر فون پر اسکرین لاک نہیں ہے، تو اسے ہاتھ میں لینے والا کوئی بھی ریموٹ رسائی کھول سکتا ہے۔ اسکرین لاک لگانے سے یہ محفوظ رہتی ہے۔</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="notifications">
+  <h2>اطلاعات</h2>
+  <p class="lead">کم اسٹاک کی اطلاع، گنتی کی یاد دہانی اور بیک اپ کی تنبیہ۔</p>
+
+  <details id="low-stock-alert"><summary>کم اسٹاک کی اطلاع کیسے آتی ہے؟ کیا وقت چن سکتے ہیں؟</summary><div>
+    <p>ایپ دن میں ایک بار کم از کم سے نیچے والی مصنوعات کا خلاصہ بھیجتی ہے۔ وقت <span class="ui">ترتیبات ← اطلاعات ← کم اسٹاک الرٹ</span> میں چنیں۔ یہ اس وقت کے <em>آس پاس</em> آتی ہے، کیونکہ بیٹری بچانے کے لیے Android اسے چند منٹ مؤخر کر سکتا ہے۔</p>
+  </div></details>
+
+  <details id="no-notifications"><summary>مجھے کوئی اطلاع نہیں ملتی۔</summary><div>
+    <ul>
+      <li>دیکھیں کہ <span class="ui">ترتیبات ← اطلاعات ← اطلاعات آن کریں</span> چالو ہے۔</li>
+      <li>ایپ کو اطلاعات کی اجازت دیں: ڈیش بورڈ کے کارڈ پر <span class="ui">الرٹ آن کریں</span> دبائیں، یا Android ترتیبات ← ایپس ← Stock Management ← اطلاعات میں جائیں۔</li>
+      <li>ہر قسم (کم اسٹاک انتباہات، اسٹاک جانچ کی یاد دہانی، بیک اپ کے مسائل، ریموٹ رسائی) Android کی ایپ اطلاعات کی ترتیبات میں الگ سے چالو یا بند ہوتی ہے۔</li>
+      <li>کچھ فون (Xiaomi، Infinix، Tecno، Oppo، Vivo، Samsung&hellip;) بیٹری بچانے کے لیے پس منظر کی ایپس بند کر دیتے ہیں۔ ایپ کو پس منظر میں چلنے دیں، یا اس کی بیٹری ترتیب "کوئی پابندی نہیں" پر رکھیں۔</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="customize">
+  <h2>ایپ کو اپنی مرضی سے بنائیں</h2>
+  <p class="lead">نیچے کی ساری چیزیں ترتیبات میں ہیں۔</p>
+
+  <details id="themes"><summary>تھیم، ڈارک موڈ اور رنگ</summary><div>
+    <p><span class="ui">ترتیبات ← تھیم</span>: <span class="ui">ظاہری انداز</span> (سسٹم، روشن، گہرا)، <span class="ui">ایپ تھیم</span> (ہاربر، گریفائٹ، کرافٹ، نصف شب)، اور وال پیپر سے رنگ لینے کے لیے <span class="ui">ڈائنامک رنگ</span> (Android 12+)۔</p>
+  </div></details>
+
+  <details id="all-settings"><summary>اور کیا بدل سکتے ہیں؟</summary><div>
+    <table>
+      <tbody>
+        <tr><td><span class="ui">مینو کی ترتیب</span></td><td>نیچے کی پٹی اور مینو میں کون سی اسکرینیں، کس ترتیب میں</td></tr>
+        <tr><td><span class="ui">ڈیش بورڈ</span></td><td>کون سے کارڈ اور چارٹ دکھیں، ان کی ترتیب اور چوڑائی</td></tr>
+        <tr><td><span class="ui">مصنوع کا کارڈ</span></td><td>فہرست میں ہر مصنوع کیا دکھائے</td></tr>
+        <tr><td><span class="ui">طے شدہ کم اسٹاک حد</span></td><td>نئی مصنوعات میں پہلے سے بھرا کم از کم اسٹاک</td></tr>
+        <tr><td><span class="ui">اسٹاک کی نقل و حرکت</span></td><td>اسٹاک بٹا ہو تو کہاں سے پوچھنا؛ اسٹاک کی مالیت کیسے نکلے</td></tr>
+        <tr><td><span class="ui">بارکوڈ فارمیٹس</span> &middot; <span class="ui">اسکین کی اطلاع</span></td><td>اسکینر کون سے کوڈ پڑھے؛ بیپ اور وائبریشن</td></tr>
+        <tr><td><span class="ui">PDF رپورٹ</span></td><td>ایکسپورٹ کی گئی PDF رپورٹ کیسی دکھے</td></tr>
+        <tr><td><span class="ui">قیمت چیک اسکرین</span></td><td>گاہکوں کی قیمت والی اسکرین کیا دکھائے</td></tr>
+        <tr><td><span class="ui">عمومی</span></td><td>کرنسی کی علامت، زبان</td></tr>
+        <tr><td><span class="ui">اطلاعات</span></td><td>کم اسٹاک اطلاع کا وقت، گنتی کی یاد دہانی</td></tr>
+      </tbody>
+    </table>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trash">
+  <h2>ردی</h2>
+  <p class="lead">جب تک آپ اسے خالی نہ کریں، حذف کی گئی کوئی چیز ہمیشہ کے لیے نہیں جاتی۔</p>
+
+  <details id="restore-deleted"><summary>حذف کی گئی چیز واپس کیسے لائیں؟</summary><div>
+    <p><span class="ui">&#8942;</span> مینو سے <span class="ui">ردی</span> کھولیں۔ حذف کی گئی مصنوعات، زمرے، سپلائر، مقامات، لیبل اور واپس لی گئی نقل و حرکت سب یہاں ہیں۔ <span class="ui">بحال کریں</span> دبائیں: ایپ پہلے ٹھیک ٹھیک بتاتی ہے کہ کیا ہوگا۔ بحالی صرف شامل کرتی ہے؛ آپ کے پاس ابھی جو ہے اسے کبھی نہیں بدلتی (ٹکرانے والے SKU یا نام کو نیا ملتا ہے، جیسے <code>A-100-2</code>)۔</p>
+    <p><span class="ui">ہمیشہ کے لیے حذف کریں</span> ایک چیز ہٹاتا ہے؛ <span class="ui">خالی کریں</span> پوری ردی خالی کرتا ہے۔ دونوں میں سے کوئی بھی آپ کے موجودہ ڈیٹا کو نہیں چھوتا۔</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trouble">
+  <h2>مسائل اور رابطہ</h2>
+
+  <details id="old-version"><summary>اس صفحے کی کوئی سہولت میری ایپ میں نہیں ہے۔</summary><div>
+    <p>Google Play سے Stock Management اپ ڈیٹ کریں۔ حالیہ اپ ڈیٹس میں مقامات کے درمیان اسٹاک منتقل کرنا، لاٹ اور سیریل نمبر، فروخت اور بل، قیمت دیکھنا اور بہت کچھ آیا ہے۔ اپ ڈیٹ کرنے پر آپ کا ڈیٹا برقرار رہتا ہے۔</p>
+  </div></details>
+
+  <details id="privacy"><summary>میرا ڈیٹا کہاں رہتا ہے؟ کون دیکھ سکتا ہے؟</summary><div>
+    <p>صرف آپ کے فون میں، ایپ کے نجی اسٹوریج میں۔ ہمیں آپ کی مصنوعات، اسٹاک یا فروخت کی معلومات نہیں ملتیں۔ <a href="../../">رازداری کی پالیسی</a> (انگریزی میں) پڑھیں۔</p>
+  </div></details>
+
+  <details id="contact" open><summary>سوال کیسے پوچھیں یا مسئلہ کیسے بتائیں؟</summary><div>
+    <p>ایپ میں: <span class="ui">ترتیبات ← رائے بھیجیں</span> (یا مرکزی اسکرینوں کے اوپر بات چیت کا بلبلہ)۔ قسم چنیں، پیغام لکھیں، اور <strong>جواب چاہیے تو <span class="ui">رابطہ (اختیاری)</span> خانے میں اپنا ای میل ڈالیں</strong>۔ اس کے بغیر ہم آپ کا پیغام پڑھ سکتے ہیں مگر جواب نہیں دے سکتے۔ بھیجنے کے لیے انٹرنیٹ چاہیے۔</p>
+    <p>یا ہمیں <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a> پر لکھیں۔ ہم ہر پیغام پڑھتے ہیں، کسی بھی زبان میں۔</p>
+  </div></details>
+</section>
+
+
+<footer>
+  <p class="langs"><a href="../" lang="en">English</a> &middot; <a href="../es/" lang="es">Español</a> &middot; <a href="../fr/" lang="fr">Français</a> &middot; <a href="../pt/" lang="pt">Português</a> &middot; <a href="../ru/" lang="ru">Русский</a> &middot; <a href="../zh/" lang="zh-Hans">中文</a> &middot; <a href="../ar/" lang="ar">العربية</a> &middot; <a href="../hi/" lang="hi">हिन्दी</a> &middot; <a href="../bn/" lang="bn">বাংলা</a> &middot; <strong>اردو</strong> &middot; <a href="../id/" lang="id">Bahasa Indonesia</a></p>
+  <p>Stock Management &middot; <a href="../../">رازداری کی پالیسی</a> &middot; <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a></p>
+  <p>&copy; 2026 Cool App Helpdesk</p>
+</footer>
+
+</main>
+<script>
+(function () {
+  var CODE = 'ur';
+  var PERMALINK = "اس جواب کا لنک";
+  var OFFERS = {"en":{"href":"../","banner":"Read this help in English"},"es":{"href":"../es/","banner":"Leer esta ayuda en español"},"fr":{"href":"../fr/","banner":"Lire cette aide en français"},"pt":{"href":"../pt/","banner":"Ler esta ajuda em português"},"ru":{"href":"../ru/","banner":"Читать справку на русском"},"zh":{"href":"../zh/","banner":"阅读中文版帮助"},"ar":{"href":"../ar/","banner":"اقرأ هذه المساعدة بالعربية"},"hi":{"href":"../hi/","banner":"यह सहायता हिन्दी में पढ़ें"},"bn":{"href":"../bn/","banner":"এই সাহায্য বাংলায় পড়ুন"},"id":{"href":"../id/","banner":"Baca bantuan ini dalam Bahasa Indonesia"}};
+  var q = document.getElementById('q');
+  var none = document.getElementById('noresults');
+  var items = Array.prototype.slice.call(document.querySelectorAll('section.card details'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('section.card'));
+  var toc = document.querySelector('nav.topics');
+
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  // The switcher keeps the answer you are on: help/#move-stock → help/es/#move-stock.
+  document.getElementById('lang').addEventListener('change', function () {
+    store('helpLang', this.options[this.selectedIndex].value.replace(/^(\.\.\/)?/, '').replace(/\/$/, '') || 'en');
+    location.href = this.value + location.hash;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('footer .langs a'), function (a) {
+    a.addEventListener('click', function (e) {
+      store('helpLang', (a.getAttribute('href').replace(/^(\.\.\/)?/, '').replace(/\/$/, '')) || 'en');
+      a.href = a.getAttribute('href') + location.hash;
+    });
+  });
+
+  // Offer the reader's own language once, unless they have already picked one.
+  if (!store('helpLang')) {
+    var langs = (navigator.languages || [navigator.language || '']).map(function (l) { return l.toLowerCase().split('-')[0]; });
+    for (var i = 0; i < langs.length; i++) {
+      var c = langs[i] === 'in' ? 'id' : langs[i];
+      if (c === CODE) break;
+      if (OFFERS[c]) {
+        var o = document.getElementById('offer');
+        var a = document.createElement('a');
+        a.textContent = OFFERS[c].banner;
+        a.href = OFFERS[c].href;
+        a.setAttribute('lang', c);
+        a.addEventListener('click', function () { store('helpLang', c); a.href = OFFERS[c].href + location.hash; });
+        o.appendChild(a);
+        o.style.display = 'block';
+        break;
+      }
+    }
+  }
+
+  // Each answer links to itself, so one answer can be sent to someone.
+  items.forEach(function (d) {
+    var p = document.createElement('p');
+    p.className = 'permalink';
+    var a = document.createElement('a');
+    a.href = '#' + d.id;
+    a.textContent = PERMALINK;
+    p.appendChild(a);
+    d.querySelector(':scope > div').appendChild(p);
+  });
+
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  var texts = items.map(function (d) { return norm(d.textContent); });
+
+  q.addEventListener('input', function () {
+    var words = norm(q.value).split(/\s+/).filter(Boolean);
+    var searching = words.length > 0;
+    var hits = items.map(function (d, i) {
+      return words.every(function (w) { return texts[i].indexOf(w) !== -1; });
+    });
+    var count = hits.filter(Boolean).length;
+    items.forEach(function (d, i) {
+      d.classList.toggle('hidden', searching && !hits[i]);
+      d.classList.toggle('hit', searching && hits[i]);
+      // A narrow search opens its answers; a broad one leaves them closed to scan.
+      d.open = searching ? hits[i] && count <= 3 : d.id === 'contact';
+    });
+    cards.forEach(function (c) {
+      c.classList.toggle('hidden', searching && !c.querySelector('details:not(.hidden)'));
+    });
+    if (toc) toc.classList.toggle('hidden', searching);
+    none.style.display = searching && count === 0 ? 'block' : 'none';
+  });
+
+  function openTarget() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    // A link followed mid-search must not land on an answer the filter hides.
+    if (q.value) { q.value = ''; q.dispatchEvent(new Event('input')); }
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'DETAILS') el.open = true;
+    el.scrollIntoView({ block: 'start', behavior: 'instant' });
+  }
+  window.addEventListener('hashchange', openTarget);
+  openTarget();
+})();
+</script>
+</body>
+</html>

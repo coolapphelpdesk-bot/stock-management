@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>帮助 — Stock Management</title>
+<meta name="description" content="如何使用 Stock Management：产品、入库与出库、位置与调拨、条码扫描、盘点、销售与单据、报表、导入、备份和远程访问。">
+<style>
+  :root {
+    --bg: #f6f9f9; --surface: #ffffff; --text: #10201f; --muted: #5b6b6a;
+    --primary: #0f5f63; --primary-soft: #dcefef; --border: #dde7e6;
+    --note-bg: #fff7e6; --note-border: #f0d79a; --note-text: #6b4b00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1717; --surface: #162222; --text: #e2ecec; --muted: #94a8a7;
+      --primary: #86d4d6; --primary-soft: #1d3b3c; --border: #2a3b3b;
+      --note-bg: #2e2612; --note-border: #5e4b1c; --note-text: #f2d9a0;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+    line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  html[lang="ur"] body { font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Noto Sans Arabic", sans-serif; line-height: 2; }
+  html[lang="ar"] body { font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 40px 24px 96px; }
+  header { border-radius: 16px; padding: 28px 28px 30px; margin-bottom: 18px;
+    background: linear-gradient(135deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); color: #fff; }
+  html[dir="rtl"] header { background: linear-gradient(225deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); }
+  .langbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+  .langbar select { font: inherit; font-size: 14px; color: #fff; background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 12px; cursor: pointer; }
+  .langbar select option { color: #10201f; background: #fff; }
+  header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+  header p { margin: 0; opacity: 0.92; font-size: 15px; }
+  #offer { display: none; margin: 0 0 12px; padding: 10px 14px; border-radius: 10px;
+    background: var(--primary-soft); border: 1px solid var(--border); font-weight: 600; }
+  .searchbar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; }
+  .searchbar input { width: 100%; font: inherit; font-size: 16px; padding: 12px 16px;
+    border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); }
+  .searchbar input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+  #noresults { display: none; text-align: center; color: var(--muted); padding: 24px 0; }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; padding: 0; list-style: none; }
+  .toc li { margin: 0; }
+  .toc a { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 14px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+  .toc a:hover { border-color: var(--primary); text-decoration: none; }
+  .card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 24px; margin: 14px 0; }
+  h2 { font-size: 20px; font-weight: 650; margin: 0 0 4px; letter-spacing: -0.005em; }
+  .card > .lead { color: var(--muted); font-size: 14.5px; margin: 0 0 10px; }
+  details { border-top: 1px solid var(--border); }
+  details:first-of-type { border-top: none; }
+  summary { cursor: pointer; padding-block: 11px; padding-inline: 0 28px; font-weight: 600;
+    list-style: none; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; inset-inline-end: 4px; top: 9px; font-size: 20px;
+    font-weight: 400; color: var(--muted); }
+  details[open] > summary::after { content: "\2212"; }
+  details > div { padding: 0 0 14px; }
+  details:target > summary, details.hit > summary { color: var(--primary); }
+  p, ul, ol { margin: 0 0 10px; }
+  ul, ol { padding-inline-start: 22px; padding-inline-end: 0; } li { margin-bottom: 5px; }
+  .ui { font-weight: 600; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .note { background: var(--note-bg); border: 1px solid var(--note-border); color: var(--note-text);
+    border-radius: 10px; padding: 10px 14px; font-size: 14.5px; margin: 10px 0; }
+  .permalink { font-size: 13px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 14px; }
+  th, td { text-align: start; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); background: var(--primary-soft); }
+  tr:last-child td { border-bottom: none; }
+  code { background: var(--primary-soft); padding: 1px 6px; border-radius: 4px; direction: ltr; unicode-bidi: isolate;
+    font-size: 13px; font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
+  a { color: var(--primary); text-decoration: none; } a:hover { text-decoration: underline; }
+  footer { margin-top: 32px; text-align: center; color: var(--muted); font-size: 13px; }
+  footer .langs { line-height: 2; }
+  .hidden { display: none !important; }
+  @media (max-width: 480px) {
+    .wrap { padding: 20px 16px 64px; }
+    header { padding: 20px 20px 24px; } header h1 { font-size: 24px; }
+    .card { padding: 16px 18px; } h2 { font-size: 18px; }
+    table { font-size: 13px; } th, td { padding: 7px 8px; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header>
+  <div class="langbar">
+    <select id="lang" aria-label="语言">
+<option value="../">English</option>
+<option value="../es/">Español</option>
+<option value="../fr/">Français</option>
+<option value="../pt/">Português</option>
+<option value="../ru/">Русский</option>
+<option value="../zh/" selected>中文</option>
+<option value="../ar/">العربية</option>
+<option value="../hi/">हिन्दी</option>
+<option value="../bn/">বাংলা</option>
+<option value="../ur/">اردو</option>
+<option value="../id/">Bahasa Indonesia</option>
+    </select>
+  </div>
+  <h1>Stock Management 帮助</h1>
+  <p>应用里每件事怎么做 &middot; 适用于 1.98 版 &middot; 2026 年 10 月更新</p>
+</header>
+
+<p id="offer"></p>
+
+<div class="searchbar">
+  <input id="q" type="search" placeholder="搜索帮助 — 例如：移动库存、条码、备份、单据" aria-label="搜索帮助 — 例如：移动库存、条码、备份、单据" autocomplete="off">
+</div>
+
+<nav class="topics" aria-label="主题">
+  <ul class="toc">
+    <li><a href="#start">入门</a></li>
+    <li><a href="#products">产品</a></li>
+    <li><a href="#stock">入库与出库</a></li>
+    <li><a href="#locations">位置与调拨</a></li>
+    <li><a href="#lots">批次、有效期、序列号</a></li>
+    <li><a href="#scanner">扫码</a></li>
+    <li><a href="#stocktake">盘点</a></li>
+    <li><a href="#sell">销售与单据</a></li>
+    <li><a href="#history">记录与更正</a></li>
+    <li><a href="#reports">报表与标签</a></li>
+    <li><a href="#import">导入</a></li>
+    <li><a href="#backup">备份与换手机</a></li>
+    <li><a href="#remote">在电脑上使用</a></li>
+    <li><a href="#notifications">通知</a></li>
+    <li><a href="#customize">个性化</a></li>
+    <li><a href="#trash">回收站</a></li>
+    <li><a href="#trouble">问题与联系</a></li>
+  </ul>
+</nav>
+
+<div class="note"><strong>找不到这里描述的功能？</strong>请先在 Google Play 更新应用。本页描述的是当前版本，很多功能（在位置之间移动库存、批次、销售、单据）都是最近的更新才加入的。每次更新新增了什么，可以在 <span class="ui">设置 → 更新内容</span> 查看。</div>
+
+<p id="noresults">没有找到匹配的内容。试试更短的词，或者<a href="#contact">问我们</a>。</p>
+
+<!-- ============================================================ -->
+<section class="card" id="start">
+  <h2>入门</h2>
+  <p class="lead">这个应用是什么、第一个界面，以及如何找到各项功能。</p>
+
+  <details id="what-is-it"><summary>Stock Management 是什么？</summary><div>
+    <p>一款面向商店、仓库和小企业的库存管理应用。你可以维护带 SKU 和条码的产品清单，记录入库和出库，随时知道有多少货、在哪里、值多少钱。它还能做盘点、带打印单据的销售、报表、标签和备份。</p>
+    <p>所有数据都保存在<strong>你的手机上</strong>。无需注册账号，也没有订阅费用。</p>
+  </div></details>
+
+  <details id="internet"><summary>需要账号或网络吗？</summary><div>
+    <p>不需要。应用可以完全离线使用，没有登录。除非你自己把数据发到别处（例如备份或导出的报表），数据不会离开设备。</p>
+    <p>只有少数功能会用到网络：发送反馈、打开 Google Play 页面、备份到 FTP 或 SMB 服务器，以及远程访问（它使用的是你的本地 Wi-Fi，而不是互联网）。</p>
+  </div></details>
+
+  <details id="first-screen"><summary>第一个界面问我想如何开始，该选哪个？</summary><div>
+    <ul>
+      <li><span class="ui">恢复备份</span> &mdash; 你在另一部手机上用过本应用，并且有备份。请看<a href="#new-phone">换到新手机</a>。</li>
+      <li><span class="ui">从电子表格导入</span> &mdash; 你的产品已经在 Excel 或 Google 表格里。请看<a href="#import">导入</a>。</li>
+      <li><span class="ui">从我自己的库存开始</span> &mdash; 空白应用，逐个添加产品。</li>
+      <li><strong>示例数据</strong>（综合商店、服装店、书店）&mdash; 用演示产品填满应用，方便你四处看看。</li>
+    </ul>
+    <p>这个界面只出现一次，但选择不会让你失去什么：之后随时都可以导入、恢复或添加产品。</p>
+  </div></details>
+
+  <details id="sample-data"><summary>如何加载或移除示例数据？</summary><div>
+    <p>只有在应用为空时才能添加示例数据：在欢迎界面，或者在仪表盘的 <span class="ui">用示例数据试一试</span> 卡片中。添加之前，应用会明确告诉你将添加多少产品、类别、供应商和位置。</p>
+    <p>要移除，点击仪表盘横幅上的 <span class="ui">清除示例数据</span>。只会删除示例记录。</p>
+  </div></details>
+
+  <details id="menu"><summary>所有界面在哪里？底部只有四个。</summary><div>
+    <p>在手机上，底部栏显示仪表盘和菜单中的前三个界面。其余界面都在每个界面右上角的 <span class="ui">&#8942;</span> 菜单里：销售、盘点、交易、报表、分类、供应商、位置、标签、导入、备份、回收站、远程访问和设置。在平板上，它们都在侧边栏中。</p>
+    <p>要选择哪些界面放在底部栏，进入 <span class="ui">设置 → 菜单配置</span>，把它们上移或下移。从不使用的界面也可以隐藏（仪表盘和设置始终保留）。</p>
+  </div></details>
+
+  <details id="language"><summary>如何更改语言？</summary><div>
+    <p><span class="ui">设置 → 语言</span>。应用支持 English、Español、Français、Português、Русский、中文、العربية、हिन्दी、বাংলা、اردو 和 Bahasa Indonesia。</p>
+  </div></details>
+
+  <details id="dashboard"><summary>仪表盘显示什么？</summary><div>
+    <p>产品总数、低库存、库存价值、最近变动、提醒和图表（库存水平、按类别的产品数和价值、7 天和 30 天的变动、需要补货的产品、按位置和供应商的库存价值、变动最多的产品，以及即将过期的批次）。</p>
+    <p>点击仪表盘底部的 <span class="ui">自定义仪表盘</span>，或进入 <span class="ui">设置 → 仪表盘</span>，可以隐藏卡片、调整顺序并设置每张卡片的宽度。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="products">
+  <h2>产品</h2>
+  <p class="lead">添加、编辑、整理和查找产品。</p>
+
+  <details id="add-product"><summary>如何添加产品？</summary><div>
+    <ol>
+      <li>打开 <span class="ui">产品</span>，点击 <span class="ui">+</span>。</li>
+      <li>填写 <span class="ui">SKU</span> 和 <span class="ui">名称</span>（两者都是必填）。SKU 是你给商品的编码，不能重复。</li>
+      <li>可选：添加照片、描述、类别、位置、供应商、单位（个、千克、升……）、最低和最高库存、成本价、售价和条码。条码栏旁边有扫码按钮。</li>
+      <li>在 <span class="ui">数量</span> 中填写你现在的数量。它会被记录为该产品的初始库存。</li>
+      <li>点击 <span class="ui">保存产品</span>。</li>
+    </ol>
+    <p>更快的方法：在<a href="#scanner">扫描</a>中扫描一个未知条码，然后点击 <span class="ui">以此条码添加产品</span>；或者从表格<a href="#import">导入</a>整个清单。</p>
+  </div></details>
+
+  <details id="edit-quantity"><summary>为什么编辑产品时不能修改数量？</summary><div>
+    <p>这是有意设计的。每一次库存变化都会记录为一条变动（谁、何时、为什么、变动前后），这样记录始终对得上。请通过 <a href="#stock-in-out">入库 / 出库</a>、<a href="#quick-stock">快速库存</a>、<a href="#scanner">扫描</a> 或<a href="#stocktake">盘点</a>来修改数量。产品的其他信息（名称、价格、条码、类别……）用产品页上的铅笔图标编辑。</p>
+  </div></details>
+
+  <details id="product-photo"><summary>如何给产品添加照片？</summary><div>
+    <p>在产品表单中点击 <span class="ui">添加照片</span>，然后选择 <span class="ui">拍照</span> 或 <span class="ui">从相册选择</span>。没有照片的产品会显示一个其类别颜色的包裹图案。</p>
+  </div></details>
+
+  <details id="delete-product"><summary>如何删除产品？还能找回吗？</summary><div>
+    <p>打开产品，点击顶部的垃圾桶图标。它过去的变动仍保留在记录中。产品会进入<a href="#trash">回收站</a>，以后可以从那里恢复。</p>
+  </div></details>
+
+  <details id="find-product"><summary>如何搜索、排序和筛选产品列表？</summary><div>
+    <p>搜索框可以按名称、SKU 或条码查找产品；旁边的扫码按钮可以通过扫码搜索。排序和筛选按钮可按名称、数量、库存价值或最近更新排序，并把列表限定为一个类别。在仪表盘上点击 <span class="ui">低库存</span>，会打开只显示低库存产品的列表。在平板上还可以选择列表显示几列。</p>
+  </div></details>
+
+  <details id="product-card"><summary>可以选择列表中每个产品显示什么吗？</summary><div>
+    <p>可以：<span class="ui">设置 → 产品卡片 → 自定义产品卡片</span>。可以显示或隐藏照片、类别、供应商、位置、价格、成本、描述、库存条等，并按你想要的顺序排列。实时预览会显示效果。</p>
+  </div></details>
+
+  <details id="categories"><summary>类别、供应商和位置是怎么用的？</summary><div>
+    <p>它们是你给产品归类用的列表。在 <span class="ui">&#8942;</span> 菜单中各自的界面（<span class="ui">分类</span>、<span class="ui">供应商</span>、<span class="ui">位置</span>）用 <span class="ui">+</span> 创建，或者让导入自动创建。然后在产品表单中选择。</p>
+    <p>点击任意类别、供应商或位置，可以看到归在其下的产品以及每个产品的库存数量。</p>
+    <p>删除它们绝不会删除产品：产品只是不再属于该类别、供应商或位置；从回收站恢复后会重新关联。</p>
+  </div></details>
+
+  <details id="low-stock"><summary>“低库存”是怎么判断的？</summary><div>
+    <p>每个产品都有自己的 <span class="ui">最低库存</span>。数量等于或低于它时，产品被标记为低库存（为零时标记为缺货）。如果设置了 <span class="ui">最高库存</span> 且超过它，则标记为库存过剩。</p>
+    <p>新产品默认填入的值在 <span class="ui">设置 → 默认最低库存阈值</span> 中设置。低库存产品会显示在仪表盘、产品列表（点击低库存卡片）、低库存报表以及<a href="#notifications">每日低库存提醒</a>中。</p>
+  </div></details>
+
+  <details id="currency"><summary>如何更改货币？</summary><div>
+    <p><span class="ui">设置 → 常规 → 货币符号</span>。输入你使用的符号（例如 ¥、HK$、NT$、$）。这只改变价格的显示方式，不会换算金额。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stock">
+  <h2>入库与出库</h2>
+  <p class="lead">记录到货和出货。</p>
+
+  <details id="stock-in-out"><summary>如何增加或减少库存？</summary><div>
+    <ol>
+      <li>打开产品，点击 <span class="ui">调整库存</span>。</li>
+      <li>选择 <span class="ui">入库</span>（到货、退货）或 <span class="ui">出库</span>（销售、损坏、领用）。</li>
+      <li>输入数量，也可以写一个原因（“订单 123”“损坏”）。</li>
+      <li>如果你使用了位置，选择库存进入哪里或从哪里出。</li>
+      <li>确认。新数量会立即显示，这条变动会加入<a href="#history">交易</a>。</li>
+    </ol>
+    <p>在产品列表、<a href="#quick-stock">快速库存</a>以及<a href="#scanner">扫描</a>扫码之后，打开的都是同一个窗口。</p>
+  </div></details>
+
+  <details id="quick-stock"><summary>什么是快速库存？</summary><div>
+    <p>一个产品网格，每个方块上都有 <span class="ui">+</span> 和 <span class="ui">&minus;</span>：点一下加一或减一。适合在柜台使用，也适合没有条码的商品（<span class="ui">无条形码</span> 筛选只显示这些商品）。点击方块可打开完整的库存窗口。</p>
+    <p>点了 + 或 &minus; 之后，该方块上的价格会被一个撤销箭头替换几秒钟。列表滚动时的点击会被忽略，避免误改库存。</p>
+  </div></details>
+
+  <details id="set-exact"><summary>清点后如何设置准确数量？</summary><div>
+    <p>使用<a href="#stocktake">盘点</a>。你只需输入清点出的数量，应用会自动算出差额并记录为一次调整，不用自己做减法。</p>
+  </div></details>
+
+  <details id="negative"><summary>为什么应用拒绝出库，或者说这里的数量不够？</summary><div>
+    <p>库存不能低于零。如果一个产品存放在多个地方，出库会从你选择的地方（或默认位置）扣除。那里不够时，提示会告诉你其余的库存在哪里，例如：“此处仅有 3 个。库存分布：A 店 5，货车 2”。请在 <span class="ui">出库来源</span> 中选择那个地方，或者先<a href="#move-stock">移动库存</a>。</p>
+  </div></details>
+
+  <details id="mistake"><summary>我输错了数量，怎么改？</summary><div>
+    <p>请看<a href="#fix-movement">更正或撤销一条变动</a>。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="locations">
+  <h2>位置与调拨</h2>
+  <p class="lead">把库存放在多个地方 &mdash; 仓库、门店、货车、货架 &mdash; 并在它们之间移动。</p>
+
+  <details id="move-stock"><summary>如何把库存从一个位置调拨到另一个位置？</summary><div>
+    <p><strong>1. 创建位置</strong>（只需一次）：<span class="ui">&#8942; → 位置 → +</span>，给每个位置起一个名称和简短代码（例如 <code>主仓库</code>、<code>WH-1</code>），然后保存。</p>
+    <p><strong>2. 移动库存：</strong></p>
+    <ol>
+      <li>打开产品。<span class="ui">库存位置</span> 卡片会列出存放该产品的每一个地方。</li>
+      <li>点击库存<em>当前</em>所在位置的那一行，然后点击 <span class="ui">移动</span>。</li>
+      <li>在 <span class="ui">到</span> 中选择目的地并输入数量（会显示可用数量）。</li>
+      <li>确认。只有这部分数量会被移动，其余的留在原处。</li>
+    </ol>
+    <p><strong>也可以从位置操作：</strong><span class="ui">&#8942; → 位置</span>，点击该位置，在存放于此的任意产品旁使用 <span class="ui">移动</span>。</p>
+    <p>每次调拨都会在 <span class="ui">交易</span> 中显示为 <span class="ui">调拨</span>（“仓库 → A 店”），并出现在 <span class="ui">调拨日志</span> 报表中。弄错了？在交易中打开它，点击 <span class="ui">撤销</span>。</p>
+    <p class="muted">要移动产品的<em>全部</em>库存，也可以编辑产品并修改其 <span class="ui">位置</span>。如果它的库存全部在一个地方，库存会随之移动。</p>
+  </div></details>
+
+  <details id="no-where-card"><summary>我看不到“库存位置”卡片或移动按钮。</summary><div>
+    <ul>
+      <li>先创建至少一个位置。只有存在可以移动到的地方时，这张卡片才会出现。</li>
+      <li>更新应用。移动产品的部分库存是在 1.79 版加入的；更早的版本只能修改整个产品的位置。</li>
+    </ul>
+  </div></details>
+
+  <details id="no-location"><summary>我的库存显示为“无库位”，如何放到某个位置？</summary><div>
+    <p>在创建位置之前添加的库存（或其位置已被删除的库存）记在 <span class="ui">无库位</span> 下。像其他库存一样移动它：打开产品，在 <span class="ui">库存位置</span> 中点击 <span class="ui">无库位</span> 那一行，然后点击 <span class="ui">移动</span> 并选择位置。</p>
+  </div></details>
+
+  <details id="default-location"><summary>什么是默认位置？</summary><div>
+    <p>当你不做选择时，新库存进入、出库扣除的地方。在 <span class="ui">位置</span> 中编辑一个位置，打开 <span class="ui">设为默认</span>。只存放在一个地方的产品总是使用那个地方。</p>
+  </div></details>
+
+  <details id="stock-out-from"><summary>如何选择出库或销售从哪里扣？</summary><div>
+    <p>当产品存放在多个地方或批次时，库存窗口会显示 <span class="ui">出库来源</span>。保持 <span class="ui">自动（先过期先出）</span>，或选择确切的地方或批次。在<a href="#sell">销售</a>中，点击 <span class="ui">出库位置：默认位置</span> 为这次销售选择位置。</p>
+    <p>产品分散存放时，快速库存的 + 和 &minus; 会询问从哪里。要始终使用默认位置，关闭 <span class="ui">设置 → 库存变动 → 库存分散时询问位置</span>。</p>
+  </div></details>
+
+  <details id="condition"><summary>可以把库存标记为损坏、预留或隔离吗？</summary><div>
+    <p>可以。按上面的方法移动它，并更改 <span class="ui">状态</span>（良好、已损坏、已预留、隔离），代替或同时更改位置。它仍然计入库存，但只有状态良好的库存才会被销售或自动出库。</p>
+  </div></details>
+
+  <details id="delete-location"><summary>删除一个位置后，库存会怎样？</summary><div>
+    <p>不会丢失任何东西。它的库存会转到 <span class="ui">无库位</span>，相关产品也不再属于该位置。从回收站恢复该位置会重新关联产品，但库存仍留在“无库位”下，直到你把它移回去。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="lots">
+  <h2>批次、有效期和序列号</h2>
+  <p class="lead">适用于食品、药品、化妆品、电子产品……任何会过期或有序列号的商品。</p>
+
+  <details id="record-lot"><summary>如何记录批次、有效期或序列号？</summary><div>
+    <p>入库时，在入库窗口中展开 <span class="ui">批次、有效期、序列号</span> 部分。按需填写：<span class="ui">批次号</span>、<span class="ui">有效期至</span>、<span class="ui">供应商</span>、<span class="ui">单位成本</span>、<span class="ui">序列号</span>。普通库存保持收起即可。</p>
+    <p>序列号每行一个、每件一个：行数必须等于数量。如果你在大多数到货时都填写这些字段，这部分会自动展开。</p>
+  </div></details>
+
+  <details id="fefo"><summary>出库时先用哪个批次？</summary><div>
+    <p>默认先用最早过期的，其次是最早到货的。你也可以随时在 <span class="ui">出库来源</span> 中指定批次。</p>
+  </div></details>
+
+  <details id="expiring"><summary>如何查看快要过期的商品？</summary><div>
+    <p>有临期商品时，仪表盘会显示 <span class="ui">即将过期</span> 卡片（已过期或 30 天内过期）。<span class="ui">有效期</span> 报表按剩余天数列出每个批次，最近的排在最前。</p>
+  </div></details>
+
+  <details id="valuation"><summary>库存价值是怎么计算的？</summary><div>
+    <p>每次到货都会保留其入库成本。在 <span class="ui">设置 → 库存变动 → 库存估值方式</span> 中选择：现有库存的平均成本、最近一次入库成本或商品的成本价。该设置用于库存估值报表和产品页上的库存价值。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="scanner">
+  <h2>条码扫描</h2>
+  <p class="lead">用手机摄像头查找产品、登记库存和查价格。</p>
+
+  <details id="scan-basics"><summary>如何扫描条码？</summary><div>
+    <p>打开 <span class="ui">扫描</span>，把摄像头对准条码。如果有产品使用这个条码，会打开它的库存窗口：选择 <span class="ui">入库</span> 或 <span class="ui">出库</span> 并输入数量。光线暗时可以用手电筒按钮。</p>
+  </div></details>
+
+  <details id="unknown-barcode"><summary>提示“未知条码”。</summary><div>
+    <p>还没有产品使用这个条码。点击 <span class="ui">以此条码添加产品</span> 新建一个已填好条码的产品，或点击 <span class="ui">在商品中搜索此代码</span> 把它关联到已有产品。</p>
+    <p>如果扫描到的代码与某个产品的 SKU 相同，应用会显示“通过 SKU 找到 — 该商品尚未保存条形码。”，并提议把它保存为该产品的条码。</p>
+  </div></details>
+
+  <details id="batch-scan"><summary>可以连续扫描很多商品（一批到货）吗？</summary><div>
+    <p>可以：在扫描界面打开 <span class="ui">批量开</span>。每扫一次就把产品加入列表，再扫同一产品就加一。然后把整个列表一次性保存为入库或出库。未知代码会单独列出并跳过。</p>
+  </div></details>
+
+  <details id="price-check"><summary>如何扫码查价格？</summary><div>
+    <p>在扫描界面打开 <span class="ui">查价</span>。每次扫码都会用大字显示售价，下面是成本和利润、库存价值、各批次成本和近期销售。摄像头会持续扫描，可以一件接一件地查。顾客能看到屏幕时，点眼睛图标可隐藏成本和利润。</p>
+  </div></details>
+
+  <details id="formats"><summary>支持哪些条码？扫得慢或读错码怎么办？</summary><div>
+    <p>EAN-13、EAN-8、UPC-A、UPC-E、Code-128、Code-39、Code-93、二维码和 Data Matrix。在 <span class="ui">设置 → 条码格式</span> 中关闭你从不使用的格式：格式越少，扫得越快、误读越少。提示音和振动在 <span class="ui">设置 → 扫描反馈</span> 中设置。</p>
+  </div></details>
+
+  <details id="camera-permission"><summary>扫描界面说需要摄像头权限。</summary><div>
+    <p>点击 <span class="ui">允许相机</span>。如果之前拒绝过，Android 不会再询问：点击 <span class="ui">打开应用设置</span>，在“权限”中允许摄像头。摄像头只在扫描界面（或拍照）打开时使用，图像在手机上处理。</p>
+  </div></details>
+
+  <details id="hardware-scanner"><summary>可以使用扫码枪（USB / 蓝牙 / PDA 手持终端）吗？</summary><div>
+    <p>可以，通过<a href="#remote">远程访问</a>：在该设备的浏览器中打开应用，使用扫描页面或手持终端视图，它会读取扫码枪输入的代码。请看<a href="#handheld">手持终端</a>。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stocktake">
+  <h2>盘点</h2>
+  <p class="lead">清点货架上的实际数量，一步更正应用中的数据。</p>
+
+  <details id="do-stocktake"><summary>如何盘点？</summary><div>
+    <ol>
+      <li>从 <span class="ui">&#8942;</span> 菜单打开 <span class="ui">盘点</span>。</li>
+      <li>在 <span class="ui">盘点位置</span> 中选择你正在清点的地方（或所有位置）。</li>
+      <li>对每个产品，上下滑动计数器、点击它输入准确数量，或扫码逐件累加。留空的产品会被跳过。</li>
+      <li>点击 <span class="ui">应用盘点</span>。只有你改动过的产品会被调整，每个差额都记录为一次调整。</li>
+    </ol>
+    <p>分多个批次存放的产品会按批次逐一清点。清点期间发生的销售会被考虑在内，不会被重复计算。</p>
+    <div class="note">离开界面之前请点击<strong>应用盘点</strong>。未应用的清点结果不会保留。</div>
+  </div></details>
+
+  <details id="stocktake-reminder"><summary>应用能提醒我盘点吗？</summary><div>
+    <p>可以：<span class="ui">设置 → 盘点提醒 → 提醒我进行盘点</span>。选择每天、每周（某个星期几）或每月（某一天），以及时间。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="sell">
+  <h2>销售与单据</h2>
+  <p class="lead">一个简单的收银台：销售、扣减库存，并打印或分享单据。</p>
+
+  <details id="make-sale"><summary>如何销售并开单？</summary><div>
+    <ol>
+      <li>从 <span class="ui">&#8942;</span> 菜单打开 <span class="ui">销售</span>。</li>
+      <li>点击产品或扫描条码，把它们加入购物车。在购物车里可以修改每行的数量、价格和折扣。</li>
+      <li>点击 <span class="ui">结账</span>。可选择填写顾客姓名和电话、付款方式（现金、银行卡、银行转账、移动支付、赊账）、折扣、税和实收金额。找零会自动计算。</li>
+      <li>点击 <span class="ui">完成销售</span>，然后打印或分享单据。</li>
+    </ol>
+    <p>库存会同时扣减，这笔销售会出现在交易和销售与毛利报表中。如果有商品库存不足，则什么都不会卖出，应用会告诉你是哪一件。</p>
+  </div></details>
+
+  <details id="bills"><summary>以前的单据在哪里？可以重新打印吗？</summary><div>
+    <p>在销售界面点击顶部的 <span class="ui">账单</span>。可按单号、顾客或电话搜索，按今天、7 天、30 天或全部筛选，打开单据即可再次打印或分享。扫描单据上印的条码也能打开它。</p>
+  </div></details>
+
+  <details id="void-bill"><summary>如何取消一笔销售或处理退货？</summary><div>
+    <p>在 <span class="ui">账单</span> 中打开单据，点击 <span class="ui">作废账单</span>。所有商品都会回到库存，单据会保留并标记为“作废”，这样它的编号仍然可以查到。作废针对整张单据：部分退货时，先作废再重新销售，或为退回的商品记录一次入库。</p>
+  </div></details>
+
+  <details id="bill-design"><summary>如何修改单据样式（店名、标志、纸张大小）？</summary><div>
+    <p>在销售界面点击 <span class="ui">账单样式</span>。选择一个默认样式：<span class="ui">58 毫米收据</span> 或 <span class="ui">80 毫米收据</span> 用于热敏小票打印机，<span class="ui">半页 (A5)</span> 或 <span class="ui">发票 (A4)</span> 用于普通打印机。然后设置店名、地址和联系方式、税号或登记号、标题、页脚文字、税名和税率、编号前缀和下一个单号。预览就是真实的单据。<span class="ui">保存销售后立即打印</span> 可以在柜台省掉一步。</p>
+  </div></details>
+
+  <details id="receipt-printer"><summary>如何用热敏 / 蓝牙 / USB 小票打印机打印？</summary><div>
+    <p>单据通过 Android 的打印对话框打印，所以任何有 Android 打印服务的打印机都可以。从 Google Play 安装打印机的打印服务应用（或通用打印服务），选择 58 毫米或 80 毫米样式，然后在打印对话框中选择打印机。没有打印机时，也可以保存为 PDF 并分享。</p>
+  </div></details>
+
+  <details id="tax-invoice"><summary>单据是正式的税务发票吗？</summary><div>
+    <p>单据可以显示你的税号或登记号以及税额行，但它没有经过任何国家官方税务或电子发票系统的认证。请确认当地法规的要求。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="history">
+  <h2>记录与更正</h2>
+  <p class="lead">每一次库存变化都有记录，每一个错误都能撤销。</p>
+
+  <details id="transactions"><summary>在哪里查看所有库存变动？</summary><div>
+    <p><span class="ui">交易</span> 列出每一条变动：入库、出库、调整和调拨，以及操作人、原因和变动前后的库存。可按日期范围和类型筛选，或按产品、SKU、原因搜索。每个产品的页面也会显示它自己的变动记录。</p>
+  </div></details>
+
+  <details id="fix-movement"><summary>如何更正或撤销一条变动？</summary><div>
+    <ul>
+      <li><strong>完全撤销：</strong>在 <span class="ui">交易</span>（或产品的变动记录）中点击它，选择 <span class="ui">撤销</span>。库存恢复原状，这条变动进入回收站。</li>
+      <li><strong>原地更正：</strong>在产品的变动记录中点击该变动，选择 <span class="ui">编辑</span>，修改数量、原因、批次、供应商、有效期或成本。它保留原来的日期，并标记为已编辑。</li>
+      <li><strong>刚在快速库存里操作？</strong>点击方块上的撤销箭头。</li>
+    </ul>
+    <p>如果撤销或编辑会让库存低于零（例如你想撤销的那批到货已经卖掉了），操作会被拒绝。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="reports">
+  <h2>报表、导出与标签</h2>
+  <p class="lead">把数据导出为 CSV 或 PDF，以及打印标签。</p>
+
+  <details id="export-report"><summary>如何导出报表（Excel / PDF）？</summary><div>
+    <ol>
+      <li>打开 <span class="ui">报表</span>。</li>
+      <li>设置范围：库存类报表按类别，变动类报表按日期范围。每份报表都会显示将包含多少行。</li>
+      <li>点击报表，然后选择 <span class="ui">CSV</span>（可用 Excel、Google 表格、WPS、LibreOffice 打开）或 <span class="ui">PDF</span>。</li>
+    </ol>
+    <table>
+      <thead><tr><th>库存</th><th>出入库</th></tr></thead>
+      <tbody><tr>
+        <td>现有库存 &middot; 低库存 &middot; 缺货 &middot; 库存过剩 &middot; 库存估值 &middot; 产品目录 &middot; 按库位统计库存 &middot; 有效期</td>
+        <td>库存变动 &middot; 入库 &middot; 出库 &middot; 调整审计 &middot; 调拨日志 &middot; 成本价变动 &middot; 销售与毛利</td>
+      </tr></tbody>
+    </table>
+  </div></details>
+
+  <details id="report-design"><summary>可以在 PDF 报表上放公司标志和名称吗？</summary><div>
+    <p>可以。在 <span class="ui">报表</span> 中点击顶部的 <span class="ui">报表版式</span>（也可在 <span class="ui">设置 → PDF 报表</span> 中进入）。可设置纸张大小、方向、页边距、标志、公司名称、字体、表格样式、页脚、页码和强调色，或从四个预设之一开始。预览就是真实的 PDF。</p>
+  </div></details>
+
+  <details id="labels"><summary>如何打印条码标签或价格标签？</summary><div>
+    <ol>
+      <li>从 <span class="ui">&#8942;</span> 菜单打开 <span class="ui">标签</span>。</li>
+      <li>点击 <span class="ui">预设</span> 添加现成的样式（零售价签、货架边标签、小号条码贴纸、热敏卷筒标签、二维码资产标签……），或用 <span class="ui">新建标签</span> 自己设计：尺寸、排版、字体、字段和条码类型。</li>
+      <li>点击 <span class="ui">打印</span>，选择产品并打印。所有标签会生成一个 PDF。</li>
+    </ol>
+    <p>只打印一个产品时，打开它并点击顶部的 <span class="ui">打印标签</span>。要用实体打印机打印，需要从 Google Play 安装打印服务（打印机厂商的应用或 Mopria）；否则保存为 PDF。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="import">
+  <h2>从表格导入</h2>
+  <p class="lead">从 CSV 文件导入产品、类别、供应商或位置。</p>
+
+  <details id="how-import"><summary>如何从 Excel 或 Google 表格导入产品？</summary><div>
+    <ol>
+      <li>在 Excel 或 Google 表格中，把工作表另存为或下载为 <strong>CSV</strong>。应用读取的是 CSV 文件，不是 .xlsx。</li>
+      <li>从 <span class="ui">&#8942;</span> 菜单打开 <span class="ui">导入</span>，选择要导入的内容（商品、类别、供应商或库位）。</li>
+      <li>点击 <span class="ui">选择 CSV 文件</span>。不确定需要哪些列？点击 <span class="ui">保存 CSV 模板</span>，填好后选择该文件。</li>
+      <li>检查预览。每一行都标为 新增 或 更新，警告和被拒绝的行都有说明。选择选项后点击 <span class="ui">导入</span>。</li>
+    </ol>
+    <p>在你确认之前，不会写入任何数据。</p>
+  </div></details>
+
+  <details id="import-columns"><summary>文件需要哪些列？</summary><div>
+    <p>导入产品时，只有 <code>sku</code> 和 <code>name</code> 是必需的。还可以包含：description、category、location、quantity、unit、min、max、cost、price、barcode、supplier、image。第一行必须是列名。许多常见写法都能识别（<code>qty</code>、<code>stock</code>、<code>unit price</code>……，以及应用自己导出的中文表头），导入界面会列出所有可接受的名称。示例：</p>
+    <p><code>sku,name,category,quantity,unit,cost,price,barcode</code><br><code>A-100,螺丝,五金,25,个,4.50,9.99,4006381333931</code></p>
+    <p>逗号、分号或制表符分隔、小数逗号、货币符号以及大多数日期格式都能处理。需要推测某个值时，预览会说明是如何读取的。</p>
+  </div></details>
+
+  <details id="import-update"><summary>导入会覆盖我已有的产品吗？</summary><div>
+    <p>只有你需要时才会。产品按 SKU 匹配。打开 <span class="ui">更新已存在的记录</span> 后，匹配到的产品会获得文件中的值，并且只更新文件里有的列。只有 <code>sku,name,quantity</code> 的文件不会清空价格或类别。关闭它则只添加新产品。</p>
+    <p>如果某个产品的库存分散在多个位置或批次中，文件无法说明新数量属于哪里，请在该产品的页面上修改它的库存。</p>
+  </div></details>
+
+  <details id="export-to-excel"><summary>如何把整个产品清单导到 Excel？</summary><div>
+    <p>将 <span class="ui">产品目录</span> 或 <span class="ui">现有库存</span> 报表导出为 CSV（见<a href="#export-report">报表</a>）。这个 CSV 也可以再导回应用。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="backup">
+  <h2>备份、恢复与换手机</h2>
+  <p class="lead">你的数据存放在手机上。手机丢失或重置时，保存在别处的备份才能救回数据。</p>
+
+  <div class="note"><strong>卸载应用或清除其存储会删除你的全部数据。</strong>做这两件事之前，请先设置好备份。</div>
+
+  <details id="setup-backup"><summary>如何备份数据？</summary><div>
+    <ol>
+      <li>从 <span class="ui">&#8942;</span> 菜单打开 <span class="ui">备份</span>。</li>
+      <li>点击 <span class="ui">添加目标位置</span>，选择备份保存到哪里：<span class="ui">本机文件夹</span>（内部存储、SD 卡、U 盘，或云盘应用同步的文件夹）、<span class="ui">FTP 服务器</span> 或 <span class="ui">共享文件夹（SMB）</span>（NAS 或 Windows 电脑上的共享文件夹）。</li>
+      <li>如果是服务器，输入地址和登录信息，然后点击 <span class="ui">测试连接</span>。它会确认确实能在那里写入文件。</li>
+      <li>点击 <span class="ui">立即备份</span>，并打开 <span class="ui">自动备份</span>，大约每天自动保存一份。</li>
+    </ol>
+    <p>每次备份都会写入你所有的目标位置。如果其中一个不再可用，你会收到通知，仪表盘上也会显示横幅，直到问题解决。</p>
+  </div></details>
+
+  <details id="restore"><summary>如何恢复备份？</summary><div>
+    <p>在 <span class="ui">备份</span> 中找到备份，点击 <span class="ui">恢复</span>。在任何数据改变之前，你可以选择恢复哪些数据并查看备份内容。恢复会用备份中的数据替换当前数据。</p>
+    <p>“此备份由更新版本的应用创建。请先更新应用，再恢复。”表示需要先从 Google Play 安装最新版本。</p>
+  </div></details>
+
+  <details id="new-phone"><summary>如何把数据转移到新手机？</summary><div>
+    <ol>
+      <li>在旧手机上，把备份保存到新手机能访问的地方：FTP/SMB 服务器、与云同步的文件夹，或你自己复制过去的文件。</li>
+      <li>在新手机上安装 Stock Management。在欢迎界面选择 <span class="ui">恢复备份</span>，然后选择 <span class="ui">从文件</span>、<span class="ui">从服务器</span> 或 <span class="ui">从文件夹</span>。</li>
+    </ol>
+    <p>为了安全，服务器密码不会保存在备份里。请在新手机上重新输入。</p>
+  </div></details>
+
+  <details id="two-phones"><summary>两部手机可以共用同一份库存吗？</summary><div>
+    <p>应用没有在线账号，所以两部手机之间不会同步。要让多人处理同一份库存，请把数据保留在一部手机上，其他人通过同一 Wi-Fi 下的浏览器使用<a href="#remote">远程访问</a>。在另一部手机上恢复的备份只是一个副本：一边的修改不会出现在另一边。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="remote">
+  <h2>在电脑、平板或手持终端上使用（远程访问）</h2>
+  <p class="lead">同一 Wi-Fi 下的其他设备可以在浏览器中打开你的库存，每个人有自己的登录和权限。</p>
+
+  <details id="remote-setup"><summary>如何在电脑上打开应用？</summary><div>
+    <ol>
+      <li>在手机上，从 <span class="ui">&#8942;</span> 菜单打开 <span class="ui">远程访问</span>。如果手机设置了锁屏，请验证。</li>
+      <li>点击 <span class="ui">启动服务器</span>。屏幕会显示一个地址（如 <code>http://192.168.1.24:8080</code>）和一个二维码。</li>
+      <li>点击 <span class="ui">添加成员</span>，创建登录信息：姓名、用户名和密码。</li>
+      <li>在该用户上点击 <span class="ui">选择</span>，勾选他可以使用的界面和操作（或选一个预设：<span class="ui">仅查看</span>、<span class="ui">盘点员</span>、<span class="ui">查价机</span>、<span class="ui">全部</span>）。在你勾选之前，什么都不允许。</li>
+      <li>在电脑的浏览器（Chrome、Edge、Firefox、Safari）中输入该地址并登录。</li>
+      <li>用完后，点击 <span class="ui">停止服务器</span>。</li>
+    </ol>
+    <p>在浏览器中做的每一项修改都会以该用户的名字记录到手机上。服务器永远不会自己启动。</p>
+  </div></details>
+
+  <details id="remote-cant-connect"><summary>浏览器打不开这个地址。</summary><div>
+    <ul>
+      <li>两台设备必须连接<strong>同一个 Wi-Fi</strong>（或电脑连接手机的热点）。移动数据不行。</li>
+      <li>访客或公共 Wi-Fi 通常不允许设备互相访问。请使用你的主网络或手机热点。</li>
+      <li>完整输入地址，包括 <code>http://</code> 和端口（<code>:8080</code>）。</li>
+      <li>确认服务器仍在运行。从最近任务中划掉应用会停止服务器，切换网络也会。</li>
+      <li>名称形式的地址（以 <code>.local</code> 结尾）只有在路由器支持时才可用。请改用数字地址。</li>
+      <li>允许应用的通知。服务器运行时，它的通知里有停止按钮。</li>
+    </ul>
+  </div></details>
+
+  <details id="remote-can-do"><summary>在浏览器里能做什么？</summary><div>
+    <p>你允许的内容：仪表盘、产品（查看、添加、编辑）、扫描、快速库存、盘点、记录、报表（CSV/PDF）、分类、供应商、位置、在位置之间移动库存、打印标签和查价。备份、导入、回收站、标签设计、设置、销售以及远程访问本身只能在手机上使用。在浏览器中无法删除任何东西。</p>
+    <p>每个浏览器都可以在 <span class="ui">显示</span> 中选择自己的浅色或深色模式、主题、文字大小和列表视图。</p>
+  </div></details>
+
+  <details id="handheld"><summary>使用手持终端（PDA）或 USB 扫码枪</summary><div>
+    <p>在该设备的浏览器中打开地址，用有扫描权限的账号登录。点击顶部的手持终端图标，选择 <span class="ui">收货</span> 或 <span class="ui">出库</span>，然后扫码。每个代码都会加入列表（再扫一次加一），一个按钮即可保存全部。打开 <span class="ui">随处读取扫描枪按键</span>，屏幕键盘就不会挡住。</p>
+    <p>如果 Wi-Fi 断开，未保存的列表会保留在设备上，恢复后再保存即可。浏览器无法使用设备摄像头扫码（需要安全连接），请使用扫码枪或手动输入代码。</p>
+  </div></details>
+
+  <details id="price-checker-screen"><summary>顾客可以自己在屏幕上查价格吗？</summary><div>
+    <p>可以。用 <span class="ui">查价机</span> 预设创建一个登录，在柜台带扫码枪的电脑或平板上打开查价，然后选择 <span class="ui">查价屏幕</span>。它会显示你的标志和公司名称（来自报表设计），并提供全屏按钮。显示哪些内容、何时清屏在 <span class="ui">设置 → 查价屏幕</span> 中设置。</p>
+  </div></details>
+
+  <details id="remote-safety"><summary>远程访问安全吗？</summary><div>
+    <ul>
+      <li>它只在私有网络（家庭或办公室 Wi-Fi、手机热点）中工作，从不暴露在互联网上。</li>
+      <li>每个人都有自己的密码，只能看到你勾选的内容。你可以看到谁已连接、断开他们、停用账号或重置密码，并查看最近的活动。</li>
+      <li>连接<strong>没有加密</strong>：请在可信网络中使用，不要在公共 Wi-Fi 上使用。</li>
+      <li>如果手机没有设置锁屏，任何拿到手机的人都能打开远程访问。给手机设置锁屏即可保护它。</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="notifications">
+  <h2>通知</h2>
+  <p class="lead">低库存提醒、盘点提醒和备份警告。</p>
+
+  <details id="low-stock-alert"><summary>低库存提醒怎么工作？可以选择时间吗？</summary><div>
+    <p>应用每天发送一次低于最低库存的产品汇总。在 <span class="ui">设置 → 通知 → 低库存提醒时间</span> 中选择时间。它会在该时间<em>前后</em>送达，因为 Android 可能为了省电推迟几分钟。</p>
+  </div></details>
+
+  <details id="no-notifications"><summary>我收不到任何通知。</summary><div>
+    <ul>
+      <li>确认 <span class="ui">设置 → 通知 → 启用通知</span> 已打开。</li>
+      <li>允许应用的通知：点击仪表盘卡片上的 <span class="ui">开启提醒</span>，或进入 Android 设置 → 应用 → Stock Management → 通知。</li>
+      <li>每种通知（低库存提醒、盘点提醒、备份问题、远程访问）都可以在 Android 的应用通知设置中单独开关。</li>
+      <li>有些手机（小米、华为、荣耀、OPPO、vivo、三星……）会为省电关闭后台应用。请允许本应用在后台运行，或把它的电池使用设为“无限制”。</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="customize">
+  <h2>个性化</h2>
+  <p class="lead">以下内容都在设置中。</p>
+
+  <details id="themes"><summary>主题、深色模式和颜色</summary><div>
+    <p><span class="ui">设置 → 主题</span>：<span class="ui">外观</span>（跟随系统、浅色、深色）、<span class="ui">应用主题</span>（港湾、石墨、牛皮纸、午夜），以及 <span class="ui">动态颜色</span>，从壁纸取色（Android 12+）。</p>
+  </div></details>
+
+  <details id="all-settings"><summary>还能改哪些设置？</summary><div>
+    <table>
+      <tbody>
+        <tr><td><span class="ui">菜单配置</span></td><td>底部栏和菜单中有哪些界面，以及它们的顺序</td></tr>
+        <tr><td><span class="ui">仪表盘</span></td><td>显示哪些卡片和图表，顺序和宽度</td></tr>
+        <tr><td><span class="ui">产品卡片</span></td><td>列表中每个产品显示什么</td></tr>
+        <tr><td><span class="ui">默认最低库存阈值</span></td><td>新产品默认的最低库存</td></tr>
+        <tr><td><span class="ui">库存变动</span></td><td>库存分散时是否询问位置；库存估值方式</td></tr>
+        <tr><td><span class="ui">条码格式</span> &middot; <span class="ui">扫描反馈</span></td><td>扫描识别哪些条码；提示音和振动</td></tr>
+        <tr><td><span class="ui">PDF 报表</span></td><td>导出的 PDF 报表样式</td></tr>
+        <tr><td><span class="ui">查价屏幕</span></td><td>顾客查价屏幕显示的内容</td></tr>
+        <tr><td><span class="ui">常规</span></td><td>货币符号、语言</td></tr>
+        <tr><td><span class="ui">通知</span></td><td>低库存提醒时间、盘点提醒</td></tr>
+      </tbody>
+    </table>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trash">
+  <h2>回收站</h2>
+  <p class="lead">在你清空之前，删除的东西都不会真正消失。</p>
+
+  <details id="restore-deleted"><summary>如何找回删除的内容？</summary><div>
+    <p>从 <span class="ui">&#8942;</span> 菜单打开 <span class="ui">回收站</span>。被删除的产品、类别、供应商、位置、标签以及被撤销的变动都在这里。点击 <span class="ui">恢复</span>：应用会先准确告诉你将发生什么。恢复只会添加，绝不会覆盖你现有的任何内容（重复的 SKU 或名称会得到一个新的，例如 <code>A-100-2</code>）。</p>
+    <p><span class="ui">永久删除</span> 删除一条；<span class="ui">清空</span> 清空整个回收站。两者都不影响你当前的数据。</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trouble">
+  <h2>问题与联系</h2>
+
+  <details id="old-version"><summary>我的应用里没有本页提到的某个功能。</summary><div>
+    <p>请在 Google Play 更新 Stock Management。最近的更新加入了在位置之间移动库存、批次和序列号、销售和单据、查价格等功能。更新时你的数据会保留。</p>
+  </div></details>
+
+  <details id="privacy"><summary>我的数据存在哪里？谁能看到？</summary><div>
+    <p>只存在你的手机上，在应用的私有存储中。我们不会收到你的产品、库存或销售数据。请阅读<a href="../../">隐私政策</a>（英文）。</p>
+  </div></details>
+
+  <details id="contact" open><summary>如何提问或报告问题？</summary><div>
+    <p>在应用中：<span class="ui">设置 → 发送反馈</span>（或主要界面顶部的对话气泡）。选择类型，写下你的消息，<strong>如果希望得到回复，请在 <span class="ui">联系方式（可选）</span> 栏填写你的邮箱</strong>。没有邮箱，我们能读到你的消息，但无法回复。发送需要联网。</p>
+    <p>也可以发邮件到 <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>。我们会阅读每一条消息，任何语言都可以。</p>
+  </div></details>
+</section>
+
+
+<footer>
+  <p class="langs"><a href="../" lang="en">English</a> &middot; <a href="../es/" lang="es">Español</a> &middot; <a href="../fr/" lang="fr">Français</a> &middot; <a href="../pt/" lang="pt">Português</a> &middot; <a href="../ru/" lang="ru">Русский</a> &middot; <strong>中文</strong> &middot; <a href="../ar/" lang="ar">العربية</a> &middot; <a href="../hi/" lang="hi">हिन्दी</a> &middot; <a href="../bn/" lang="bn">বাংলা</a> &middot; <a href="../ur/" lang="ur">اردو</a> &middot; <a href="../id/" lang="id">Bahasa Indonesia</a></p>
+  <p>Stock Management &middot; <a href="../../">隐私政策</a> &middot; <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a></p>
+  <p>&copy; 2026 Cool App Helpdesk</p>
+</footer>
+
+</main>
+<script>
+(function () {
+  var CODE = 'zh';
+  var PERMALINK = "链接到此回答";
+  var OFFERS = {"en":{"href":"../","banner":"Read this help in English"},"es":{"href":"../es/","banner":"Leer esta ayuda en español"},"fr":{"href":"../fr/","banner":"Lire cette aide en français"},"pt":{"href":"../pt/","banner":"Ler esta ajuda em português"},"ru":{"href":"../ru/","banner":"Читать справку на русском"},"ar":{"href":"../ar/","banner":"اقرأ هذه المساعدة بالعربية"},"hi":{"href":"../hi/","banner":"यह सहायता हिन्दी में पढ़ें"},"bn":{"href":"../bn/","banner":"এই সাহায্য বাংলায় পড়ুন"},"ur":{"href":"../ur/","banner":"یہ مدد اردو میں پڑھیں"},"id":{"href":"../id/","banner":"Baca bantuan ini dalam Bahasa Indonesia"}};
+  var q = document.getElementById('q');
+  var none = document.getElementById('noresults');
+  var items = Array.prototype.slice.call(document.querySelectorAll('section.card details'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('section.card'));
+  var toc = document.querySelector('nav.topics');
+
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  // The switcher keeps the answer you are on: help/#move-stock → help/es/#move-stock.
+  document.getElementById('lang').addEventListener('change', function () {
+    store('helpLang', this.options[this.selectedIndex].value.replace(/^(\.\.\/)?/, '').replace(/\/$/, '') || 'en');
+    location.href = this.value + location.hash;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('footer .langs a'), function (a) {
+    a.addEventListener('click', function (e) {
+      store('helpLang', (a.getAttribute('href').replace(/^(\.\.\/)?/, '').replace(/\/$/, '')) || 'en');
+      a.href = a.getAttribute('href') + location.hash;
+    });
+  });
+
+  // Offer the reader's own language once, unless they have already picked one.
+  if (!store('helpLang')) {
+    var langs = (navigator.languages || [navigator.language || '']).map(function (l) { return l.toLowerCase().split('-')[0]; });
+    for (var i = 0; i < langs.length; i++) {
+      var c = langs[i] === 'in' ? 'id' : langs[i];
+      if (c === CODE) break;
+      if (OFFERS[c]) {
+        var o = document.getElementById('offer');
+        var a = document.createElement('a');
+        a.textContent = OFFERS[c].banner;
+        a.href = OFFERS[c].href;
+        a.setAttribute('lang', c);
+        a.addEventListener('click', function () { store('helpLang', c); a.href = OFFERS[c].href + location.hash; });
+        o.appendChild(a);
+        o.style.display = 'block';
+        break;
+      }
+    }
+  }
+
+  // Each answer links to itself, so one answer can be sent to someone.
+  items.forEach(function (d) {
+    var p = document.createElement('p');
+    p.className = 'permalink';
+    var a = document.createElement('a');
+    a.href = '#' + d.id;
+    a.textContent = PERMALINK;
+    p.appendChild(a);
+    d.querySelector(':scope > div').appendChild(p);
+  });
+
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  var texts = items.map(function (d) { return norm(d.textContent); });
+
+  q.addEventListener('input', function () {
+    var words = norm(q.value).split(/\s+/).filter(Boolean);
+    var searching = words.length > 0;
+    var hits = items.map(function (d, i) {
+      return words.every(function (w) { return texts[i].indexOf(w) !== -1; });
+    });
+    var count = hits.filter(Boolean).length;
+    items.forEach(function (d, i) {
+      d.classList.toggle('hidden', searching && !hits[i]);
+      d.classList.toggle('hit', searching && hits[i]);
+      // A narrow search opens its answers; a broad one leaves them closed to scan.
+      d.open = searching ? hits[i] && count <= 3 : d.id === 'contact';
+    });
+    cards.forEach(function (c) {
+      c.classList.toggle('hidden', searching && !c.querySelector('details:not(.hidden)'));
+    });
+    if (toc) toc.classList.toggle('hidden', searching);
+    none.style.display = searching && count === 0 ? 'block' : 'none';
+  });
+
+  function openTarget() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    // A link followed mid-search must not land on an answer the filter hides.
+    if (q.value) { q.value = ''; q.dispatchEvent(new Event('input')); }
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'DETAILS') el.open = true;
+    el.scrollIntoView({ block: 'start', behavior: 'instant' });
+  }
+  window.addEventListener('hashchange', openTarget);
+  openTarget();
+})();
+</script>
+</body>
+</html>

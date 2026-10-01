@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajuda — Stock Management</title>
+<meta name="description" content="Como usar o Stock Management: produtos, entradas e saídas de estoque, locais e transferências, leitor de código de barras, inventário, vendas e notas, relatórios, importação, backup e acesso remoto.">
+<style>
+  :root {
+    --bg: #f6f9f9; --surface: #ffffff; --text: #10201f; --muted: #5b6b6a;
+    --primary: #0f5f63; --primary-soft: #dcefef; --border: #dde7e6;
+    --note-bg: #fff7e6; --note-border: #f0d79a; --note-text: #6b4b00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1717; --surface: #162222; --text: #e2ecec; --muted: #94a8a7;
+      --primary: #86d4d6; --primary-soft: #1d3b3c; --border: #2a3b3b;
+      --note-bg: #2e2612; --note-border: #5e4b1c; --note-text: #f2d9a0;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+    line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  html[lang="ur"] body { font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Noto Sans Arabic", sans-serif; line-height: 2; }
+  html[lang="ar"] body { font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 40px 24px 96px; }
+  header { border-radius: 16px; padding: 28px 28px 30px; margin-bottom: 18px;
+    background: linear-gradient(135deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); color: #fff; }
+  html[dir="rtl"] header { background: linear-gradient(225deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); }
+  .langbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+  .langbar select { font: inherit; font-size: 14px; color: #fff; background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 12px; cursor: pointer; }
+  .langbar select option { color: #10201f; background: #fff; }
+  header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+  header p { margin: 0; opacity: 0.92; font-size: 15px; }
+  #offer { display: none; margin: 0 0 12px; padding: 10px 14px; border-radius: 10px;
+    background: var(--primary-soft); border: 1px solid var(--border); font-weight: 600; }
+  .searchbar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; }
+  .searchbar input { width: 100%; font: inherit; font-size: 16px; padding: 12px 16px;
+    border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); }
+  .searchbar input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+  #noresults { display: none; text-align: center; color: var(--muted); padding: 24px 0; }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; padding: 0; list-style: none; }
+  .toc li { margin: 0; }
+  .toc a { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 14px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+  .toc a:hover { border-color: var(--primary); text-decoration: none; }
+  .card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 24px; margin: 14px 0; }
+  h2 { font-size: 20px; font-weight: 650; margin: 0 0 4px; letter-spacing: -0.005em; }
+  .card > .lead { color: var(--muted); font-size: 14.5px; margin: 0 0 10px; }
+  details { border-top: 1px solid var(--border); }
+  details:first-of-type { border-top: none; }
+  summary { cursor: pointer; padding-block: 11px; padding-inline: 0 28px; font-weight: 600;
+    list-style: none; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; inset-inline-end: 4px; top: 9px; font-size: 20px;
+    font-weight: 400; color: var(--muted); }
+  details[open] > summary::after { content: "\2212"; }
+  details > div { padding: 0 0 14px; }
+  details:target > summary, details.hit > summary { color: var(--primary); }
+  p, ul, ol { margin: 0 0 10px; }
+  ul, ol { padding-inline-start: 22px; padding-inline-end: 0; } li { margin-bottom: 5px; }
+  .ui { font-weight: 600; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .note { background: var(--note-bg); border: 1px solid var(--note-border); color: var(--note-text);
+    border-radius: 10px; padding: 10px 14px; font-size: 14.5px; margin: 10px 0; }
+  .permalink { font-size: 13px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 14px; }
+  th, td { text-align: start; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); background: var(--primary-soft); }
+  tr:last-child td { border-bottom: none; }
+  code { background: var(--primary-soft); padding: 1px 6px; border-radius: 4px; direction: ltr; unicode-bidi: isolate;
+    font-size: 13px; font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
+  a { color: var(--primary); text-decoration: none; } a:hover { text-decoration: underline; }
+  footer { margin-top: 32px; text-align: center; color: var(--muted); font-size: 13px; }
+  footer .langs { line-height: 2; }
+  .hidden { display: none !important; }
+  @media (max-width: 480px) {
+    .wrap { padding: 20px 16px 64px; }
+    header { padding: 20px 20px 24px; } header h1 { font-size: 24px; }
+    .card { padding: 16px 18px; } h2 { font-size: 18px; }
+    table { font-size: 13px; } th, td { padding: 7px 8px; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header>
+  <div class="langbar">
+    <select id="lang" aria-label="Idioma">
+<option value="../">English</option>
+<option value="../es/">Español</option>
+<option value="../fr/">Français</option>
+<option value="../pt/" selected>Português</option>
+<option value="../ru/">Русский</option>
+<option value="../zh/">中文</option>
+<option value="../ar/">العربية</option>
+<option value="../hi/">हिन्दी</option>
+<option value="../bn/">বাংলা</option>
+<option value="../ur/">اردو</option>
+<option value="../id/">Bahasa Indonesia</option>
+    </select>
+  </div>
+  <h1>Stock Management — Ajuda</h1>
+  <p>Como fazer tudo no app &middot; para a versão 1.98 &middot; atualizado em outubro de 2026</p>
+</header>
+
+<p id="offer"></p>
+
+<div class="searchbar">
+  <input id="q" type="search" placeholder="Pesquisar na ajuda — ex.: mover estoque, código de barras, backup, nota" aria-label="Pesquisar na ajuda — ex.: mover estoque, código de barras, backup, nota" autocomplete="off">
+</div>
+
+<nav class="topics" aria-label="Tópicos">
+  <ul class="toc">
+    <li><a href="#start">Primeiros passos</a></li>
+    <li><a href="#products">Produtos</a></li>
+    <li><a href="#stock">Entradas e saídas</a></li>
+    <li><a href="#locations">Locais e transferências</a></li>
+    <li><a href="#lots">Lotes, validade, séries</a></li>
+    <li><a href="#scanner">Leitor</a></li>
+    <li><a href="#stocktake">Inventário</a></li>
+    <li><a href="#sell">Vendas e notas</a></li>
+    <li><a href="#history">Histórico e correções</a></li>
+    <li><a href="#reports">Relatórios e etiquetas</a></li>
+    <li><a href="#import">Importar</a></li>
+    <li><a href="#backup">Backup e celular novo</a></li>
+    <li><a href="#remote">Usar pelo computador</a></li>
+    <li><a href="#notifications">Notificações</a></li>
+    <li><a href="#customize">Personalizar</a></li>
+    <li><a href="#trash">Lixeira</a></li>
+    <li><a href="#trouble">Problemas e contato</a></li>
+  </ul>
+</nav>
+
+<div class="note"><strong>Não encontrou algo descrito aqui?</strong> Primeiro atualize o app pelo Google Play. Esta página descreve a versão atual, e muitos recursos (mover estoque entre locais, lotes, vendas, notas) chegaram em atualizações recentes. Você pode ver o que cada atualização trouxe em <span class="ui">Configurações → Novidades</span>.</div>
+
+<p id="noresults">Nada corresponde a essa pesquisa. Tente uma palavra mais curta, ou <a href="#contact">pergunte para nós</a>.</p>
+
+<!-- ============================================================ -->
+<section class="card" id="start">
+  <h2>Primeiros passos</h2>
+  <p class="lead">O que é o app, a primeira tela e como se localizar.</p>
+
+  <details id="what-is-it"><summary>O que é o Stock Management?</summary><div>
+    <p>Um app de controle de estoque para lojas, depósitos e pequenos negócios. Você mantém uma lista de produtos com SKU e código de barras, registra o estoque que entra e sai, e sempre sabe quanto tem, onde está e quanto vale. Ele também faz inventários, vendas com nota impressa, relatórios, etiquetas e backups.</p>
+    <p>Tudo fica salvo <strong>no seu celular</strong>. Não é preciso criar conta nem pagar assinatura.</p>
+  </div></details>
+
+  <details id="internet"><summary>Preciso de uma conta ou de internet?</summary><div>
+    <p>Não. O app funciona totalmente off-line e não tem login. Seus dados só saem do aparelho se você mesmo enviá-los para algum lugar (um backup, um relatório exportado).</p>
+    <p>Só algumas funções usam a rede: enviar comentários, abrir a página do Google Play, backups para um servidor FTP ou SMB, e o Acesso remoto (que usa o seu Wi-Fi local, não a internet).</p>
+  </div></details>
+
+  <details id="first-screen"><summary>A primeira tela pergunta como quero começar. O que escolho?</summary><div>
+    <ul>
+      <li><span class="ui">Restaurar uma cópia</span> &mdash; você já usava o app em outro celular e tem um backup. Veja <a href="#new-phone">passar para um celular novo</a>.</li>
+      <li><span class="ui">Importar de uma planilha</span> &mdash; seus produtos já estão no Excel ou no Google Planilhas. Veja <a href="#import">Importar</a>.</li>
+      <li><span class="ui">Começar com o meu inventário</span> &mdash; o app vazio; você cadastra os produtos um a um.</li>
+      <li>Um <strong>conjunto de exemplo</strong> (Loja geral, Loja de roupa, Livraria) &mdash; enche o app de produtos de demonstração para você explorar.</li>
+    </ul>
+    <p>Essa tela só aparece uma vez, mas nada se perde na escolha: você pode importar, restaurar ou cadastrar produtos a qualquer momento depois.</p>
+  </div></details>
+
+  <details id="sample-data"><summary>Como carrego ou removo os dados de exemplo?</summary><div>
+    <p>Os dados de exemplo só podem ser adicionados enquanto o app está vazio: na tela de boas-vindas, ou pelo cartão <span class="ui">Experimente com dados de exemplo</span> no Painel. Antes de adicionar, o app diz exatamente quantos produtos, categorias, fornecedores e locais vai criar.</p>
+    <p>Para removê-los, toque em <span class="ui">Limpar dados de exemplo</span> no aviso do Painel. Só os registros de exemplo são apagados.</p>
+  </div></details>
+
+  <details id="menu"><summary>Onde estão todas as telas? Só vejo quatro embaixo.</summary><div>
+    <p>No celular, a barra inferior mostra o Painel e as três primeiras telas do seu menu. Todo o resto está no menu <span class="ui">&#8942;</span>, no canto superior direito de cada tela: Vender, Inventário, Movimentos, Relatórios, Categorias, Fornecedores, Locais, Etiquetas, Importar, Backup, Lixeira, Acesso remoto e Configurações. No tablet, ficam todas na barra lateral.</p>
+    <p>Para escolher quais telas vão na barra inferior, vá em <span class="ui">Configurações → Configuração dos menus</span> e suba ou desça as telas. Você também pode esconder as que nunca usa (Painel e Configurações sempre ficam).</p>
+  </div></details>
+
+  <details id="language"><summary>Como mudo o idioma?</summary><div>
+    <p><span class="ui">Configurações → Idioma</span>. O app está disponível em English, Español, Français, Português, Русский, 中文, العربية, हिन्दी, বাংলা, اردو e Bahasa Indonesia.</p>
+  </div></details>
+
+  <details id="dashboard"><summary>O que o Painel mostra?</summary><div>
+    <p>Total de produtos, estoque baixo, valor do estoque, movimentos recentes, alertas e gráficos (níveis de estoque, produtos e valor por categoria, movimentos de 7 e 30 dias, o que precisa de reposição, valor do estoque por local e por fornecedor, produtos mais movimentados e lotes perto do vencimento).</p>
+    <p>Toque em <span class="ui">Personalizar painel</span> no fim do Painel, ou vá em <span class="ui">Configurações → Painel</span>, para esconder cartões, mudar a ordem e definir a largura de cada um.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="products">
+  <h2>Produtos</h2>
+  <p class="lead">Cadastrar, editar, organizar e encontrar produtos.</p>
+
+  <details id="add-product"><summary>Como cadastro um produto?</summary><div>
+    <ol>
+      <li>Abra <span class="ui">Produtos</span> e toque em <span class="ui">+</span>.</li>
+      <li>Preencha <span class="ui">SKU</span> e <span class="ui">Nome</span> (os dois são obrigatórios). O SKU é o seu próprio código para o item e não pode se repetir.</li>
+      <li>Se quiser, adicione foto, descrição, categoria, local, fornecedor, unidade (unidades, kg, litros&hellip;), estoque mínimo e máximo, preço de custo, preço de venda e código de barras. O campo do código de barras tem um botão para ler o código.</li>
+      <li>Digite a <span class="ui">Quantidade</span> que você tem agora. Ela é registrada como o estoque inicial do produto.</li>
+      <li>Toque em <span class="ui">Salvar produto</span>.</li>
+    </ol>
+    <p>Jeitos mais rápidos: leia um código desconhecido no <a href="#scanner">Leitor</a> e toque em <span class="ui">Adicionar produto com este código</span>, ou <a href="#import">importe</a> uma lista inteira de uma planilha.</p>
+  </div></details>
+
+  <details id="edit-quantity"><summary>Por que não consigo mudar a quantidade ao editar um produto?</summary><div>
+    <p>É de propósito. Cada mudança de estoque é registrada como um movimento (quem, quando, por quê, antes e depois), para o histórico sempre bater. Mude as quantidades com <a href="#stock-in-out">Entrada / Saída</a>, o <a href="#quick-stock">Estoque rápido</a>, o <a href="#scanner">Leitor</a> ou um <a href="#stocktake">Inventário</a>. O resto do produto (nome, preços, código de barras, categoria&hellip;) é editado pelo lápis na página do produto.</p>
+  </div></details>
+
+  <details id="product-photo"><summary>Como coloco uma foto no produto?</summary><div>
+    <p>No formulário do produto, toque em <span class="ui">Adicionar fotografia</span> e depois em <span class="ui">Tirar fotografia</span> ou <span class="ui">Escolher da galeria</span>. Produtos sem foto mostram o desenho de uma caixa na cor da categoria.</p>
+  </div></details>
+
+  <details id="delete-product"><summary>Como apago um produto? Dá para recuperar?</summary><div>
+    <p>Abra o produto e toque no ícone de lixeira no topo. Os movimentos anteriores continuam no histórico. O produto vai para a <a href="#trash">Lixeira</a>, de onde você pode restaurá-lo depois.</p>
+  </div></details>
+
+  <details id="find-product"><summary>Como pesquiso, ordeno e filtro a lista de produtos?</summary><div>
+    <p>A caixa de pesquisa encontra produtos por nome, SKU ou código de barras; o botão de leitura ao lado pesquisa lendo o código. O botão de ordenar e filtrar ordena por nome, quantidade, valor do estoque ou atualização recente, e limita a lista a uma categoria. Tocar em <span class="ui">Estoque baixo</span> no Painel abre a lista só com os produtos em baixa. No tablet, você também escolhe quantas colunas a lista usa.</p>
+  </div></details>
+
+  <details id="product-card"><summary>Posso escolher o que cada produto mostra na lista?</summary><div>
+    <p>Sim: <span class="ui">Configurações → Cartão de produto → Personalizar cartão de produto</span>. Mostre ou esconda foto, categoria, fornecedor, local, preços, custo, descrição, barra de estoque e mais, na ordem que quiser. Uma prévia ao vivo mostra o resultado.</p>
+  </div></details>
+
+  <details id="categories"><summary>Como funcionam categorias, fornecedores e locais?</summary><div>
+    <p>São listas em que você classifica os produtos. Crie-as nas próprias telas, no menu <span class="ui">&#8942;</span> (<span class="ui">Categorias</span>, <span class="ui">Fornecedores</span>, <span class="ui">Locais</span>), com <span class="ui">+</span>, ou deixe uma importação criá-las. Depois escolha-as no formulário do produto.</p>
+    <p>Toque em qualquer categoria, fornecedor ou local para ver os produtos classificados ali e quanto há de cada um.</p>
+    <p>Apagar um deles nunca apaga produtos: eles só ficam sem aquela categoria, fornecedor ou local, e restaurá-lo pela Lixeira liga tudo de novo.</p>
+  </div></details>
+
+  <details id="low-stock"><summary>Como funciona o "estoque baixo"?</summary><div>
+    <p>Cada produto tem seu próprio <span class="ui">Estoque mínimo</span>. Quando a quantidade chega nele ou fica abaixo, o produto é marcado como baixo (e esgotado no zero). Se ele tiver um <span class="ui">Estoque máximo</span> e passar dele, é marcado como excesso.</p>
+    <p>O valor sugerido para produtos novos é definido em <span class="ui">Configurações → Limite padrão de estoque baixo</span>. Os produtos em baixa aparecem no Painel, na lista de produtos (toque no cartão de estoque baixo), no relatório de estoque baixo e no <a href="#notifications">alerta diário de estoque baixo</a>.</p>
+  </div></details>
+
+  <details id="currency"><summary>Como mudo a moeda?</summary><div>
+    <p><span class="ui">Configurações → Geral → Símbolo da moeda</span>. Digite o símbolo que você usa (por exemplo R$, Kz, MT, &euro;). Isso muda como os preços aparecem; nenhum valor é convertido.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stock">
+  <h2>Entradas e saídas de estoque</h2>
+  <p class="lead">Registrar o que chega e o que sai.</p>
+
+  <details id="stock-in-out"><summary>Como adiciono ou retiro estoque?</summary><div>
+    <ol>
+      <li>Abra o produto e toque em <span class="ui">Ajustar estoque</span>.</li>
+      <li>Escolha <span class="ui">Entrada</span> (uma entrega, uma devolução) ou <span class="ui">Saída</span> (uma venda, uma perda, um consumo).</li>
+      <li>Digite a quantidade e, se quiser, um motivo ("Pedido 123", "Avariado").</li>
+      <li>Se você usa locais, escolha onde o estoque entra ou de onde sai.</li>
+      <li>Confirme. A nova quantidade aparece na hora e o movimento entra em <a href="#history">Movimentos</a>.</li>
+    </ol>
+    <p>A mesma janela abre pela lista de produtos, pelo <a href="#quick-stock">Estoque rápido</a> e depois de uma leitura no <a href="#scanner">Leitor</a>.</p>
+  </div></details>
+
+  <details id="quick-stock"><summary>O que é o Estoque rápido?</summary><div>
+    <p>Uma grade dos seus produtos com <span class="ui">+</span> e <span class="ui">&minus;</span> em cada bloco: um toque soma ou tira uma unidade. Prático no balcão e para itens sem código de barras (o filtro <span class="ui">Sem código de barras</span> mostra só esses). Toque num bloco para abrir a janela de estoque completa.</p>
+    <p>Depois de um + ou &minus;, uma seta de desfazer aparece no lugar do preço por alguns segundos. Toques feitos enquanto a lista rola são ignorados, para você não mudar o estoque sem querer.</p>
+  </div></details>
+
+  <details id="set-exact"><summary>Como defino uma quantidade exata depois de contar?</summary><div>
+    <p>Use o <a href="#stocktake">Inventário</a>. Você digita o que contou, e o app calcula a diferença e registra como um ajuste. Assim você nunca precisa fazer a conta.</p>
+  </div></details>
+
+  <details id="negative"><summary>Por que o app recusa uma saída, ou diz que tem pouco aqui?</summary><div>
+    <p>O estoque não pode ficar negativo. Se um produto está em vários lugares, a saída sai do lugar escolhido (ou do local padrão). Quando ali não há o suficiente, a mensagem diz onde está o resto, por exemplo: "Só há 3 un. aqui. Em estoque: Loja A 5, Van 2". Escolha esse lugar em <span class="ui">Retirar de</span>, ou <a href="#move-stock">mova o estoque</a> antes.</p>
+  </div></details>
+
+  <details id="mistake"><summary>Digitei a quantidade errada. Como corrijo?</summary><div>
+    <p>Veja <a href="#fix-movement">corrigir ou desfazer um movimento</a>.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="locations">
+  <h2>Locais e transferências</h2>
+  <p class="lead">Ter estoque em vários lugares &mdash; depósito, loja, van, prateleira &mdash; e mover entre eles.</p>
+
+  <details id="move-stock"><summary>Como transfiro estoque de um local para outro?</summary><div>
+    <p><strong>1. Crie seus locais</strong> (uma vez só): <span class="ui">&#8942; → Locais → +</span>, dê a cada um um nome e um código curto (ex.: <code>Depósito principal</code>, <code>DEP-1</code>) e salve.</p>
+    <p><strong>2. Mova o estoque:</strong></p>
+    <ol>
+      <li>Abra o produto. O cartão <span class="ui">Onde está</span> lista cada lugar que guarda parte do estoque dele.</li>
+      <li>Toque na linha de onde o estoque está <em>agora</em> e depois em <span class="ui">Mover</span>.</li>
+      <li>Em <span class="ui">Para</span>, escolha o destino e digite a quantidade (aparece quanto está disponível).</li>
+      <li>Confirme. Só essa quantidade é movida; o resto fica onde estava.</li>
+    </ol>
+    <p><strong>A partir de um local:</strong> <span class="ui">&#8942; → Locais</span>, toque no local e use <span class="ui">Mover</span> ao lado de qualquer produto guardado ali.</p>
+    <p>Cada transferência aparece em <span class="ui">Movimentos</span> como <span class="ui">Transferência</span> ("Depósito → Loja A") e no relatório <span class="ui">Registo de transferências</span>. Errou? Abra-a em Movimentos e toque em <span class="ui">Reverter</span>.</p>
+    <p class="muted">Para mover <em>todo</em> um produto, você também pode editá-lo e mudar o <span class="ui">Local</span>. Se todo o estoque dele estiver num só lugar, ele vai junto.</p>
+  </div></details>
+
+  <details id="no-where-card"><summary>Não vejo o cartão "Onde está" nem o botão de mover.</summary><div>
+    <ul>
+      <li>Crie pelo menos um local antes. O cartão só aparece quando existe um lugar para onde mover o estoque.</li>
+      <li>Atualize o app. Mover parte do estoque de um produto chegou na versão 1.79; versões mais antigas só mudam o local do produto inteiro.</li>
+    </ul>
+  </div></details>
+
+  <details id="no-location"><summary>Meu estoque aparece como "Sem local". Como coloco num lugar?</summary><div>
+    <p>O estoque cadastrado antes de você criar locais (ou cujo local foi apagado) fica em <span class="ui">Sem local</span>. Mova como qualquer outro estoque: abra o produto, toque na linha <span class="ui">Sem local</span> em <span class="ui">Onde está</span>, depois em <span class="ui">Mover</span> e escolha o local.</p>
+  </div></details>
+
+  <details id="default-location"><summary>O que é o local padrão?</summary><div>
+    <p>O lugar para onde vai o estoque novo e de onde saem as saídas quando você não escolhe outro. Em <span class="ui">Locais</span>, edite um local e ative <span class="ui">Definir como padrão</span>. Um produto guardado num só lugar sempre usa esse lugar.</p>
+  </div></details>
+
+  <details id="stock-out-from"><summary>Como escolho de onde sai uma saída ou uma venda?</summary><div>
+    <p>Quando um produto está em mais de um lugar ou lote, a janela de estoque mostra <span class="ui">Retirar de</span>. Deixe em <span class="ui">Automático (o que vence primeiro sai primeiro)</span> ou escolha o lugar ou lote exato. Em <a href="#sell">Vender</a>, toque em <span class="ui">Retirar de: local habitual</span> para escolher um local para a venda.</p>
+    <p>O + e o &minus; do Estoque rápido perguntam de onde quando o produto está dividido. Para usar sempre o local padrão, desative <span class="ui">Configurações → Movimentos de estoque → Perguntar onde quando o estoque está dividido</span>.</p>
+  </div></details>
+
+  <details id="condition"><summary>Posso marcar estoque como avariado, reservado ou em quarentena?</summary><div>
+    <p>Sim. Mova como acima e mude a <span class="ui">Condição</span> (Bom, Danificado, Reservado, Quarentena) em vez do local, ou junto com ele. Ele continua contado, mas só o estoque em bom estado é vendido ou sai automaticamente.</p>
+  </div></details>
+
+  <details id="delete-location"><summary>O que acontece com o estoque se eu apagar um local?</summary><div>
+    <p>Nada se perde. O estoque dele passa para <span class="ui">Sem local</span>, e os produtos ficam sem aquele local. Restaurar o local pela Lixeira liga os produtos de novo, mas o estoque continua em Sem local até você movê-lo de volta.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="lots">
+  <h2>Lotes, validade e números de série</h2>
+  <p class="lead">Para alimentos, remédios, cosméticos, eletrônicos&hellip; tudo que vence ou tem número de série.</p>
+
+  <details id="record-lot"><summary>Como registro um lote, uma validade ou números de série?</summary><div>
+    <p>Quando o estoque entra, abra a seção <span class="ui">Lote, validade, números de série</span> na janela de Entrada. Preencha o que precisar: <span class="ui">Código do lote</span>, <span class="ui">Data de validade</span>, <span class="ui">Fornecedor</span>, <span class="ui">Custo por unidade</span>, <span class="ui">Números de série</span>. Deixe fechada para estoque comum.</p>
+    <p>Para números de série, um por linha, um por unidade: o número de linhas tem de ser igual à quantidade. Se você preenche esses campos na maioria das entregas, a seção passa a abrir sozinha.</p>
+  </div></details>
+
+  <details id="fefo"><summary>Qual lote sai primeiro?</summary><div>
+    <p>Por padrão, o que vence antes e, depois, a entrega mais antiga. Você sempre pode escolher um lote específico em <span class="ui">Retirar de</span>.</p>
+  </div></details>
+
+  <details id="expiring"><summary>Como vejo o que está para vencer?</summary><div>
+    <p>O Painel mostra um cartão <span class="ui">Vence em breve</span> (vencido ou nos próximos 30 dias) quando há algo. O relatório <span class="ui">Datas de validade</span> lista cada lote com os dias que faltam, o mais próximo primeiro.</p>
+  </div></details>
+
+  <details id="valuation"><summary>Como o valor do estoque é calculado?</summary><div>
+    <p>Cada entrega guarda o custo com que entrou. Em <span class="ui">Configurações → Movimentos de estoque → Avaliar o estoque por</span>, escolha: Custo médio do estoque disponível, Custo da última entrada ou O preço de custo do produto. Isso é usado no relatório Valorização do inventário e no valor do estoque na página do produto.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="scanner">
+  <h2>Leitor de código de barras</h2>
+  <p class="lead">Usar a câmera do celular para achar produtos, lançar estoque e consultar preços.</p>
+
+  <details id="scan-basics"><summary>Como leio um código de barras?</summary><div>
+    <p>Abra <span class="ui">Leitor</span> e aponte a câmera para o código. Se um produto tiver esse código, a janela de estoque dele abre: escolha <span class="ui">Entrada</span> ou <span class="ui">Saída</span> e a quantidade. O botão da lanterna ajuda em lugares escuros.</p>
+  </div></details>
+
+  <details id="unknown-barcode"><summary>Aparece "Código desconhecido".</summary><div>
+    <p>Nenhum produto tem esse código ainda. Toque em <span class="ui">Adicionar produto com este código</span> para criar um com o código já preenchido, ou em <span class="ui">Procurar este código nos produtos</span> para ligá-lo a um produto existente.</p>
+    <p>Se o código lido for igual ao SKU de um produto, o app diz "Encontrado pelo SKU — este produto ainda não tem código de barras guardado." e oferece salvar o código como código de barras dele.</p>
+  </div></details>
+
+  <details id="batch-scan"><summary>Posso ler muitos itens seguidos (uma entrega)?</summary><div>
+    <p>Sim: ative <span class="ui">Lote ativo</span> no leitor. Cada leitura adiciona o produto a uma lista; ler o mesmo produto de novo soma mais um. Depois salve a lista inteira como Entrada ou Saída de uma vez. Códigos desconhecidos ficam numa lista à parte e são ignorados.</p>
+  </div></details>
+
+  <details id="price-check"><summary>Como consulto um preço lendo o código?</summary><div>
+    <p>Ative o chip <span class="ui">Consultar preço</span> no leitor. Cada leitura mostra o preço de venda em letras grandes e, abaixo, custo e lucro, valor do estoque, custo por lote e vendas recentes. A câmera continua lendo, então dá para consultar um item atrás do outro. O ícone de olho esconde custos e lucro quando um cliente pode ver a tela.</p>
+  </div></details>
+
+  <details id="formats"><summary>Quais códigos são aceitos? A leitura está lenta ou lê códigos errados.</summary><div>
+    <p>EAN-13, EAN-8, UPC-A, UPC-E, Code-128, Code-39, Code-93, QR code e Data Matrix. Em <span class="ui">Configurações → Formatos de código de barras</span>, desative os que você nunca usa: menos formatos leem mais rápido e erram menos. O bipe e a vibração ficam em <span class="ui">Configurações → Confirmação de leitura</span>.</p>
+  </div></details>
+
+  <details id="camera-permission"><summary>O leitor diz que precisa da câmera.</summary><div>
+    <p>Toque em <span class="ui">Permitir câmera</span>. Se você recusou antes, o Android não pergunta de novo: toque em <span class="ui">Abrir configurações do aplicativo</span> e permita a câmera em Permissões. A câmera só é usada enquanto o leitor (ou uma foto) está aberto, e as imagens são processadas no celular.</p>
+  </div></details>
+
+  <details id="hardware-scanner"><summary>Posso usar um leitor de mão (USB / Bluetooth / coletor PDA)?</summary><div>
+    <p>Sim, pelo <a href="#remote">Acesso remoto</a>: abra o app no navegador do aparelho e use a página do leitor ou a visão de coletor, que lê os códigos que o seu leitor digita. Veja <a href="#handheld">coletores de dados</a>.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stocktake">
+  <h2>Inventário (contagem de estoque)</h2>
+  <p class="lead">Conte o que realmente há nas prateleiras e corrija o app num só passo.</p>
+
+  <details id="do-stocktake"><summary>Como faço um inventário?</summary><div>
+    <ol>
+      <li>Abra <span class="ui">Inventário</span> pelo menu <span class="ui">&#8942;</span>.</li>
+      <li>Escolha onde está contando em <span class="ui">Contando em</span> (ou Todos os locais).</li>
+      <li>Em cada produto, deslize o contador para cima ou para baixo, toque nele para digitar o número exato, ou leia os itens para ir somando. Deixe em branco para pular um produto.</li>
+      <li>Toque em <span class="ui">Aplicar inventário</span>. Só os produtos que você mudou são ajustados, e cada diferença é registrada como um ajuste.</li>
+    </ol>
+    <p>Um produto guardado em vários lotes é contado lote por lote. Vendas feitas durante a contagem são levadas em conta, então não são contadas duas vezes.</p>
+    <div class="note">Toque em <strong>Aplicar inventário</strong> antes de sair da tela. Contagens não aplicadas não são guardadas.</div>
+  </div></details>
+
+  <details id="stocktake-reminder"><summary>O app pode me lembrar de contar?</summary><div>
+    <p>Sim: <span class="ui">Configurações → Lembrete de contagem → Lembrar-me de fazer uma contagem</span>. Escolha Todos os dias, Todas as semanas (num dia da semana) ou Todos os meses (numa data), e um horário.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="sell">
+  <h2>Vendas e notas</h2>
+  <p class="lead">Um caixa simples: venda, dê baixa no estoque e imprima ou compartilhe a nota.</p>
+
+  <details id="make-sale"><summary>Como vendo e emito uma nota?</summary><div>
+    <ol>
+      <li>Abra <span class="ui">Vender</span> pelo menu <span class="ui">&#8942;</span>.</li>
+      <li>Toque nos produtos, ou leia os códigos, para colocá-los no carrinho. No carrinho dá para mudar quantidades, preços e descontos de cada linha.</li>
+      <li>Toque em <span class="ui">Finalizar</span>. Se quiser, adicione nome e telefone do cliente, a forma de pagamento (Dinheiro, Cartão, Transferência, Carteira digital, Fiado), um desconto, o imposto e o valor recebido. O troco é calculado para você.</li>
+      <li>Toque em <span class="ui">Concluir venda</span> e depois imprima ou compartilhe a nota.</li>
+    </ol>
+    <p>O estoque sai na mesma hora, e a venda aparece em Movimentos e no relatório Vendas e margem. Se algum item não tiver estoque suficiente, nada é vendido e o app diz qual é.</p>
+  </div></details>
+
+  <details id="bills"><summary>Onde ficam as notas anteriores? Posso reimprimir uma?</summary><div>
+    <p>Na tela Vender, toque em <span class="ui">Contas</span> no topo. Pesquise por número, cliente ou telefone, filtre por Hoje, 7 dias, 30 dias ou Tudo, e abra uma nota para imprimir ou compartilhar de novo. Ler o código de barras impresso na nota também a abre.</p>
+  </div></details>
+
+  <details id="void-bill"><summary>Como cancelo uma venda ou faço uma devolução?</summary><div>
+    <p>Abra a nota em <span class="ui">Contas</span> e toque em <span class="ui">Anular conta</span>. Todos os itens voltam ao estoque, e a nota fica guardada, marcada como CANCELADA, para o número continuar localizável. Cancelar vale para a nota inteira: numa devolução parcial, cancele e faça uma nova venda, ou registre uma Entrada do item devolvido.</p>
+  </div></details>
+
+  <details id="bill-design"><summary>Como mudo a aparência da nota (nome da loja, logo, tamanho do papel)?</summary><div>
+    <p>Na tela Vender, toque em <span class="ui">Modelo da conta</span>. Escolha um modelo: <span class="ui">Recibo 58 mm</span> ou <span class="ui">Recibo 80 mm</span> para impressoras térmicas de cupom, <span class="ui">Meia página (A5)</span> ou <span class="ui">Fatura (A4)</span> para impressoras comuns. Depois defina o nome da loja, as linhas de endereço e contato, o número fiscal (CNPJ, NIF&hellip;), o título, o rodapé, o nome e a alíquota do imposto, o prefixo e o próximo número. A prévia é a nota de verdade. <span class="ui">Imprimir assim que a venda for salva</span> economiza um passo no balcão.</p>
+  </div></details>
+
+  <details id="receipt-printer"><summary>Como imprimo numa impressora térmica de cupom / Bluetooth / USB?</summary><div>
+    <p>As notas são impressas pela janela de impressão do Android, então funciona qualquer impressora que tenha um serviço de impressão para Android. Instale pelo Google Play o app de serviço de impressão da sua impressora (ou um universal), escolha o modelo de 58 mm ou 80 mm e selecione a impressora na janela de impressão. Sem impressora, dá sempre para salvar em PDF e compartilhar.</p>
+  </div></details>
+
+  <details id="tax-invoice"><summary>A nota tem valor fiscal?</summary><div>
+    <p>A nota pode mostrar seu número fiscal e as linhas de imposto, mas não é certificada por nenhum sistema oficial de nota fiscal eletrônica (como NF-e ou NFC-e). Confira o que as regras do seu país exigem.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="history">
+  <h2>Histórico e correções</h2>
+  <p class="lead">Cada mudança de estoque fica registrada, e todo erro pode ser desfeito.</p>
+
+  <details id="transactions"><summary>Onde vejo todos os movimentos de estoque?</summary><div>
+    <p><span class="ui">Movimentos</span> lista cada movimento: entradas, saídas, ajustes e transferências, com quem fez, por quê, e o estoque antes e depois. Filtre por período e tipo, ou pesquise por produto, SKU ou motivo. A página de cada produto também mostra a atividade dele.</p>
+  </div></details>
+
+  <details id="fix-movement"><summary>Como corrijo ou desfaço um movimento?</summary><div>
+    <ul>
+      <li><strong>Desfazer por completo:</strong> toque nele em <span class="ui">Movimentos</span> (ou na atividade do produto) e escolha <span class="ui">Reverter</span>. O estoque volta ao que era e o movimento vai para a Lixeira.</li>
+      <li><strong>Corrigir:</strong> na atividade do produto, toque no movimento e escolha <span class="ui">Editar</span> para acertar a quantidade, o motivo, o lote, o fornecedor, a validade ou o custo. Ele mantém a data e fica marcado como editado.</li>
+      <li><strong>Acabou de fazer no Estoque rápido?</strong> Toque na seta de desfazer do bloco.</li>
+    </ul>
+    <p>Desfazer ou editar é recusado se o estoque ficaria negativo (por exemplo, a entrega que você quer desfazer já foi vendida).</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="reports">
+  <h2>Relatórios, exportações e etiquetas</h2>
+  <p class="lead">Tirar seus dados em CSV ou PDF e imprimir etiquetas.</p>
+
+  <details id="export-report"><summary>Como exporto um relatório (Excel / PDF)?</summary><div>
+    <ol>
+      <li>Abra <span class="ui">Relatórios</span>.</li>
+      <li>Defina o escopo: uma categoria para os relatórios de estoque, um período para os de movimento. Cada relatório mostra quantas linhas terá.</li>
+      <li>Toque num relatório e depois em <span class="ui">CSV</span> (abre no Excel, Google Planilhas, LibreOffice) ou <span class="ui">PDF</span>.</li>
+    </ol>
+    <table>
+      <thead><tr><th>Inventário</th><th>Movimentação</th></tr></thead>
+      <tbody><tr>
+        <td>Estoque existente &middot; Estoque baixo &middot; Sem estoque &middot; Excesso de estoque &middot; Valorização do inventário &middot; Catálogo de produtos &middot; Estoque por local &middot; Datas de validade</td>
+        <td>Movimentos de estoque &middot; Entradas &middot; Saídas &middot; Auditoria de ajustes &middot; Registo de transferências &middot; Variações do preço de custo &middot; Vendas e margem</td>
+      </tr></tbody>
+    </table>
+  </div></details>
+
+  <details id="report-design"><summary>Posso colocar meu logo e o nome da empresa nos relatórios PDF?</summary><div>
+    <p>Sim. Em <span class="ui">Relatórios</span>, toque em <span class="ui">Design do relatório</span> no topo (também em <span class="ui">Configurações → Relatório PDF</span>). Defina tamanho do papel, orientação, margens, logo, nome da empresa, fontes, estilo da tabela, rodapé, números de página e uma cor de destaque, ou comece por um dos quatro modelos. A prévia é o PDF de verdade.</p>
+  </div></details>
+
+  <details id="labels"><summary>Como imprimo etiquetas de código de barras ou de preço?</summary><div>
+    <ol>
+      <li>Abra <span class="ui">Etiquetas</span> pelo menu <span class="ui">&#8942;</span>.</li>
+      <li>Toque em <span class="ui">Prontas</span> e adicione um modelo pronto (Etiqueta de preço de varejo, Etiqueta de bordo de prateleira, Adesivo pequeno com código, Etiqueta para rolo térmico, Etiqueta QR de ativo&hellip;), ou crie o seu com <span class="ui">Nova etiqueta</span>: tamanho, disposição, fonte, campos e tipo de código de barras.</li>
+      <li>Toque em <span class="ui">Imprimir</span>, selecione os produtos e imprima. Todas as etiquetas saem num único PDF.</li>
+    </ol>
+    <p>Para um só produto, abra-o e toque em <span class="ui">Imprimir etiqueta</span> no topo. Para imprimir numa impressora física é preciso um serviço de impressão (o app do fabricante da impressora, ou o Mopria) do Google Play; senão, salve em PDF.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="import">
+  <h2>Importar de uma planilha</h2>
+  <p class="lead">Trazer produtos, categorias, fornecedores ou locais de um arquivo CSV.</p>
+
+  <details id="how-import"><summary>Como importo meus produtos do Excel ou do Google Planilhas?</summary><div>
+    <ol>
+      <li>No Excel ou no Google Planilhas, salve ou baixe a planilha como <strong>CSV</strong>. O app lê arquivos CSV, não .xlsx.</li>
+      <li>Abra <span class="ui">Importar</span> pelo menu <span class="ui">&#8942;</span> e escolha o que vai importar (Produtos, Categorias, Fornecedores ou Locais).</li>
+      <li>Toque em <span class="ui">Escolher arquivo CSV</span>. Na dúvida sobre as colunas? Toque em <span class="ui">Salvar um CSV modelo</span>, preencha e escolha esse arquivo.</li>
+      <li>Revise a prévia. Cada linha é marcada como NOVO ou ATUALIZAR, com os avisos e as linhas recusadas explicados. Escolha suas opções e toque em <span class="ui">Importar</span>.</li>
+    </ol>
+    <p>Nada é gravado antes de você confirmar.</p>
+  </div></details>
+
+  <details id="import-columns"><summary>Quais colunas o arquivo precisa ter?</summary><div>
+    <p>Para produtos, só <code>sku</code> e <code>name</code> são obrigatórias. Outras que você pode incluir: description, category, location, quantity, unit, min, max, cost, price, barcode, supplier, image. A primeira linha deve nomear as colunas. Muitas grafias comuns são entendidas (<code>qty</code>, <code>stock</code>, <code>unit price</code>&hellip;, e também os cabeçalhos em português que o próprio app exporta), e a tela de importação lista todos os nomes aceitos. Exemplo:</p>
+    <p><code>sku,name,category,quantity,unit,cost,price,barcode</code><br><code>A-100,Parafuso,Ferragens,25,un,4.50,9.99,4006381333931</code></p>
+    <p>Vírgula, ponto e vírgula ou tabulação, vírgula decimal, símbolos de moeda e a maioria dos formatos de data são aceitos. Quando um valor precisa ser deduzido, a prévia diz como foi lido.</p>
+  </div></details>
+
+  <details id="import-update"><summary>Importar sobrescreve os produtos que já tenho?</summary><div>
+    <p>Só se você quiser. Os produtos são casados pelo SKU. Com <span class="ui">Atualizar registos que já existem</span> ativado, um produto correspondente recebe os valores do seu arquivo, e só nas colunas que o arquivo tem. Um arquivo só com <code>sku,name,quantity</code> não apaga preços nem categorias. Desative para adicionar apenas produtos novos.</p>
+    <p>Se o estoque de um produto estiver dividido entre vários locais ou lotes, o arquivo não tem como dizer para onde vai uma nova quantidade; mude o estoque desse produto pela página dele.</p>
+  </div></details>
+
+  <details id="export-to-excel"><summary>Como passo toda a minha lista de produtos para o Excel?</summary><div>
+    <p>Exporte o relatório <span class="ui">Catálogo de produtos</span> ou <span class="ui">Estoque existente</span> em CSV (veja <a href="#export-report">relatórios</a>). O CSV também pode ser importado de volta no app.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="backup">
+  <h2>Backup, restauração e troca de celular</h2>
+  <p class="lead">Seus dados vivem no celular. Um backup em outro lugar é o que os salva se o celular for perdido ou formatado.</p>
+
+  <div class="note"><strong>Desinstalar o app ou limpar os dados dele apaga tudo.</strong> Configure um backup antes de fazer qualquer um dos dois.</div>
+
+  <details id="setup-backup"><summary>Como faço backup dos meus dados?</summary><div>
+    <ol>
+      <li>Abra <span class="ui">Backup</span> pelo menu <span class="ui">&#8942;</span>.</li>
+      <li>Toque em <span class="ui">Adicionar destino</span> e escolha para onde vão os backups: <span class="ui">Pasta neste dispositivo</span> (memória interna, cartão SD, pen drive, ou uma pasta sincronizada pelo seu app de nuvem), <span class="ui">Servidor FTP</span> ou <span class="ui">Pasta partilhada (SMB)</span> (um NAS ou uma pasta compartilhada num PC com Windows).</li>
+      <li>Para um servidor, digite o endereço e o login e toque em <span class="ui">Testar ligação</span>. O teste confere se dá mesmo para gravar um arquivo lá.</li>
+      <li>Toque em <span class="ui">Fazer cópia agora</span> e ative <span class="ui">Backups automáticos</span> para salvar uma cópia mais ou menos uma vez por dia.</li>
+    </ol>
+    <p>Cada backup vai para todos os seus destinos. Se um parar de funcionar, você recebe uma notificação e um aviso no Painel até ser resolvido.</p>
+  </div></details>
+
+  <details id="restore"><summary>Como restauro um backup?</summary><div>
+    <p>Em <span class="ui">Backup</span>, encontre o backup na lista e toque em <span class="ui">Restaurar</span>. Você escolhe quais dados trazer de volta e vê o que ele contém antes de qualquer mudança. Restaurar substitui seus dados atuais pelos do backup.</p>
+    <p>"Este backup foi feito por uma versão mais recente do app. Atualize o app e restaure-o novamente." significa que antes é preciso instalar a versão mais recente pelo Google Play.</p>
+  </div></details>
+
+  <details id="new-phone"><summary>Como passo meus dados para um celular novo?</summary><div>
+    <ol>
+      <li>No celular antigo, faça backup num lugar que o novo alcance: um servidor FTP/SMB, uma pasta sincronizada com a nuvem, ou um arquivo que você copie.</li>
+      <li>No celular novo, instale o Stock Management. Na tela de boas-vindas escolha <span class="ui">Restaurar uma cópia</span> e depois <span class="ui">De um ficheiro</span>, <span class="ui">De um servidor</span> ou <span class="ui">De uma pasta</span>.</li>
+    </ol>
+    <p>As senhas dos servidores não ficam salvas dentro dos backups, por segurança. Digite-as de novo no celular novo.</p>
+  </div></details>
+
+  <details id="two-phones"><summary>Dois celulares podem compartilhar o mesmo estoque?</summary><div>
+    <p>O app não tem conta on-line, então dois celulares não sincronizam entre si. Para várias pessoas trabalharem no mesmo estoque, mantenha-o num só celular e deixe os outros usarem pelo <a href="#remote">Acesso remoto</a>, num navegador no mesmo Wi-Fi. Um backup restaurado em outro celular é uma cópia: o que muda num não aparece no outro.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="remote">
+  <h2>Usar pelo computador, tablet ou coletor (Acesso remoto)</h2>
+  <p class="lead">Outros aparelhos no mesmo Wi-Fi abrem seu estoque num navegador, cada um com seu login e suas permissões.</p>
+
+  <details id="remote-setup"><summary>Como abro o app no meu computador?</summary><div>
+    <ol>
+      <li>No celular, abra <span class="ui">Acesso remoto</span> pelo menu <span class="ui">&#8942;</span>. Se o celular tiver bloqueio de tela, confirme.</li>
+      <li>Toque em <span class="ui">Iniciar servidor</span>. A tela mostra um endereço como <code>http://192.168.1.24:8080</code> e um QR code.</li>
+      <li>Toque em <span class="ui">Adicionar alguém</span> e crie um acesso: um nome, um nome de usuário e uma senha.</li>
+      <li>Toque em <span class="ui">Escolher</span> nessa pessoa e marque as telas e ações que ela terá (ou um perfil: <span class="ui">Apenas ver</span>, <span class="ui">Inventariante</span>, <span class="ui">Consulta de preços</span>, <span class="ui">Tudo</span>). Nada é liberado até você marcar.</li>
+      <li>No computador, digite o endereço num navegador (Chrome, Edge, Firefox, Safari) e entre.</li>
+      <li>Quando terminar, toque em <span class="ui">Parar servidor</span>.</li>
+    </ol>
+    <p>Cada mudança feita no navegador chega ao celular com o nome dessa pessoa. O servidor nunca liga sozinho.</p>
+  </div></details>
+
+  <details id="remote-cant-connect"><summary>O navegador não abre o endereço.</summary><div>
+    <ul>
+      <li>Os dois aparelhos precisam estar no <strong>mesmo Wi-Fi</strong> (ou o computador conectado ao roteador do celular). Dados móveis não funcionam.</li>
+      <li>Redes Wi-Fi de visitantes ou públicas costumam impedir que os aparelhos se vejam. Use sua rede principal ou o roteador do celular.</li>
+      <li>Digite o endereço completo, com <code>http://</code> e a porta (<code>:8080</code>).</li>
+      <li>Confira se o servidor ainda está ligado. Fechar o app pela tela de apps recentes o desliga, e mudar de rede também.</li>
+      <li>O endereço com nome (terminado em <code>.local</code>) só funciona se o seu roteador aceitar. Use o endereço com números.</li>
+      <li>Permita as notificações do app. Enquanto o servidor roda, a notificação dele traz o botão de parar.</li>
+    </ul>
+  </div></details>
+
+  <details id="remote-can-do"><summary>O que dá para fazer pelo navegador?</summary><div>
+    <p>O que você permitir: Painel, Produtos (ver, cadastrar, editar), Leitor, Estoque rápido, Inventário, histórico, Relatórios (CSV/PDF), Categorias, Fornecedores, Locais, mover estoque entre locais, imprimir etiquetas e Consultar preço. Backup, importação, a Lixeira, o design de etiquetas, as configurações, as vendas e o próprio Acesso remoto ficam no celular. Nada pode ser apagado pelo navegador.</p>
+    <p>Cada navegador escolhe o próprio modo claro ou escuro, tema, tamanho do texto e visualização da lista em <span class="ui">Exibição</span>.</p>
+  </div></details>
+
+  <details id="handheld"><summary>Usar um coletor de dados (PDA) ou um leitor USB</summary><div>
+    <p>Abra o endereço no navegador do aparelho e entre com uma conta que possa usar o leitor. Toque no ícone de coletor no topo, escolha <span class="ui">Receção</span> ou <span class="ui">Saída</span>, e leia os códigos. Cada código entra numa lista (leia de novo para somar mais um), e um só botão salva tudo. Ative <span class="ui">Ler as teclas do scanner em qualquer lugar</span> para o teclado da tela não atrapalhar.</p>
+    <p>Listas não salvas ficam guardadas no aparelho se o Wi-Fi cair, para você salvar quando voltar. Um navegador não consegue usar a câmera do aparelho para ler códigos (precisa de conexão segura), então use um leitor ou digite o código.</p>
+  </div></details>
+
+  <details id="price-checker-screen"><summary>Os clientes podem consultar preços sozinhos numa tela?</summary><div>
+    <p>Sim. Crie um acesso com o perfil <span class="ui">Consulta de preços</span>, abra Consultar preço num PC ou tablet do balcão com um leitor, e escolha <span class="ui">Tela de consulta</span>. Ela mostra seu logo e o nome da empresa (do design dos relatórios) e oferece um botão de tela cheia. O que ela mostra e quando limpa é definido em <span class="ui">Configurações → Tela de consulta de preços</span>.</p>
+  </div></details>
+
+  <details id="remote-safety"><summary>O Acesso remoto é seguro?</summary><div>
+    <ul>
+      <li>Só funciona em redes privadas (Wi-Fi de casa ou do escritório, roteador do celular), nunca na internet aberta.</li>
+      <li>Cada pessoa tem a própria senha e só vê o que você marcou. Você vê quem está conectado, pode desconectar, desativar uma conta ou trocar a senha dela, e ler a atividade recente.</li>
+      <li>A conexão <strong>não é criptografada</strong>: use numa rede de confiança, não em Wi-Fi público.</li>
+      <li>Se o celular não tiver bloqueio de tela, qualquer pessoa com ele na mão pode abrir o Acesso remoto. Colocar um bloqueio de tela protege.</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="notifications">
+  <h2>Notificações</h2>
+  <p class="lead">Alertas de estoque baixo, lembretes de contagem e avisos de backup.</p>
+
+  <details id="low-stock-alert"><summary>Como funcionam os alertas de estoque baixo? Posso escolher o horário?</summary><div>
+    <p>Uma vez por dia o app envia um resumo dos produtos abaixo do mínimo. Escolha o horário em <span class="ui">Configurações → Notificações → Alerta de stock baixo</span>. Ele chega <em>por volta</em> desse horário, porque o Android pode atrasá-lo alguns minutos para economizar bateria.</p>
+  </div></details>
+
+  <details id="no-notifications"><summary>Não recebo nenhuma notificação.</summary><div>
+    <ul>
+      <li>Confira se <span class="ui">Configurações → Notificações → Ativar notificações</span> está ativado.</li>
+      <li>Permita as notificações do app: toque em <span class="ui">Ativar alertas</span> no cartão do Painel, ou vá em Configurações do Android → Apps → Stock Management → Notificações.</li>
+      <li>Cada tipo (Alertas de estoque baixo, Lembretes de contagem, Problemas de cópia de segurança, Acesso remoto) pode ser ligado ou desligado separadamente nas configurações de notificação do Android para o app.</li>
+      <li>Alguns celulares (Xiaomi, Huawei, Oppo, Vivo, Samsung, Motorola&hellip;) fecham apps em segundo plano para economizar bateria. Permita que o app rode em segundo plano, ou deixe o uso de bateria dele "sem restrições".</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="customize">
+  <h2>Personalizar o app</h2>
+  <p class="lead">Tudo abaixo fica em Configurações.</p>
+
+  <details id="themes"><summary>Temas, modo escuro e cores</summary><div>
+    <p><span class="ui">Configurações → Tema</span>: <span class="ui">Aspeto</span> (Sistema, Claro, Escuro), <span class="ui">Tema da aplicativo</span> (Porto, Grafite, Kraft, Meia-noite), e <span class="ui">Cor dinâmica</span> para usar as cores do seu papel de parede (Android 12+).</p>
+  </div></details>
+
+  <details id="all-settings"><summary>O que mais posso mudar?</summary><div>
+    <table>
+      <tbody>
+        <tr><td><span class="ui">Configuração dos menus</span></td><td>Quais telas ficam na barra inferior e no menu, e em que ordem</td></tr>
+        <tr><td><span class="ui">Painel</span></td><td>Quais cartões e gráficos aparecem, a ordem e a largura</td></tr>
+        <tr><td><span class="ui">Cartão de produto</span></td><td>O que cada produto mostra na lista</td></tr>
+        <tr><td><span class="ui">Limite padrão de estoque baixo</span></td><td>Estoque mínimo sugerido para produtos novos</td></tr>
+        <tr><td><span class="ui">Movimentos de estoque</span></td><td>Perguntar de onde quando o estoque está dividido; como o estoque é avaliado</td></tr>
+        <tr><td><span class="ui">Formatos de código de barras</span> &middot; <span class="ui">Confirmação de leitura</span></td><td>Quais códigos o leitor lê; bipe e vibração</td></tr>
+        <tr><td><span class="ui">Relatório PDF</span></td><td>A aparência dos relatórios PDF exportados</td></tr>
+        <tr><td><span class="ui">Tela de consulta de preços</span></td><td>O que a tela de preços para clientes mostra</td></tr>
+        <tr><td><span class="ui">Geral</span></td><td>Símbolo da moeda, idioma</td></tr>
+        <tr><td><span class="ui">Notificações</span></td><td>Horário do alerta de estoque baixo, lembrete de contagem</td></tr>
+      </tbody>
+    </table>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trash">
+  <h2>Lixeira</h2>
+  <p class="lead">Nada do que você apaga some de vez até você esvaziá-la.</p>
+
+  <details id="restore-deleted"><summary>Como recupero algo que apaguei?</summary><div>
+    <p>Abra <span class="ui">Lixeira</span> pelo menu <span class="ui">&#8942;</span>. Produtos, categorias, fornecedores, locais e etiquetas apagados, e movimentos desfeitos, ficam todos ali. Toque em <span class="ui">Restaurar</span>: o app diz antes exatamente o que vai acontecer. Restaurar só adiciona; nunca sobrescreve nada que você tem agora (um SKU ou nome repetido ganha um novo, como <code>A-100-2</code>).</p>
+    <p><span class="ui">Excluir para sempre</span> remove um item; <span class="ui">Esvaziar</span> esvazia a Lixeira inteira. Nenhum dos dois afeta seus dados atuais.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trouble">
+  <h2>Problemas e contato</h2>
+
+  <details id="old-version"><summary>Falta no meu app um recurso desta página.</summary><div>
+    <p>Atualize o Stock Management pelo Google Play. As últimas atualizações trouxeram mover estoque entre locais, lotes e números de série, vendas e notas, consulta de preço e mais. Seus dados são mantidos na atualização.</p>
+  </div></details>
+
+  <details id="privacy"><summary>Onde ficam meus dados? Quem pode vê-los?</summary><div>
+    <p>Só no seu celular, no armazenamento privado do app. Nós não recebemos seus produtos, seu estoque nem suas vendas. Leia a <a href="../../">política de privacidade</a> (em inglês).</p>
+  </div></details>
+
+  <details id="contact" open><summary>Como faço uma pergunta ou relato um problema?</summary><div>
+    <p>No app: <span class="ui">Configurações → Enviar comentários</span> (ou o balão no topo das telas principais). Escolha o tipo, escreva a mensagem e <strong>coloque seu e-mail no campo <span class="ui">Contato (opcional)</span> se quiser resposta</strong>. Sem ele, lemos sua mensagem mas não conseguimos responder. O envio precisa de internet.</p>
+    <p>Ou escreva para <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>. Lemos todas as mensagens, em qualquer idioma.</p>
+  </div></details>
+</section>
+
+
+<footer>
+  <p class="langs"><a href="../" lang="en">English</a> &middot; <a href="../es/" lang="es">Español</a> &middot; <a href="../fr/" lang="fr">Français</a> &middot; <strong>Português</strong> &middot; <a href="../ru/" lang="ru">Русский</a> &middot; <a href="../zh/" lang="zh-Hans">中文</a> &middot; <a href="../ar/" lang="ar">العربية</a> &middot; <a href="../hi/" lang="hi">हिन्दी</a> &middot; <a href="../bn/" lang="bn">বাংলা</a> &middot; <a href="../ur/" lang="ur">اردو</a> &middot; <a href="../id/" lang="id">Bahasa Indonesia</a></p>
+  <p>Stock Management &middot; <a href="../../">Política de privacidade</a> &middot; <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a></p>
+  <p>&copy; 2026 Cool App Helpdesk</p>
+</footer>
+
+</main>
+<script>
+(function () {
+  var CODE = 'pt';
+  var PERMALINK = "Link para esta resposta";
+  var OFFERS = {"en":{"href":"../","banner":"Read this help in English"},"es":{"href":"../es/","banner":"Leer esta ayuda en español"},"fr":{"href":"../fr/","banner":"Lire cette aide en français"},"ru":{"href":"../ru/","banner":"Читать справку на русском"},"zh":{"href":"../zh/","banner":"阅读中文版帮助"},"ar":{"href":"../ar/","banner":"اقرأ هذه المساعدة بالعربية"},"hi":{"href":"../hi/","banner":"यह सहायता हिन्दी में पढ़ें"},"bn":{"href":"../bn/","banner":"এই সাহায্য বাংলায় পড়ুন"},"ur":{"href":"../ur/","banner":"یہ مدد اردو میں پڑھیں"},"id":{"href":"../id/","banner":"Baca bantuan ini dalam Bahasa Indonesia"}};
+  var q = document.getElementById('q');
+  var none = document.getElementById('noresults');
+  var items = Array.prototype.slice.call(document.querySelectorAll('section.card details'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('section.card'));
+  var toc = document.querySelector('nav.topics');
+
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  // The switcher keeps the answer you are on: help/#move-stock → help/es/#move-stock.
+  document.getElementById('lang').addEventListener('change', function () {
+    store('helpLang', this.options[this.selectedIndex].value.replace(/^(\.\.\/)?/, '').replace(/\/$/, '') || 'en');
+    location.href = this.value + location.hash;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('footer .langs a'), function (a) {
+    a.addEventListener('click', function (e) {
+      store('helpLang', (a.getAttribute('href').replace(/^(\.\.\/)?/, '').replace(/\/$/, '')) || 'en');
+      a.href = a.getAttribute('href') + location.hash;
+    });
+  });
+
+  // Offer the reader's own language once, unless they have already picked one.
+  if (!store('helpLang')) {
+    var langs = (navigator.languages || [navigator.language || '']).map(function (l) { return l.toLowerCase().split('-')[0]; });
+    for (var i = 0; i < langs.length; i++) {
+      var c = langs[i] === 'in' ? 'id' : langs[i];
+      if (c === CODE) break;
+      if (OFFERS[c]) {
+        var o = document.getElementById('offer');
+        var a = document.createElement('a');
+        a.textContent = OFFERS[c].banner;
+        a.href = OFFERS[c].href;
+        a.setAttribute('lang', c);
+        a.addEventListener('click', function () { store('helpLang', c); a.href = OFFERS[c].href + location.hash; });
+        o.appendChild(a);
+        o.style.display = 'block';
+        break;
+      }
+    }
+  }
+
+  // Each answer links to itself, so one answer can be sent to someone.
+  items.forEach(function (d) {
+    var p = document.createElement('p');
+    p.className = 'permalink';
+    var a = document.createElement('a');
+    a.href = '#' + d.id;
+    a.textContent = PERMALINK;
+    p.appendChild(a);
+    d.querySelector(':scope > div').appendChild(p);
+  });
+
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  var texts = items.map(function (d) { return norm(d.textContent); });
+
+  q.addEventListener('input', function () {
+    var words = norm(q.value).split(/\s+/).filter(Boolean);
+    var searching = words.length > 0;
+    var hits = items.map(function (d, i) {
+      return words.every(function (w) { return texts[i].indexOf(w) !== -1; });
+    });
+    var count = hits.filter(Boolean).length;
+    items.forEach(function (d, i) {
+      d.classList.toggle('hidden', searching && !hits[i]);
+      d.classList.toggle('hit', searching && hits[i]);
+      // A narrow search opens its answers; a broad one leaves them closed to scan.
+      d.open = searching ? hits[i] && count <= 3 : d.id === 'contact';
+    });
+    cards.forEach(function (c) {
+      c.classList.toggle('hidden', searching && !c.querySelector('details:not(.hidden)'));
+    });
+    if (toc) toc.classList.toggle('hidden', searching);
+    none.style.display = searching && count === 0 ? 'block' : 'none';
+  });
+
+  function openTarget() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    // A link followed mid-search must not land on an answer the filter hides.
+    if (q.value) { q.value = ''; q.dispatchEvent(new Event('input')); }
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'DETAILS') el.open = true;
+    el.scrollIntoView({ block: 'start', behavior: 'instant' });
+  }
+  window.addEventListener('hashchange', openTarget);
+  openTarget();
+})();
+</script>
+</body>
+</html>

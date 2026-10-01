@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,19 +21,29 @@
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; scroll-padding-top: 76px; }
   html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
     line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  html[lang="ur"] body { font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Noto Sans Arabic", sans-serif; line-height: 2; }
+  html[lang="ar"] body { font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif; }
   .wrap { max-width: 820px; margin: 0 auto; padding: 40px 24px 96px; }
-  header { border-radius: 16px; padding: 32px 28px; margin-bottom: 18px;
+  header { border-radius: 16px; padding: 28px 28px 30px; margin-bottom: 18px;
     background: linear-gradient(135deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); color: #fff; }
+  html[dir="rtl"] header { background: linear-gradient(225deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); }
+  .langbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+  .langbar select { font: inherit; font-size: 14px; color: #fff; background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 12px; cursor: pointer; }
+  .langbar select option { color: #10201f; background: #fff; }
   header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
   header p { margin: 0; opacity: 0.92; font-size: 15px; }
+  #offer { display: none; margin: 0 0 12px; padding: 10px 14px; border-radius: 10px;
+    background: var(--primary-soft); border: 1px solid var(--border); font-weight: 600; }
   .searchbar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; }
   .searchbar input { width: 100%; font: inherit; font-size: 16px; padding: 12px 16px;
     border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); }
   .searchbar input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
   #noresults { display: none; text-align: center; color: var(--muted); padding: 24px 0; }
   .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; padding: 0; list-style: none; }
+  .toc li { margin: 0; }
   .toc a { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 14px;
     background: var(--surface); border: 1px solid var(--border); color: var(--text); }
   .toc a:hover { border-color: var(--primary); text-decoration: none; }
@@ -43,34 +53,35 @@
   .card > .lead { color: var(--muted); font-size: 14.5px; margin: 0 0 10px; }
   details { border-top: 1px solid var(--border); }
   details:first-of-type { border-top: none; }
-  summary { cursor: pointer; padding: 11px 28px 11px 0; font-weight: 600; list-style: none; position: relative; }
+  summary { cursor: pointer; padding-block: 11px; padding-inline: 0 28px; font-weight: 600;
+    list-style: none; position: relative; }
   summary::-webkit-details-marker { display: none; }
-  summary::after { content: "+"; position: absolute; right: 4px; top: 9px; font-size: 20px;
+  summary::after { content: "+"; position: absolute; inset-inline-end: 4px; top: 9px; font-size: 20px;
     font-weight: 400; color: var(--muted); }
   details[open] > summary::after { content: "\2212"; }
   details > div { padding: 0 0 14px; }
   details:target > summary, details.hit > summary { color: var(--primary); }
   p, ul, ol { margin: 0 0 10px; }
-  ul, ol { padding-left: 22px; } li { margin-bottom: 5px; }
-  .ui { font-weight: 600; white-space: nowrap; }
+  ul, ol { padding-inline-start: 22px; padding-inline-end: 0; } li { margin-bottom: 5px; }
+  .ui { font-weight: 600; }
   .muted { color: var(--muted); font-size: 14px; }
   .note { background: var(--note-bg); border: 1px solid var(--note-border); color: var(--note-text);
     border-radius: 10px; padding: 10px 14px; font-size: 14.5px; margin: 10px 0; }
   .permalink { font-size: 13px; color: var(--muted); }
   table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 14px; }
-  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th, td { text-align: start; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
   th { font-weight: 600; color: var(--muted); background: var(--primary-soft); }
   tr:last-child td { border-bottom: none; }
-  code { background: var(--primary-soft); padding: 1px 6px; border-radius: 4px;
+  code { background: var(--primary-soft); padding: 1px 6px; border-radius: 4px; direction: ltr; unicode-bidi: isolate;
     font-size: 13px; font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
   a { color: var(--primary); text-decoration: none; } a:hover { text-decoration: underline; }
   footer { margin-top: 32px; text-align: center; color: var(--muted); font-size: 13px; }
+  footer .langs { line-height: 2; }
   .hidden { display: none !important; }
   @media (max-width: 480px) {
     .wrap { padding: 20px 16px 64px; }
-    header { padding: 24px 20px; } header h1 { font-size: 24px; }
+    header { padding: 20px 20px 24px; } header h1 { font-size: 24px; }
     .card { padding: 16px 18px; } h2 { font-size: 18px; }
-    .ui { white-space: normal; }
     table { font-size: 13px; } th, td { padding: 7px 8px; }
   }
 </style>
@@ -79,15 +90,32 @@
 <main class="wrap">
 
 <header>
+  <div class="langbar">
+    <select id="lang" aria-label="Language">
+<option value="" selected>English</option>
+<option value="es/">Español</option>
+<option value="fr/">Français</option>
+<option value="pt/">Português</option>
+<option value="ru/">Русский</option>
+<option value="zh/">中文</option>
+<option value="ar/">العربية</option>
+<option value="hi/">हिन्दी</option>
+<option value="bn/">বাংলা</option>
+<option value="ur/">اردو</option>
+<option value="id/">Bahasa Indonesia</option>
+    </select>
+  </div>
   <h1>Stock Management — Help</h1>
-  <p>How to do everything in the app &middot; written for version 1.98 &middot; last updated <time datetime="2026-10-01">Oct 1, 2026</time></p>
+  <p>How to do everything in the app &middot; written for version 1.98 &middot; updated Oct 2026</p>
 </header>
 
+<p id="offer"></p>
+
 <div class="searchbar">
-  <input id="q" type="search" placeholder="Search the help — e.g. move stock, barcode, backup, bill" aria-label="Search the help" autocomplete="off">
+  <input id="q" type="search" placeholder="Search the help — e.g. move stock, barcode, backup, bill" aria-label="Search the help — e.g. move stock, barcode, backup, bill" autocomplete="off">
 </div>
 
-<nav aria-label="Topics">
+<nav class="topics" aria-label="Topics">
   <ul class="toc">
     <li><a href="#start">Getting started</a></li>
     <li><a href="#products">Products</a></li>
@@ -109,7 +137,7 @@
   </ul>
 </nav>
 
-<div class="note"><strong>Can&rsquo;t find something described here?</strong> Update the app from Google Play first. This page describes the current version, and many features (moving stock between locations, lots, selling, bills) only arrived in recent updates. You can see what each update added in <span class="ui">Settings &rarr; What&rsquo;s new</span>.</div>
+<div class="note"><strong>Can&rsquo;t find something described here?</strong> Update the app from Google Play first. This page describes the current version, and many features (moving stock between locations, lots, selling, bills) only arrived in recent updates. You can see what each update added in <span class="ui">Settings → What's new</span>.</div>
 
 <p id="noresults">Nothing matches that search. Try a shorter word, or <a href="#contact">ask us</a>.</p>
 
@@ -145,16 +173,16 @@
 
   <details id="menu"><summary>Where are all the screens? I only see four at the bottom.</summary><div>
     <p>On a phone the bottom bar shows the Dashboard and the first three screens of your menu. Everything else is in the <span class="ui">&#8942;</span> menu at the top right of each screen: Sell, Stocktake, Transactions, Reports, Categories, Suppliers, Locations, Labels, Import, Backup, Trash, Remote access and Settings. On a tablet they are all in the side rail.</p>
-    <p>To choose which screens get the bottom bar, go to <span class="ui">Settings &rarr; Menu configuration</span> and move them up or down. You can hide screens you never use too (Dashboard and Settings always stay).</p>
+    <p>To choose which screens get the bottom bar, go to <span class="ui">Settings → Menu configuration</span> and move them up or down. You can hide screens you never use too (Dashboard and Settings always stay).</p>
   </div></details>
 
   <details id="language"><summary>How do I change the language?</summary><div>
-    <p><span class="ui">Settings &rarr; Language</span>. The app is available in English, Español, Français, Português, Русский, 中文, العربية, हिन्दी, বাংলা, اردو and Bahasa Indonesia.</p>
+    <p><span class="ui">Settings → Language</span>. The app is available in English, Español, Français, Português, Русский, 中文, العربية, हिन्दी, বাংলা, اردو and Bahasa Indonesia.</p>
   </div></details>
 
   <details id="dashboard"><summary>What does the Dashboard show?</summary><div>
     <p>Total products, low stock, stock value, recent moves, alerts and charts (stock levels, products and value by category, movements over 7 and 30 days, what needs reordering, stock value by location and by supplier, most moved products, and lots expiring soon).</p>
-    <p>Tap <span class="ui">Customize dashboard</span> at the foot of the Dashboard, or go to <span class="ui">Settings &rarr; Dashboard</span>, to hide cards, change their order and set how wide each one is.</p>
+    <p>Tap <span class="ui">Customize dashboard</span> at the foot of the Dashboard, or go to <span class="ui">Settings → Dashboard</span>, to hide cards, change their order and set how wide each one is.</p>
   </div></details>
 </section>
 
@@ -187,11 +215,11 @@
   </div></details>
 
   <details id="find-product"><summary>How do I search, sort and filter the product list?</summary><div>
-    <p>The search box finds products by name, SKU or barcode; the scan button beside it searches by scanning. The sort and filter button sorts by name, quantity, stock value or recently updated, narrows the list to one category, and tapping <span class="ui">Low stock</span> on the Dashboard opens the list showing only low products. On a tablet you can also choose how many columns the list uses.</p>
+    <p>The search box finds products by name, SKU or barcode; the scan button beside it searches by scanning. The sort and filter button sorts by name, quantity, stock value or recently updated, and narrows the list to one category. Tapping <span class="ui">Low stock</span> on the Dashboard opens the list showing only low products. On a tablet you can also choose how many columns the list uses.</p>
   </div></details>
 
   <details id="product-card"><summary>Can I choose what each product shows in the list?</summary><div>
-    <p>Yes: <span class="ui">Settings &rarr; Product card &rarr; Customize product card</span>. Show or hide the photo, category, supplier, location, prices, cost, description, stock bar and more, and put them in your own order. A live preview shows the result.</p>
+    <p>Yes: <span class="ui">Settings → Product card → Customize product card</span>. Show or hide the photo, category, supplier, location, prices, cost, description, stock bar and more, and put them in your own order. A live preview shows the result.</p>
   </div></details>
 
   <details id="categories"><summary>How do categories, suppliers and locations work?</summary><div>
@@ -202,11 +230,11 @@
 
   <details id="low-stock"><summary>How does &ldquo;low stock&rdquo; work?</summary><div>
     <p>Each product has its own <span class="ui">Min stock</span>. When the quantity is at or below it, the product is marked low (and out of stock at zero). If it has a <span class="ui">Max stock</span> and goes above it, it is marked overstock.</p>
-    <p>The value pre-filled for new products is set in <span class="ui">Settings &rarr; Default Low Stock Threshold</span>. Low products show on the Dashboard, in the product list (tap the Low stock tile), in the low stock report and in the daily <a href="#notifications">low stock alert</a>.</p>
+    <p>The value pre-filled for new products is set in <span class="ui">Settings → Default Low Stock Threshold</span>. Low products show on the Dashboard, in the product list (tap the low stock tile), in the low stock report and in the daily <a href="#notifications">low stock alert</a>.</p>
   </div></details>
 
   <details id="currency"><summary>How do I change the currency?</summary><div>
-    <p><span class="ui">Settings &rarr; General &rarr; Currency Symbol</span>. Type the symbol you use (for example $, &euro;, MAD, &#8377;). It changes how prices are shown; it does not convert amounts.</p>
+    <p><span class="ui">Settings → General → Currency Symbol</span>. Type the symbol you use (for example $, &euro;, MAD, &#8377;). It changes how prices are shown; it does not convert amounts.</p>
   </div></details>
 </section>
 
@@ -235,8 +263,8 @@
     <p>Use <a href="#stocktake">Stocktake</a>. You type what you counted, and the app works out the difference and records it as an adjustment. That way you never have to do the subtraction yourself.</p>
   </div></details>
 
-  <details id="negative"><summary>Why does it say &ldquo;Only N here&rdquo; or refuse to go below zero?</summary><div>
-    <p>Stock can&rsquo;t go below zero. If a product is held in several places, a stock-out takes from the place you chose (or the default location). When that place doesn&rsquo;t hold enough, the message tells you where the rest is (for example &ldquo;Only 3 units here. In stock: Store A 5, Van 2&rdquo;). Choose that place in <span class="ui">Stock out from</span>, or <a href="#move-stock">move the stock</a> first.</p>
+  <details id="negative"><summary>Why does the app refuse a stock-out, or say there is only a little here?</summary><div>
+    <p>Stock can&rsquo;t go below zero. If a product is held in several places, a stock-out takes from the place you chose (or the default location). When that place doesn&rsquo;t hold enough, the message tells you where the rest is, for example: &ldquo;Only 3 pcs here. In stock: Store A 5, Van 2&rdquo;. Choose that place in <span class="ui">Stock out from</span>, or <a href="#move-stock">move the stock</a> first.</p>
   </div></details>
 
   <details id="mistake"><summary>I entered the wrong amount. How do I fix it?</summary><div>
@@ -250,7 +278,7 @@
   <p class="lead">Keeping stock in several places &mdash; warehouse, shop, van, shelf &mdash; and moving it between them.</p>
 
   <details id="move-stock"><summary>How do I move (transfer) stock from one location to another?</summary><div>
-    <p><strong>1. Create your locations</strong> (once): <span class="ui">&#8942; &rarr; Locations &rarr; +</span>, give each one a name and a short code (e.g. <code>Main Warehouse</code>, <code>WH-MN</code>), and save.</p>
+    <p><strong>1. Create your locations</strong> (once): <span class="ui">&#8942; → Locations → +</span>, give each one a name and a short code (e.g. <code>Main Warehouse</code>, <code>WH-MN</code>), and save.</p>
     <p><strong>2. Move the stock:</strong></p>
     <ol>
       <li>Open the product. The <span class="ui">Where it is</span> card lists every place that holds some of its stock.</li>
@@ -258,8 +286,8 @@
       <li>Under <span class="ui">To</span>, pick the destination and enter the amount (it shows how much is available).</li>
       <li>Confirm. Only that amount moves; the rest stays where it was.</li>
     </ol>
-    <p><strong>From a location instead:</strong> <span class="ui">&#8942; &rarr; Locations</span>, tap the location, and use <span class="ui">Move</span> next to any product held there.</p>
-    <p>Each transfer appears in <span class="ui">Transactions</span> as <span class="ui">Transfer</span> (&ldquo;Warehouse &rarr; Store A&rdquo;) and in the <span class="ui">Transfers log</span> report. Made a mistake? Open it in Transactions and tap <span class="ui">Revert</span>.</p>
+    <p><strong>From a location instead:</strong> <span class="ui">&#8942; → Locations</span>, tap the location, and use <span class="ui">Move</span> next to any product held there.</p>
+    <p>Each transfer appears in <span class="ui">Transactions</span> as <span class="ui">Transfer</span> (&ldquo;Warehouse → Store A&rdquo;) and in the <span class="ui">Transfers log</span> report. Made a mistake? Open it in Transactions and tap <span class="ui">Revert</span>.</p>
     <p class="muted">Moving <em>all</em> of a product: you can also edit the product and change its <span class="ui">Location</span>. If all its stock is in one place, it moves with it.</p>
   </div></details>
 
@@ -280,7 +308,7 @@
 
   <details id="stock-out-from"><summary>How do I choose where a stock-out or a sale takes from?</summary><div>
     <p>When a product is held in more than one place or batch, the stock sheet shows <span class="ui">Stock out from</span>. Leave it on <span class="ui">Automatic (earliest expiry first)</span> or pick the exact place or lot. In <a href="#sell">Sell</a>, tap <span class="ui">Take from: usual place</span> to choose a location for the sale.</p>
-    <p>Quick stock&rsquo;s + and &minus; ask where when a product is split. To always use the default location instead, turn off <span class="ui">Settings &rarr; Stock movements &rarr; Ask where, when stock is split</span>.</p>
+    <p>Quick stock&rsquo;s + and &minus; ask where when a product is split. To always use the default location instead, turn off <span class="ui">Settings → Stock movements → Ask where, when stock is split</span>.</p>
   </div></details>
 
   <details id="condition"><summary>Can I mark stock as damaged, reserved or in quarantine?</summary><div>
@@ -311,7 +339,7 @@
   </div></details>
 
   <details id="valuation"><summary>How is stock value calculated?</summary><div>
-    <p>Each delivery keeps the cost it came in at. In <span class="ui">Settings &rarr; Stock movements &rarr; Value stock at</span> choose one of: the average cost of stock on hand, the latest receipt cost, or the product&rsquo;s cost price. This is used by the Inventory valuation report and the stock value on the product page.</p>
+    <p>Each delivery keeps the cost it came in at. In <span class="ui">Settings → Stock movements → Value stock at</span> choose one of: Average cost of stock on hand, Latest receipt cost, or The product's cost price. This is used by the Inventory valuation report and the stock value on the product page.</p>
   </div></details>
 </section>
 
@@ -326,11 +354,11 @@
 
   <details id="unknown-barcode"><summary>It says &ldquo;Unknown barcode&rdquo;.</summary><div>
     <p>No product has that barcode yet. Tap <span class="ui">Add product with this barcode</span> to create one with the code already filled in, or <span class="ui">Search products for this code</span> to attach it to an existing product.</p>
-    <p>If the scanned code matches a product&rsquo;s SKU instead, the app says <span class="ui">Found by SKU</span> and offers to save the code as its barcode.</p>
+    <p>If the scanned code matches a product&rsquo;s SKU instead, the app says &ldquo;Found by SKU — no barcode saved for this product yet.&rdquo; and offers to save the code as its barcode.</p>
   </div></details>
 
   <details id="batch-scan"><summary>Can I scan many items in a row (a delivery)?</summary><div>
-    <p>Yes: turn on <span class="ui">Batch</span> in the scanner. Each scan adds the product to a list; scanning the same product again adds one more. Then save the whole list as stock in or stock out in one go. Unknown codes are listed separately and skipped.</p>
+    <p>Yes: turn on <span class="ui">Batch on</span> in the scanner. Each scan adds the product to a list; scanning the same product again adds one more. Then save the whole list as Stock in or Stock out in one go. Unknown codes are listed separately and skipped.</p>
   </div></details>
 
   <details id="price-check"><summary>How do I check a price by scanning?</summary><div>
@@ -338,7 +366,7 @@
   </div></details>
 
   <details id="formats"><summary>Which barcodes are supported? It scans slowly or reads wrong codes.</summary><div>
-    <p>EAN-13, EAN-8, UPC-A, UPC-E, Code-128, Code-39, Code-93, QR code and Data Matrix. In <span class="ui">Settings &rarr; Barcode formats</span>, switch off the ones you never use. Fewer formats scan faster and make fewer false reads. Beep and vibration are under <span class="ui">Settings &rarr; Scan feedback</span>.</p>
+    <p>EAN-13, EAN-8, UPC-A, UPC-E, Code-128, Code-39, Code-93, QR code and Data Matrix. In <span class="ui">Settings → Barcode formats</span>, switch off the ones you never use. Fewer formats scan faster and make fewer false reads. Beep and vibration are under <span class="ui">Settings → Scan feedback</span>.</p>
   </div></details>
 
   <details id="camera-permission"><summary>The scanner says it needs the camera.</summary><div>
@@ -367,7 +395,7 @@
   </div></details>
 
   <details id="stocktake-reminder"><summary>Can the app remind me to count?</summary><div>
-    <p>Yes: <span class="ui">Settings &rarr; Stock check reminder &rarr; Remind me to do a stock check</span>. Choose every day, every week (on a weekday) or every month (on a date), and a time.</p>
+    <p>Yes: <span class="ui">Settings → Stock check reminder → Remind me to do a stock check</span>. Choose Every day, Every week (on a weekday) or Every month (on a date), and a time.</p>
   </div></details>
 </section>
 
@@ -438,7 +466,7 @@
       <li>Tap a report, then <span class="ui">CSV</span> (opens in Excel, Google Sheets, LibreOffice) or <span class="ui">PDF</span>.</li>
     </ol>
     <table>
-      <thead><tr><th>Inventory (now)</th><th>Movement (over a period)</th></tr></thead>
+      <thead><tr><th>Inventory</th><th>Movement</th></tr></thead>
       <tbody><tr>
         <td>Stock on hand &middot; Low stock &middot; Out of stock &middot; Overstock &middot; Inventory valuation &middot; Product catalogue &middot; Stock by location &middot; Expiry dates</td>
         <td>Stock movements &middot; Stock in &middot; Stock out &middot; Adjustments audit &middot; Transfers log &middot; Cost price changes &middot; Sales &amp; margin</td>
@@ -447,13 +475,13 @@
   </div></details>
 
   <details id="report-design"><summary>Can I put my logo and company name on PDF reports?</summary><div>
-    <p>Yes. In <span class="ui">Reports</span>, tap <span class="ui">Report design</span> at the top (also in <span class="ui">Settings &rarr; PDF Report</span>). Set paper size, orientation, margins, logo, company name, fonts, table style, footer, page numbers and an accent colour, or start from one of four presets. The preview is the real PDF.</p>
+    <p>Yes. In <span class="ui">Reports</span>, tap <span class="ui">Report design</span> at the top (also in <span class="ui">Settings → PDF Report</span>). Set paper size, orientation, margins, logo, company name, fonts, table style, footer, page numbers and an accent colour, or start from one of four presets. The preview is the real PDF.</p>
   </div></details>
 
   <details id="labels"><summary>How do I print barcode or price labels?</summary><div>
     <ol>
       <li>Open <span class="ui">Labels</span> from the <span class="ui">&#8942;</span> menu.</li>
-      <li>Tap <span class="ui">Presets</span> and add a ready-made design (retail price tag, shelf edge label, small barcode sticker, thermal roll label, QR tag&hellip;), or create your own with <span class="ui">New label</span>: size, layout, font, fields and barcode type.</li>
+      <li>Tap <span class="ui">Presets</span> and add a ready-made design (Retail price tag, Shelf edge label, Small barcode sticker, Thermal roll label, QR asset tag&hellip;), or create your own with <span class="ui">New label</span>: size, layout, font, fields and barcode type.</li>
       <li>Tap <span class="ui">Print</span>, select the products, and print. All the labels come out as one PDF.</li>
     </ol>
     <p>For one product, open it and tap <span class="ui">Print label</span> at the top. Printing to a physical printer needs a print service (your printer maker&rsquo;s app, or Mopria) from Google Play; otherwise save as PDF.</p>
@@ -510,7 +538,7 @@
 
   <details id="restore"><summary>How do I restore a backup?</summary><div>
     <p>In <span class="ui">Backup</span>, find the backup in the saved list and tap <span class="ui">Restore</span>. You choose which data to bring back and see what it contains before anything changes. Restoring replaces your current data with the backup&rsquo;s.</p>
-    <p>&ldquo;This backup was made by a newer version of the app&rdquo; means the phone needs the latest version from Google Play first.</p>
+    <p>&ldquo;This backup was made by a newer version of the app. Update the app, then restore it.&rdquo; means the phone needs the latest version from Google Play first.</p>
   </div></details>
 
   <details id="new-phone"><summary>How do I move my data to a new phone?</summary><div>
@@ -565,7 +593,7 @@
   </div></details>
 
   <details id="price-checker-screen"><summary>Can customers check prices themselves on a screen?</summary><div>
-    <p>Yes. Create a sign-in with the <span class="ui">Price checker</span> preset, open Price check on a counter PC or tablet with a scanner, and choose <span class="ui">Price checker screen</span>. It shows your logo and company name (from the report design) and offers a full-screen button. What it shows and when it clears are set in <span class="ui">Settings &rarr; Price checker screen</span>.</p>
+    <p>Yes. Create a sign-in with the <span class="ui">Price checker</span> preset, open Price check on a counter PC or tablet with a scanner, and choose <span class="ui">Price checker screen</span>. It shows your logo and company name (from the report design) and offers a full-screen button. What it shows and when it clears are set in <span class="ui">Settings → Price checker screen</span>.</p>
   </div></details>
 
   <details id="remote-safety"><summary>Is Remote access safe?</summary><div>
@@ -584,13 +612,13 @@
   <p class="lead">Low stock alerts, stock check reminders and backup warnings.</p>
 
   <details id="low-stock-alert"><summary>How do low stock alerts work? Can I choose the time?</summary><div>
-    <p>Once a day the app sends one summary of the products below their minimum. Pick the time in <span class="ui">Settings &rarr; Notifications &rarr; Low stock alert</span>. It arrives <em>around</em> that time, because Android may delay it by a few minutes to save battery.</p>
+    <p>Once a day the app sends one summary of the products below their minimum. Pick the time in <span class="ui">Settings → Notifications → Low stock alert</span>. It arrives <em>around</em> that time, because Android may delay it by a few minutes to save battery.</p>
   </div></details>
 
   <details id="no-notifications"><summary>I don&rsquo;t get any notifications.</summary><div>
     <ul>
-      <li>Check that <span class="ui">Settings &rarr; Notifications &rarr; Enable Notifications</span> is on.</li>
-      <li>Allow notifications for the app: tap <span class="ui">Turn on alerts</span> on the Dashboard card, or go to Android Settings &rarr; Apps &rarr; Stock Management &rarr; Notifications.</li>
+      <li>Check that <span class="ui">Settings → Notifications → Enable Notifications</span> is on.</li>
+      <li>Allow notifications for the app: tap <span class="ui">Turn on alerts</span> on the Dashboard card, or go to Android Settings → Apps → Stock Management → Notifications.</li>
       <li>Each type (Low stock alerts, Stock check reminders, Backup problems, Remote access) can be switched on or off separately in Android&rsquo;s notification settings for the app.</li>
       <li>Some phones (Xiaomi, Huawei, Oppo, Vivo, Samsung&hellip;) stop background apps to save battery. Allow the app to run in the background, or set its battery use to &ldquo;no restrictions&rdquo;.</li>
     </ul>
@@ -603,7 +631,7 @@
   <p class="lead">Everything below is in Settings.</p>
 
   <details id="themes"><summary>Themes, dark mode and colours</summary><div>
-    <p><span class="ui">Settings &rarr; Theme</span>: <span class="ui">Appearance</span> (System, Light, Dark), <span class="ui">App theme</span> (Harbor, Graphite, Kraft, Midnight), and <span class="ui">Dynamic Color</span> to take colours from your wallpaper (Android 12+).</p>
+    <p><span class="ui">Settings → Theme</span>: <span class="ui">Appearance</span> (System, Light, Dark), <span class="ui">App theme</span> (Harbor, Graphite, Kraft, Midnight), and <span class="ui">Dynamic Color</span> to take colours from your wallpaper (Android 12+).</p>
   </div></details>
 
   <details id="all-settings"><summary>What else can I change?</summary><div>
@@ -648,12 +676,14 @@
   </div></details>
 
   <details id="contact" open><summary>How do I ask a question or report a problem?</summary><div>
-    <p>In the app: <span class="ui">Settings &rarr; Send feedback</span> (or the speech bubble at the top of the main screens). Choose the type, write your message, and <strong>put your email in the Contact field if you&rsquo;d like an answer</strong>. Without it we can read your message but can&rsquo;t reply. Sending needs an internet connection.</p>
+    <p>In the app: <span class="ui">Settings → Send feedback</span> (or the speech bubble at the top of the main screens). Choose the type, write your message, and <strong>put your email in the <span class="ui">Contact (optional)</span> field if you&rsquo;d like an answer</strong>. Without it we can read your message but can&rsquo;t reply. Sending needs an internet connection.</p>
     <p>Or email us at <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>. We read every message, in any language.</p>
   </div></details>
 </section>
 
+
 <footer>
+  <p class="langs"><strong>English</strong> &middot; <a href="es/" lang="es">Español</a> &middot; <a href="fr/" lang="fr">Français</a> &middot; <a href="pt/" lang="pt">Português</a> &middot; <a href="ru/" lang="ru">Русский</a> &middot; <a href="zh/" lang="zh-Hans">中文</a> &middot; <a href="ar/" lang="ar">العربية</a> &middot; <a href="hi/" lang="hi">हिन्दी</a> &middot; <a href="bn/" lang="bn">বাংলা</a> &middot; <a href="ur/" lang="ur">اردو</a> &middot; <a href="id/" lang="id">Bahasa Indonesia</a></p>
   <p>Stock Management &middot; <a href="../">Privacy policy</a> &middot; <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a></p>
   <p>&copy; 2026 Cool App Helpdesk</p>
 </footer>
@@ -661,36 +691,62 @@
 </main>
 <script>
 (function () {
+  var CODE = 'en';
+  var PERMALINK = "Link to this answer";
+  var OFFERS = {"es":{"href":"es/","banner":"Leer esta ayuda en español"},"fr":{"href":"fr/","banner":"Lire cette aide en français"},"pt":{"href":"pt/","banner":"Ler esta ajuda em português"},"ru":{"href":"ru/","banner":"Читать справку на русском"},"zh":{"href":"zh/","banner":"阅读中文版帮助"},"ar":{"href":"ar/","banner":"اقرأ هذه المساعدة بالعربية"},"hi":{"href":"hi/","banner":"यह सहायता हिन्दी में पढ़ें"},"bn":{"href":"bn/","banner":"এই সাহায্য বাংলায় পড়ুন"},"ur":{"href":"ur/","banner":"یہ مدد اردو میں پڑھیں"},"id":{"href":"id/","banner":"Baca bantuan ini dalam Bahasa Indonesia"}};
   var q = document.getElementById('q');
   var none = document.getElementById('noresults');
   var items = Array.prototype.slice.call(document.querySelectorAll('section.card details'));
   var cards = Array.prototype.slice.call(document.querySelectorAll('section.card'));
+  var toc = document.querySelector('nav.topics');
 
-  // Each answer gets a link to itself, so one answer can be sent to a user.
-  items.forEach(function (d) {
-    if (!d.id) return;
-    var body = d.querySelector(':scope > div');
-    var p = document.createElement('p');
-    p.className = 'permalink';
-    p.innerHTML = '<a href="#' + d.id + '">Link to this answer</a>';
-    body.appendChild(p);
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  // The switcher keeps the answer you are on: help/#move-stock → help/es/#move-stock.
+  document.getElementById('lang').addEventListener('change', function () {
+    store('helpLang', this.options[this.selectedIndex].value.replace(/^(\.\.\/)?/, '').replace(/\/$/, '') || 'en');
+    location.href = this.value + location.hash;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('footer .langs a'), function (a) {
+    a.addEventListener('click', function (e) {
+      store('helpLang', (a.getAttribute('href').replace(/^(\.\.\/)?/, '').replace(/\/$/, '')) || 'en');
+      a.href = a.getAttribute('href') + location.hash;
+    });
   });
 
-  // Opening a link to an answer (help/#move-stock) opens that answer.
-  function openTarget() {
-    var id = decodeURIComponent(location.hash.slice(1));
-    if (!id) return;
-    // A link followed mid-search (“ask us”) must not land on an answer the filter hides.
-    if (q.value) { q.value = ''; q.dispatchEvent(new Event('input')); }
-    var el = document.getElementById(id);
-    if (!el) return;
-    if (el.tagName === 'DETAILS') el.open = true;
-    el.scrollIntoView({ block: 'start', behavior: 'instant' });
+  // Offer the reader's own language once, unless they have already picked one.
+  if (!store('helpLang')) {
+    var langs = (navigator.languages || [navigator.language || '']).map(function (l) { return l.toLowerCase().split('-')[0]; });
+    for (var i = 0; i < langs.length; i++) {
+      var c = langs[i] === 'in' ? 'id' : langs[i];
+      if (c === CODE) break;
+      if (OFFERS[c]) {
+        var o = document.getElementById('offer');
+        var a = document.createElement('a');
+        a.textContent = OFFERS[c].banner;
+        a.href = OFFERS[c].href;
+        a.setAttribute('lang', c);
+        a.addEventListener('click', function () { store('helpLang', c); a.href = OFFERS[c].href + location.hash; });
+        o.appendChild(a);
+        o.style.display = 'block';
+        break;
+      }
+    }
   }
 
-  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  // Each answer links to itself, so one answer can be sent to someone.
+  items.forEach(function (d) {
+    var p = document.createElement('p');
+    p.className = 'permalink';
+    var a = document.createElement('a');
+    a.href = '#' + d.id;
+    a.textContent = PERMALINK;
+    p.appendChild(a);
+    d.querySelector(':scope > div').appendChild(p);
+  });
+
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   var texts = items.map(function (d) { return norm(d.textContent); });
-  var toc = document.querySelector('nav[aria-label="Topics"]');
 
   q.addEventListener('input', function () {
     var words = norm(q.value).split(/\s+/).filter(Boolean);
@@ -708,10 +764,20 @@
     cards.forEach(function (c) {
       c.classList.toggle('hidden', searching && !c.querySelector('details:not(.hidden)'));
     });
-    toc.classList.toggle('hidden', searching);
+    if (toc) toc.classList.toggle('hidden', searching);
     none.style.display = searching && count === 0 ? 'block' : 'none';
   });
 
+  function openTarget() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    // A link followed mid-search must not land on an answer the filter hides.
+    if (q.value) { q.value = ''; q.dispatchEvent(new Event('input')); }
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'DETAILS') el.open = true;
+    el.scrollIntoView({ block: 'start', behavior: 'instant' });
+  }
   window.addEventListener('hashchange', openTarget);
   openTarget();
 })();

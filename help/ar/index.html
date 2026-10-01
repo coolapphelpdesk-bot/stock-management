@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المساعدة — Stock Management</title>
+<meta name="description" content="كيفية استخدام Stock Management: المنتجات، إدخال المخزون وإخراجه، المواقع والنقل، ماسح الباركود، الجرد، البيع والفواتير، التقارير، الاستيراد، النسخ الاحتياطي والوصول عن بُعد.">
+<style>
+  :root {
+    --bg: #f6f9f9; --surface: #ffffff; --text: #10201f; --muted: #5b6b6a;
+    --primary: #0f5f63; --primary-soft: #dcefef; --border: #dde7e6;
+    --note-bg: #fff7e6; --note-border: #f0d79a; --note-text: #6b4b00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1717; --surface: #162222; --text: #e2ecec; --muted: #94a8a7;
+      --primary: #86d4d6; --primary-soft: #1d3b3c; --border: #2a3b3b;
+      --note-bg: #2e2612; --note-border: #5e4b1c; --note-text: #f2d9a0;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+    line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  html[lang="ur"] body { font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Noto Sans Arabic", sans-serif; line-height: 2; }
+  html[lang="ar"] body { font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 40px 24px 96px; }
+  header { border-radius: 16px; padding: 28px 28px 30px; margin-bottom: 18px;
+    background: linear-gradient(135deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); color: #fff; }
+  html[dir="rtl"] header { background: linear-gradient(225deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); }
+  .langbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+  .langbar select { font: inherit; font-size: 14px; color: #fff; background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 12px; cursor: pointer; }
+  .langbar select option { color: #10201f; background: #fff; }
+  header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+  header p { margin: 0; opacity: 0.92; font-size: 15px; }
+  #offer { display: none; margin: 0 0 12px; padding: 10px 14px; border-radius: 10px;
+    background: var(--primary-soft); border: 1px solid var(--border); font-weight: 600; }
+  .searchbar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; }
+  .searchbar input { width: 100%; font: inherit; font-size: 16px; padding: 12px 16px;
+    border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); }
+  .searchbar input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+  #noresults { display: none; text-align: center; color: var(--muted); padding: 24px 0; }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; padding: 0; list-style: none; }
+  .toc li { margin: 0; }
+  .toc a { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 14px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+  .toc a:hover { border-color: var(--primary); text-decoration: none; }
+  .card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 24px; margin: 14px 0; }
+  h2 { font-size: 20px; font-weight: 650; margin: 0 0 4px; letter-spacing: -0.005em; }
+  .card > .lead { color: var(--muted); font-size: 14.5px; margin: 0 0 10px; }
+  details { border-top: 1px solid var(--border); }
+  details:first-of-type { border-top: none; }
+  summary { cursor: pointer; padding-block: 11px; padding-inline: 0 28px; font-weight: 600;
+    list-style: none; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; inset-inline-end: 4px; top: 9px; font-size: 20px;
+    font-weight: 400; color: var(--muted); }
+  details[open] > summary::after { content: "\2212"; }
+  details > div { padding: 0 0 14px; }
+  details:target > summary, details.hit > summary { color: var(--primary); }
+  p, ul, ol { margin: 0 0 10px; }
+  ul, ol { padding-inline-start: 22px; padding-inline-end: 0; } li { margin-bottom: 5px; }
+  .ui { font-weight: 600; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .note { background: var(--note-bg); border: 1px solid var(--note-border); color: var(--note-text);
+    border-radius: 10px; padding: 10px 14px; font-size: 14.5px; margin: 10px 0; }
+  .permalink { font-size: 13px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 14px; }
+  th, td { text-align: start; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); background: var(--primary-soft); }
+  tr:last-child td { border-bottom: none; }
+  code { background: var(--primary-soft); padding: 1px 6px; border-radius: 4px; direction: ltr; unicode-bidi: isolate;
+    font-size: 13px; font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
+  a { color: var(--primary); text-decoration: none; } a:hover { text-decoration: underline; }
+  footer { margin-top: 32px; text-align: center; color: var(--muted); font-size: 13px; }
+  footer .langs { line-height: 2; }
+  .hidden { display: none !important; }
+  @media (max-width: 480px) {
+    .wrap { padding: 20px 16px 64px; }
+    header { padding: 20px 20px 24px; } header h1 { font-size: 24px; }
+    .card { padding: 16px 18px; } h2 { font-size: 18px; }
+    table { font-size: 13px; } th, td { padding: 7px 8px; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header>
+  <div class="langbar">
+    <select id="lang" aria-label="اللغة">
+<option value="../">English</option>
+<option value="../es/">Español</option>
+<option value="../fr/">Français</option>
+<option value="../pt/">Português</option>
+<option value="../ru/">Русский</option>
+<option value="../zh/">中文</option>
+<option value="../ar/" selected>العربية</option>
+<option value="../hi/">हिन्दी</option>
+<option value="../bn/">বাংলা</option>
+<option value="../ur/">اردو</option>
+<option value="../id/">Bahasa Indonesia</option>
+    </select>
+  </div>
+  <h1>مساعدة Stock Management</h1>
+  <p>كيف تفعل كل شيء في التطبيق &middot; للإصدار 1.98 &middot; حُدّثت في أكتوبر 2026</p>
+</header>
+
+<p id="offer"></p>
+
+<div class="searchbar">
+  <input id="q" type="search" placeholder="ابحث في المساعدة — مثلاً: نقل المخزون، باركود، نسخة احتياطية، فاتورة" aria-label="ابحث في المساعدة — مثلاً: نقل المخزون، باركود، نسخة احتياطية، فاتورة" autocomplete="off">
+</div>
+
+<nav class="topics" aria-label="المواضيع">
+  <ul class="toc">
+    <li><a href="#start">البداية</a></li>
+    <li><a href="#products">المنتجات</a></li>
+    <li><a href="#stock">الإدخال والإخراج</a></li>
+    <li><a href="#locations">المواقع والنقل</a></li>
+    <li><a href="#lots">الدفعات والصلاحية والأرقام التسلسلية</a></li>
+    <li><a href="#scanner">الماسح</a></li>
+    <li><a href="#stocktake">الجرد</a></li>
+    <li><a href="#sell">البيع والفواتير</a></li>
+    <li><a href="#history">السجل والتصحيح</a></li>
+    <li><a href="#reports">التقارير والملصقات</a></li>
+    <li><a href="#import">الاستيراد</a></li>
+    <li><a href="#backup">النسخ الاحتياطي وهاتف جديد</a></li>
+    <li><a href="#remote">الاستخدام من حاسوب</a></li>
+    <li><a href="#notifications">الإشعارات</a></li>
+    <li><a href="#customize">التخصيص</a></li>
+    <li><a href="#trash">المهملات</a></li>
+    <li><a href="#trouble">المشكلات والتواصل</a></li>
+  </ul>
+</nav>
+
+<div class="note"><strong>لا تجد شيئاً مما هو موصوف هنا؟</strong> حدّث التطبيق من Google Play أولاً. تصف هذه الصفحة الإصدار الحالي، وكثير من الميزات (نقل المخزون بين المواقع، الدفعات، البيع، الفواتير) وصلت في تحديثات حديثة. يمكنك معرفة ما أضافه كل تحديث من <span class="ui">الإعدادات ← ما الجديد</span>.</div>
+
+<p id="noresults">لا توجد نتائج. جرّب كلمة أقصر، أو <a href="#contact">اسألنا</a>.</p>
+
+<!-- ============================================================ -->
+<section class="card" id="start">
+  <h2>البداية</h2>
+  <p class="lead">ما هو التطبيق، والشاشة الأولى، وكيف تتنقّل فيه.</p>
+
+  <details id="what-is-it"><summary>ما هو Stock Management؟</summary><div>
+    <p>تطبيق لإدارة المخزون للمتاجر والمستودعات والأعمال الصغيرة. تحتفظ فيه بقائمة منتجات برموز SKU وباركود، وتسجّل ما يدخل المخزون وما يخرج منه، فتعرف دائماً كم لديك وأين هو وكم قيمته. ويقوم أيضاً بالجرد والبيع مع فاتورة مطبوعة والتقارير والملصقات والنسخ الاحتياطي.</p>
+    <p>كل شيء محفوظ <strong>على هاتفك</strong>. لا حساب تنشئه ولا اشتراك تدفعه.</p>
+  </div></details>
+
+  <details id="internet"><summary>هل أحتاج إلى حساب أو اتصال بالإنترنت؟</summary><div>
+    <p>لا. يعمل التطبيق بالكامل دون اتصال ولا يتطلب تسجيل دخول. لا تغادر بياناتك الجهاز إلا إذا أرسلتها بنفسك (نسخة احتياطية، تقرير مُصدَّر).</p>
+    <p>بضعة أشياء فقط تستخدم الشبكة: إرسال الملاحظات، فتح صفحة Google Play، النسخ الاحتياطي إلى خادم FTP أو SMB، والوصول عن بُعد (الذي يستخدم شبكة Wi-Fi المحلية لا الإنترنت).</p>
+  </div></details>
+
+  <details id="first-screen"><summary>الشاشة الأولى تسألني كيف أريد أن أبدأ. ماذا أختار؟</summary><div>
+    <ul>
+      <li><span class="ui">استعادة نسخة احتياطية</span> &mdash; كنت تستخدم التطبيق على هاتف آخر ولديك نسخة احتياطية. انظر <a href="#new-phone">الانتقال إلى هاتف جديد</a>.</li>
+      <li><span class="ui">استيراد من جدول بيانات</span> &mdash; منتجاتك موجودة في Excel أو Google Sheets. انظر <a href="#import">الاستيراد</a>.</li>
+      <li><span class="ui">ابدأ بمخزوني الخاص</span> &mdash; تطبيق فارغ؛ تضيف المنتجات واحداً واحداً.</li>
+      <li><strong>مجموعة تجريبية</strong> (بقالة عامة، متجر ملابس، مكتبة) &mdash; تملأ التطبيق بمنتجات تجريبية لتتعرّف عليه.</li>
+    </ul>
+    <p>تظهر هذه الشاشة مرة واحدة فقط، لكن لا شيء يضيع باختيارك: يمكنك الاستيراد أو الاستعادة أو إضافة المنتجات في أي وقت لاحقاً.</p>
+  </div></details>
+
+  <details id="sample-data"><summary>كيف أُحمّل البيانات التجريبية أو أزيلها؟</summary><div>
+    <p>لا يمكن إضافة البيانات التجريبية إلا والتطبيق فارغ: من شاشة الترحيب، أو من بطاقة <span class="ui">جرّبه ببيانات تجريبية</span> في لوحة المعلومات. يخبرك التطبيق قبل الإضافة بعدد المنتجات والفئات والموردين والمواقع التي سيضيفها بالضبط.</p>
+    <p>لإزالتها، اضغط <span class="ui">حذف البيانات التجريبية</span> في شريط لوحة المعلومات. تُحذف السجلات التجريبية فقط.</p>
+  </div></details>
+
+  <details id="menu"><summary>أين كل الشاشات؟ لا أرى في الأسفل إلا أربعاً.</summary><div>
+    <p>على الهاتف يعرض الشريط السفلي لوحة المعلومات وأول ثلاث شاشات في قائمتك. كل ما سواها في القائمة <span class="ui">&#8942;</span> أعلى كل شاشة: البيع، الجرد، الحركات، التقارير، الفئات، الموردون، المواقع، الملصقات، الاستيراد، النسخ الاحتياطي، المهملات، الوصول عن بُعد والإعدادات. على الجهاز اللوحي تكون كلها في الشريط الجانبي.</p>
+    <p>لاختيار الشاشات التي تظهر في الشريط السفلي، اذهب إلى <span class="ui">الإعدادات ← إعداد القوائم</span> وحرّكها إلى الأعلى أو الأسفل. يمكنك أيضاً إخفاء الشاشات التي لا تستخدمها (لوحة المعلومات والإعدادات تبقيان دائماً).</p>
+  </div></details>
+
+  <details id="language"><summary>كيف أغيّر اللغة؟</summary><div>
+    <p><span class="ui">الإعدادات ← اللغة</span>. التطبيق متاح بالإنجليزية والإسبانية والفرنسية والبرتغالية والروسية والصينية والعربية والهندية والبنغالية والأردية والإندونيسية.</p>
+  </div></details>
+
+  <details id="dashboard"><summary>ماذا تعرض لوحة المعلومات؟</summary><div>
+    <p>عدد المنتجات، المخزون المنخفض، قيمة المخزون، الحركات الأخيرة، التنبيهات والرسوم البيانية (مستويات المخزون، المنتجات والقيمة حسب الفئة، الحركات خلال 7 و30 يوماً، ما يحتاج إلى إعادة طلب، قيمة المخزون حسب الموقع والمورّد، المنتجات الأكثر حركة، والدفعات القريبة من انتهاء الصلاحية).</p>
+    <p>اضغط <span class="ui">تخصيص لوحة التحكم</span> أسفل لوحة المعلومات، أو اذهب إلى <span class="ui">الإعدادات ← لوحة التحكم</span>، لإخفاء البطاقات وتغيير ترتيبها وتحديد عرض كل منها.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="products">
+  <h2>المنتجات</h2>
+  <p class="lead">إضافة المنتجات وتعديلها وتنظيمها والعثور عليها.</p>
+
+  <details id="add-product"><summary>كيف أضيف منتجاً؟</summary><div>
+    <ol>
+      <li>افتح <span class="ui">المنتجات</span> واضغط <span class="ui">+</span>.</li>
+      <li>املأ <span class="ui">SKU</span> و<span class="ui">الاسم</span> (كلاهما مطلوب). رمز SKU هو رمزك الخاص للصنف ويجب ألا يتكرر.</li>
+      <li>إن أردت، أضف صورة ووصفاً وفئة وموقعاً ومورّداً ووحدة (قطعة، كغ، لتر&hellip;) وحداً أدنى وأعلى للمخزون وسعر التكلفة وسعر البيع والباركود. لحقل الباركود زر للمسح.</li>
+      <li>أدخل في <span class="ui">الكمية</span> ما لديك الآن. تُسجّل كمخزون افتتاحي للمنتج.</li>
+      <li>اضغط <span class="ui">حفظ المنتج</span>.</li>
+    </ol>
+    <p>طرق أسرع: امسح باركوداً غير معروف في <a href="#scanner">الماسح</a> واضغط <span class="ui">إضافة منتج بهذا الباركود</span>، أو <a href="#import">استورد</a> قائمة كاملة من جدول بيانات.</p>
+  </div></details>
+
+  <details id="edit-quantity"><summary>لماذا لا أستطيع تغيير الكمية عند تعديل المنتج؟</summary><div>
+    <p>هذا مقصود. كل تغيير في المخزون يُسجّل حركةً (من، ومتى، ولماذا، وقبل وبعد)، فيبقى السجل متطابقاً دائماً. غيّر الكميات عبر <a href="#stock-in-out">إدخال مخزون / إخراج مخزون</a> أو <a href="#quick-stock">مخزون سريع</a> أو <a href="#scanner">الماسح</a> أو <a href="#stocktake">الجرد</a>. أما بقية بيانات المنتج (الاسم، الأسعار، الباركود، الفئة&hellip;) فتُعدّل بأيقونة القلم في صفحة المنتج.</p>
+  </div></details>
+
+  <details id="product-photo"><summary>كيف أضيف صورة لمنتج؟</summary><div>
+    <p>في نموذج المنتج اضغط <span class="ui">إضافة صورة</span>، ثم <span class="ui">التقاط صورة</span> أو <span class="ui">اختيار من المعرض</span>. المنتجات بلا صورة تعرض رسماً لطرد بلون فئتها.</p>
+  </div></details>
+
+  <details id="delete-product"><summary>كيف أحذف منتجاً، وهل يمكنني استرجاعه؟</summary><div>
+    <p>افتح المنتج واضغط أيقونة سلة المهملات في الأعلى. تبقى حركاته السابقة في السجل. يذهب المنتج إلى <a href="#trash">المهملات</a>، ويمكنك استعادته منها لاحقاً.</p>
+  </div></details>
+
+  <details id="find-product"><summary>كيف أبحث في قائمة المنتجات وأرتّبها وأصفّيها؟</summary><div>
+    <p>مربع البحث يجد المنتجات بالاسم أو SKU أو الباركود، وزر المسح بجانبه يبحث بالمسح. زر الترتيب والتصفية يرتّب حسب الاسم أو الكمية أو قيمة المخزون أو آخر تحديث، ويحصر القائمة في فئة واحدة. الضغط على <span class="ui">مخزون منخفض</span> في لوحة المعلومات يفتح القائمة بالمنتجات المنخفضة فقط. على الجهاز اللوحي يمكنك أيضاً اختيار عدد الأعمدة.</p>
+  </div></details>
+
+  <details id="product-card"><summary>هل يمكنني اختيار ما يعرضه كل منتج في القائمة؟</summary><div>
+    <p>نعم: <span class="ui">الإعدادات ← بطاقة المنتج ← تخصيص بطاقة المنتج</span>. أظهر أو أخفِ الصورة والفئة والمورّد والموقع والأسعار والتكلفة والوصف وشريط المخزون وغير ذلك، بالترتيب الذي تريده. تعرض المعاينة المباشرة النتيجة.</p>
+  </div></details>
+
+  <details id="categories"><summary>كيف تعمل الفئات والموردون والمواقع؟</summary><div>
+    <p>هي قوائم تصنّف بها المنتجات. أنشئها من شاشاتها في القائمة <span class="ui">&#8942;</span> (<span class="ui">الفئات</span>، <span class="ui">الموردون</span>، <span class="ui">المواقع</span>) بزر <span class="ui">+</span>، أو دع الاستيراد ينشئها. ثم اخترها في نموذج المنتج.</p>
+    <p>اضغط أي فئة أو مورّد أو موقع لترى المنتجات المصنّفة تحته وكمية كل منها.</p>
+    <p>حذف أحدها لا يحذف المنتجات أبداً: تبقى فقط بلا تلك الفئة أو المورّد أو الموقع، واستعادته من المهملات تعيد ربطها.</p>
+  </div></details>
+
+  <details id="low-stock"><summary>كيف يعمل «المخزون المنخفض»؟</summary><div>
+    <p>لكل منتج <span class="ui">الحد الأدنى</span> خاص به. عندما تصل الكمية إليه أو تنزل عنه يُعلَّم المنتج منخفضاً (ونافداً عند الصفر). وإن كان له <span class="ui">الحد الأقصى</span> وتجاوزه، يُعلَّم فائضاً.</p>
+    <p>القيمة المقترحة للمنتجات الجديدة تُضبط في <span class="ui">الإعدادات ← حد المخزون المنخفض الافتراضي</span>. تظهر المنتجات المنخفضة في لوحة المعلومات، وفي قائمة المنتجات (اضغط بطاقة المخزون المنخفض)، وفي تقرير المخزون المنخفض، وفي <a href="#notifications">تنبيه المخزون المنخفض اليومي</a>.</p>
+  </div></details>
+
+  <details id="currency"><summary>كيف أغيّر العملة؟</summary><div>
+    <p><span class="ui">الإعدادات ← عام ← رمز العملة</span>. اكتب الرمز الذي تستخدمه (مثلاً ر.س، د.إ، ج.م، د.م). يغيّر ذلك طريقة عرض الأسعار فقط؛ لا يحوّل المبالغ.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stock">
+  <h2>إدخال المخزون وإخراجه</h2>
+  <p class="lead">تسجيل ما يصل وما يخرج.</p>
+
+  <details id="stock-in-out"><summary>كيف أضيف مخزوناً أو أُخرجه؟</summary><div>
+    <ol>
+      <li>افتح المنتج واضغط <span class="ui">تعديل المخزون</span>.</li>
+      <li>اختر <span class="ui">إدخال مخزون</span> (توريد، مرتجع) أو <span class="ui">إخراج مخزون</span> (بيع، تلف، استهلاك).</li>
+      <li>أدخل الكمية، وسبباً إن شئت («طلب رقم 123»، «تالف»).</li>
+      <li>إن كنت تستخدم المواقع، اختر إلى أين يدخل المخزون أو من أين يخرج.</li>
+      <li>أكّد. تظهر الكمية الجديدة فوراً وتُضاف الحركة إلى <a href="#history">الحركات</a>.</li>
+    </ol>
+    <p>النافذة نفسها تُفتح من قائمة المنتجات، ومن <a href="#quick-stock">مخزون سريع</a>، وبعد المسح في <a href="#scanner">الماسح</a>.</p>
+  </div></details>
+
+  <details id="quick-stock"><summary>ما هو مخزون سريع؟</summary><div>
+    <p>شبكة لمنتجاتك على كل مربع منها <span class="ui">+</span> و<span class="ui">&minus;</span>: ضغطة واحدة تضيف واحداً أو تُنقص واحداً. مفيد عند الصندوق وللأصناف بلا باركود (المرشّح <span class="ui">بلا باركود</span> يعرضها وحدها). اضغط المربع لفتح نافذة المخزون كاملة.</p>
+    <p>بعد + أو &minus; يحلّ سهم تراجع محلّ السعر على المربع لبضع ثوانٍ. الضغطات أثناء تمرير القائمة تُتجاهل حتى لا تغيّر المخزون بالخطأ.</p>
+  </div></details>
+
+  <details id="set-exact"><summary>كيف أضبط كمية دقيقة بعد العدّ؟</summary><div>
+    <p>استخدم <a href="#stocktake">الجرد</a>. تكتب ما عددته، فيحسب التطبيق الفرق ويسجّله تسويةً. لن تحتاج أبداً إلى إجراء الطرح بنفسك.</p>
+  </div></details>
+
+  <details id="negative"><summary>لماذا يرفض التطبيق الإخراج، أو يقول إن الموجود هنا قليل؟</summary><div>
+    <p>لا يمكن أن ينزل المخزون تحت الصفر. إذا كان المنتج في عدة أماكن، يُخرج من المكان الذي اخترته (أو من الموقع الافتراضي). وإن لم يكفِ ما فيه، تخبرك الرسالة أين البقية، مثلاً: «يوجد هنا 3 قطعة فقط. في المخزون: المتجر أ 5، الشاحنة 2». اختر ذلك المكان في <span class="ui">الإخراج من</span>، أو <a href="#move-stock">انقل المخزون</a> أولاً.</p>
+  </div></details>
+
+  <details id="mistake"><summary>أدخلت كمية خاطئة. كيف أصحّحها؟</summary><div>
+    <p>انظر <a href="#fix-movement">تصحيح حركة أو التراجع عنها</a>.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="locations">
+  <h2>المواقع والنقل</h2>
+  <p class="lead">الاحتفاظ بالمخزون في عدة أماكن &mdash; مستودع، متجر، شاحنة، رف &mdash; ونقله بينها.</p>
+
+  <details id="move-stock"><summary>كيف أنقل المخزون من موقع إلى آخر؟</summary><div>
+    <p><strong>1. أنشئ مواقعك</strong> (مرة واحدة): <span class="ui">&#8942; ← المواقع ← +</span>، أعطِ كل موقع اسماً ورمزاً قصيراً (مثلاً «المستودع الرئيسي» و<code>WH-1</code>)، واحفظ.</p>
+    <p><strong>2. انقل المخزون:</strong></p>
+    <ol>
+      <li>افتح المنتج. تعرض بطاقة <span class="ui">أين يوجد</span> كل مكان يحتفظ بجزء من مخزونه.</li>
+      <li>اضغط سطر المكان الذي يوجد فيه المخزون <em>الآن</em>، ثم <span class="ui">نقل</span>.</li>
+      <li>في <span class="ui">إلى</span> اختر الوجهة وأدخل الكمية (تُعرض الكمية المتاحة).</li>
+      <li>أكّد. تُنقل تلك الكمية فقط ويبقى الباقي في مكانه.</li>
+    </ol>
+    <p><strong>من الموقع نفسه:</strong> <span class="ui">&#8942; ← المواقع</span>، اضغط الموقع، واستخدم <span class="ui">نقل</span> بجانب أي منتج موجود فيه.</p>
+    <p>تظهر كل عملية نقل في <span class="ui">الحركات</span> بنوع <span class="ui">نقل</span> («المستودع ← المتجر أ») وفي تقرير <span class="ui">سجل التحويلات</span>. أخطأت؟ افتحها في الحركات واضغط <span class="ui">تراجع</span>.</p>
+    <p class="muted">لنقل المنتج <em>كله</em> يمكنك أيضاً تعديله وتغيير <span class="ui">الموقع</span>. إذا كان مخزونه كله في مكان واحد، ينتقل معه.</p>
+  </div></details>
+
+  <details id="no-where-card"><summary>لا أرى بطاقة «أين يوجد» ولا زر النقل.</summary><div>
+    <ul>
+      <li>أنشئ موقعاً واحداً على الأقل أولاً. لا تظهر البطاقة إلا عندما يوجد مكان يُنقل إليه المخزون.</li>
+      <li>حدّث التطبيق. نقل جزء من مخزون المنتج أُضيف في الإصدار 1.79؛ الإصدارات الأقدم لا تغيّر إلا موقع المنتج كله.</li>
+    </ul>
+  </div></details>
+
+  <details id="no-location"><summary>مخزوني يظهر «بلا موقع». كيف أضعه في مكان؟</summary><div>
+    <p>المخزون المضاف قبل إنشاء المواقع (أو الذي حُذف موقعه) يُحفظ تحت <span class="ui">بلا موقع</span>. انقله كأي مخزون آخر: افتح المنتج، اضغط سطر <span class="ui">بلا موقع</span> في <span class="ui">أين يوجد</span>، ثم <span class="ui">نقل</span> واختر الموقع.</p>
+  </div></details>
+
+  <details id="default-location"><summary>ما هو الموقع الافتراضي؟</summary><div>
+    <p>المكان الذي يذهب إليه المخزون الجديد وتخرج منه الكميات حين لا تختار. في <span class="ui">المواقع</span> عدّل موقعاً وفعّل <span class="ui">تعيين كافتراضي</span>. المنتج الموجود في مكان واحد يستخدم ذلك المكان دائماً.</p>
+  </div></details>
+
+  <details id="stock-out-from"><summary>كيف أختار من أين يُخرج المخزون أو تُؤخذ البيعة؟</summary><div>
+    <p>عندما يكون المنتج في أكثر من مكان أو دفعة، تعرض نافذة المخزون <span class="ui">الإخراج من</span>. اتركها على <span class="ui">تلقائي (الأقرب انتهاءً أولاً)</span> أو اختر المكان أو الدفعة بالضبط. في <a href="#sell">البيع</a> اضغط <span class="ui">الأخذ من: المكان المعتاد</span> لاختيار موقع للبيع.</p>
+    <p>زرّا + و&minus; في مخزون سريع يسألان من أين حين يكون المنتج موزعاً. لاستخدام الموقع الافتراضي دائماً، أوقف <span class="ui">الإعدادات ← حركات المخزون ← اسأل عن المكان عندما يكون المخزون موزعاً</span>.</p>
+  </div></details>
+
+  <details id="condition"><summary>هل يمكنني تعليم المخزون كتالف أو محجوز أو في الحجر؟</summary><div>
+    <p>نعم. انقله كما في الأعلى وغيّر <span class="ui">الحالة</span> (سليم، تالف، محجوز، حجر) بدلاً من الموقع أو معه. يبقى محسوباً، لكن المخزون السليم وحده هو الذي يُباع أو يُخرج تلقائياً.</p>
+  </div></details>
+
+  <details id="delete-location"><summary>ماذا يحدث للمخزون إذا حذفت موقعاً؟</summary><div>
+    <p>لا يضيع شيء. ينتقل مخزونه إلى <span class="ui">بلا موقع</span>، وتبقى منتجاته بلا ذلك الموقع. استعادة الموقع من المهملات تعيد ربط المنتجات، لكن المخزون يبقى تحت «بلا موقع» حتى تنقله إليه.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="lots">
+  <h2>الدفعات وتواريخ الصلاحية والأرقام التسلسلية</h2>
+  <p class="lead">للأغذية والأدوية ومستحضرات التجميل والإلكترونيات&hellip; كل ما تنتهي صلاحيته أو له رقم تسلسلي.</p>
+
+  <details id="record-lot"><summary>كيف أسجّل دفعة أو تاريخ صلاحية أو أرقاماً تسلسلية؟</summary><div>
+    <p>عند إدخال المخزون، افتح قسم <span class="ui">الدفعة وتاريخ الانتهاء والأرقام التسلسلية</span> في نافذة إدخال مخزون. املأ ما تحتاجه: <span class="ui">رمز الدفعة</span>، <span class="ui">تاريخ انتهاء الصلاحية</span>، <span class="ui">المورّد</span>، <span class="ui">التكلفة للوحدة</span>، <span class="ui">الأرقام التسلسلية</span>. اتركه مغلقاً للمخزون العادي.</p>
+    <p>الأرقام التسلسلية: رقم في كل سطر، رقم لكل وحدة؛ يجب أن يساوي عدد الأسطر الكمية. إذا كنت تملأ هذه الحقول في معظم التوريدات، يُفتح القسم وحده.</p>
+  </div></details>
+
+  <details id="fefo"><summary>أي دفعة تُستخدم أولاً عند الإخراج؟</summary><div>
+    <p>افتراضياً، الأقرب انتهاءً للصلاحية أولاً، ثم الأقدم توريداً. ويمكنك دائماً اختيار دفعة محددة في <span class="ui">الإخراج من</span>.</p>
+  </div></details>
+
+  <details id="expiring"><summary>كيف أرى ما يقترب من انتهاء صلاحيته؟</summary><div>
+    <p>تعرض لوحة المعلومات بطاقة <span class="ui">تنتهي صلاحيته قريبًا</span> (منتهٍ أو خلال 30 يوماً) متى وُجد ذلك. ويعرض تقرير <span class="ui">تواريخ انتهاء الصلاحية</span> كل دفعة مع الأيام المتبقية، الأقرب أولاً.</p>
+  </div></details>
+
+  <details id="valuation"><summary>كيف تُحسب قيمة المخزون؟</summary><div>
+    <p>كل توريد يحتفظ بالتكلفة التي دخل بها. في <span class="ui">الإعدادات ← حركات المخزون ← تقييم المخزون حسب</span> اختر: متوسط تكلفة المخزون الحالي، أو تكلفة آخر استلام، أو سعر تكلفة المنتج. يُستخدم ذلك في تقرير تقييم المخزون وفي قيمة المخزون بصفحة المنتج.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="scanner">
+  <h2>ماسح الباركود</h2>
+  <p class="lead">استخدام كاميرا الهاتف للعثور على المنتجات وتسجيل المخزون ومعرفة الأسعار.</p>
+
+  <details id="scan-basics"><summary>كيف أمسح باركوداً؟</summary><div>
+    <p>افتح <span class="ui">الماسح</span> ووجّه الكاميرا إلى الرمز. إذا كان لمنتجٍ هذا الباركود تُفتح نافذة مخزونه: اختر <span class="ui">إدخال مخزون</span> أو <span class="ui">إخراج مخزون</span> والكمية. زر المصباح يساعد في الأماكن المظلمة.</p>
+  </div></details>
+
+  <details id="unknown-barcode"><summary>يظهر «باركود غير معروف».</summary><div>
+    <p>لا يوجد منتج بهذا الباركود بعد. اضغط <span class="ui">إضافة منتج بهذا الباركود</span> لإنشاء منتج والرمز معبّأ مسبقاً، أو <span class="ui">البحث عن هذا الرمز في المنتجات</span> لربطه بمنتج موجود.</p>
+    <p>إذا طابق الرمز الممسوح رمز SKU لمنتج، يقول التطبيق «تم العثور عليه عبر رمز SKU — لا يوجد باركود محفوظ لهذا المنتج بعد.» ويعرض حفظ الرمز باركوداً له.</p>
+  </div></details>
+
+  <details id="batch-scan"><summary>هل يمكنني مسح أصناف كثيرة متتالية (توريد كامل)؟</summary><div>
+    <p>نعم: فعّل <span class="ui">الدفعة مفعّلة</span> في الماسح. كل مسح يضيف المنتج إلى قائمة، ومسح المنتج نفسه مجدداً يزيده واحداً. ثم احفظ القائمة كلها إدخال مخزون أو إخراج مخزون دفعة واحدة. الرموز غير المعروفة تُعرض منفصلة وتُتخطّى.</p>
+  </div></details>
+
+  <details id="price-check"><summary>كيف أعرف السعر بالمسح؟</summary><div>
+    <p>فعّل <span class="ui">فحص السعر</span> في الماسح. كل مسح يعرض سعر البيع بخط كبير، ثم التكلفة والربح وقيمة المخزون والتكلفة حسب الدفعة والمبيعات الأخيرة. تستمر الكاميرا في المسح، فتتحقق من صنف تلو الآخر. أيقونة العين تخفي التكاليف والأرباح حين يرى الزبون الشاشة.</p>
+  </div></details>
+
+  <details id="formats"><summary>ما الرموز المدعومة؟ المسح بطيء أو يقرأ رموزاً خاطئة.</summary><div>
+    <p>EAN-13 وEAN-8 وUPC-A وUPC-E وCode-128 وCode-39 وCode-93 ورمز QR وData Matrix. في <span class="ui">الإعدادات ← صيغ الباركود</span> أوقف ما لا تستخدمه أبداً: الصيغ الأقل تعني مسحاً أسرع وأخطاء أقل. الصوت والاهتزاز في <span class="ui">الإعدادات ← تأكيد المسح</span>.</p>
+  </div></details>
+
+  <details id="camera-permission"><summary>الماسح يطلب الكاميرا.</summary><div>
+    <p>اضغط <span class="ui">السماح بالكاميرا</span>. إذا رفضت سابقاً فلن يسأل Android مجدداً: اضغط <span class="ui">فتح إعدادات التطبيق</span> واسمح بالكاميرا في الأذونات. لا تُستخدم الكاميرا إلا والماسح (أو التصوير) مفتوح، وتُعالج الصور على الهاتف.</p>
+  </div></details>
+
+  <details id="hardware-scanner"><summary>هل يمكنني استخدام قارئ باركود يدوي (USB / بلوتوث / جهاز PDA)؟</summary><div>
+    <p>نعم، عبر <a href="#remote">الوصول عن بُعد</a>: افتح التطبيق في متصفح الجهاز واستخدم صفحة الماسح أو العرض اليدوي، الذي يقرأ الرموز التي يكتبها القارئ. انظر <a href="#handheld">الأجهزة اليدوية</a>.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stocktake">
+  <h2>الجرد</h2>
+  <p class="lead">اعدد ما على الرفوف فعلاً وصحّح التطبيق بخطوة واحدة.</p>
+
+  <details id="do-stocktake"><summary>كيف أُجري الجرد؟</summary><div>
+    <ol>
+      <li>افتح <span class="ui">الجرد</span> من القائمة <span class="ui">&#8942;</span>.</li>
+      <li>اختر مكان العدّ في <span class="ui">الجرد في</span> (أو كل المواقع).</li>
+      <li>لكل منتج، اسحب العدّاد إلى الأعلى أو الأسفل، أو اضغطه لكتابة العدد الدقيق، أو امسح الأصناف لجمعها. اترك المنتج فارغاً لتخطّيه.</li>
+      <li>اضغط <span class="ui">تطبيق الجرد</span>. تُعدّل المنتجات التي غيّرتها فقط، ويُسجّل كل فرق تسويةً.</li>
+    </ol>
+    <p>المنتج المخزّن في عدة دفعات يُعدّ دفعة دفعة. المبيعات التي تتم أثناء العدّ تُؤخذ في الحسبان، فلا تُعدّ مرتين.</p>
+    <div class="note">اضغط <strong>تطبيق الجرد</strong> قبل مغادرة الشاشة. العدّ غير المطبَّق لا يُحفظ.</div>
+  </div></details>
+
+  <details id="stocktake-reminder"><summary>هل يمكن للتطبيق تذكيري بالعدّ؟</summary><div>
+    <p>نعم: <span class="ui">الإعدادات ← تذكير الجرد ← ذكّرني بإجراء جرد</span>. اختر كل يوم أو كل أسبوع (في يوم من الأسبوع) أو كل شهر (في تاريخ)، ووقتاً.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="sell">
+  <h2>البيع والفواتير</h2>
+  <p class="lead">صندوق بسيط: بِع، وأخرج المخزون، واطبع الفاتورة أو شاركها.</p>
+
+  <details id="make-sale"><summary>كيف أبيع وأُصدر فاتورة؟</summary><div>
+    <ol>
+      <li>افتح <span class="ui">البيع</span> من القائمة <span class="ui">&#8942;</span>.</li>
+      <li>اضغط المنتجات، أو امسح رموزها، لإضافتها إلى السلة. غيّر في السلة الكميات والأسعار وخصم كل سطر.</li>
+      <li>اضغط <span class="ui">الدفع</span>. أضف إن شئت اسم الزبون وهاتفه، وطريقة الدفع (نقدًا، بطاقة، تحويل بنكي، محفظة الجوال، بالآجل)، وخصماً، والضريبة، والمبلغ المستلم. يُحسب الباقي تلقائياً.</li>
+      <li>اضغط <span class="ui">إتمام البيع</span>، ثم اطبع الفاتورة أو شاركها.</li>
+    </ol>
+    <p>يُخرج المخزون في اللحظة نفسها، وتظهر البيعة في الحركات وفي تقرير المبيعات والهامش. إن لم يكفِ مخزون أي صنف، لا يُباع شيء ويخبرك التطبيق أيّها.</p>
+  </div></details>
+
+  <details id="bills"><summary>أين فواتيري السابقة؟ هل يمكنني إعادة طباعة إحداها؟</summary><div>
+    <p>في شاشة البيع اضغط <span class="ui">الفواتير</span> في الأعلى. ابحث برقم الفاتورة أو الزبون أو الهاتف، وصفِّ حسب اليوم أو 7 أيام أو 30 يومًا أو الكل، ثم افتح الفاتورة لطباعتها أو مشاركتها مجدداً. مسح الباركود المطبوع على الفاتورة يفتحها.</p>
+  </div></details>
+
+  <details id="void-bill"><summary>كيف ألغي بيعة أو أتعامل مع مرتجع؟</summary><div>
+    <p>افتح الفاتورة في <span class="ui">الفواتير</span> واضغط <span class="ui">إلغاء الفاتورة</span>. تعود كل الأصناف إلى المخزون، وتبقى الفاتورة محفوظة بعلامة «ملغاة» حتى يظل رقمها قابلاً للعثور. الإلغاء يشمل الفاتورة كلها: للمرتجع الجزئي ألغِها وأجرِ بيعة جديدة، أو سجّل إدخال مخزون للصنف المُرتجع.</p>
+  </div></details>
+
+  <details id="bill-design"><summary>كيف أغيّر شكل الفاتورة (اسم المتجر، الشعار، حجم الورق)؟</summary><div>
+    <p>في شاشة البيع اضغط <span class="ui">تصميم الفاتورة</span>. اختر تصميماً افتراضياً: <span class="ui">إيصال 58 مم</span> أو <span class="ui">إيصال 80 مم</span> لطابعات الإيصالات الحرارية، <span class="ui">نصف صفحة (A5)</span> أو <span class="ui">فاتورة (A4)</span> للطابعات العادية. ثم حدّد اسم متجرك وأسطر العنوان والتواصل، والرقم الضريبي أو رقم السجل، والعنوان، ونص التذييل، واسم الضريبة ونسبتها، وبادئة الترقيم ورقم الفاتورة التالي. المعاينة هي الفاتورة الحقيقية. خيار <span class="ui">الطباعة فور حفظ البيع</span> يوفّر خطوة عند الصندوق.</p>
+  </div></details>
+
+  <details id="receipt-printer"><summary>كيف أطبع على طابعة إيصالات حرارية / بلوتوث / USB؟</summary><div>
+    <p>تُطبع الفواتير عبر نافذة الطباعة في Android، لذا تعمل أي طابعة لها خدمة طباعة لـ Android. ثبّت من Google Play تطبيق خدمة الطباعة الخاص بطابعتك (أو تطبيقاً عاماً)، واختر تصميم 58 مم أو 80 مم، ثم اختر الطابعة في نافذة الطباعة. ومن دون طابعة يمكنك دائماً الحفظ PDF والمشاركة.</p>
+  </div></details>
+
+  <details id="tax-invoice"><summary>هل الفاتورة فاتورة ضريبية رسمية؟</summary><div>
+    <p>يمكن أن تعرض الفاتورة رقمك الضريبي أو رقم السجل وأسطر الضريبة، لكنها غير معتمدة في أي نظام ضريبي أو فوترة إلكترونية رسمي في أي بلد. تحقّق مما تشترطه أنظمة بلدك.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="history">
+  <h2>السجل والتصحيح</h2>
+  <p class="lead">كل تغيير في المخزون مسجَّل، وكل خطأ يمكن التراجع عنه.</p>
+
+  <details id="transactions"><summary>أين أرى كل حركات المخزون؟</summary><div>
+    <p>تعرض <span class="ui">الحركات</span> كل حركة: إدخال، إخراج، تسويات ونقل، مع من قام بها ولماذا، والمخزون قبلها وبعدها. صفِّ حسب الفترة والنوع، أو ابحث بالمنتج أو SKU أو السبب. وتعرض صفحة كل منتج نشاطه أيضاً.</p>
+  </div></details>
+
+  <details id="fix-movement"><summary>كيف أصحّح حركة أو أتراجع عنها؟</summary><div>
+    <ul>
+      <li><strong>التراجع الكامل:</strong> اضغطها في <span class="ui">الحركات</span> (أو في نشاط المنتج) واختر <span class="ui">تراجع</span>. يعود المخزون كما كان وتذهب الحركة إلى المهملات.</li>
+      <li><strong>التصحيح في مكانها:</strong> في نشاط المنتج اضغط الحركة واختر <span class="ui">تعديل</span> لتصحيح الكمية أو السبب أو الدفعة أو المورّد أو الصلاحية أو التكلفة. تحتفظ بتاريخها وتُعلَّم كمعدّلة.</li>
+      <li><strong>فعلتها للتو في مخزون سريع؟</strong> اضغط سهم التراجع على المربع.</li>
+    </ul>
+    <p>يُرفض التراجع أو التعديل إن كان سيُنزل المخزون تحت الصفر (مثلاً التوريد الذي تريد التراجع عنه قد بِيع).</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="reports">
+  <h2>التقارير والتصدير والملصقات</h2>
+  <p class="lead">إخراج بياناتك بصيغة CSV أو PDF، وطباعة الملصقات.</p>
+
+  <details id="export-report"><summary>كيف أصدّر تقريراً (Excel / PDF)؟</summary><div>
+    <ol>
+      <li>افتح <span class="ui">التقارير</span>.</li>
+      <li>حدّد النطاق: فئة لتقارير المخزون، وفترة زمنية لتقارير الحركة. يعرض كل تقرير عدد الصفوف التي سيحتويها.</li>
+      <li>اضغط التقرير، ثم <span class="ui">CSV</span> (يُفتح في Excel وGoogle Sheets وLibreOffice) أو <span class="ui">PDF</span>.</li>
+    </ol>
+    <table>
+      <thead><tr><th>المخزون</th><th>الحركة</th></tr></thead>
+      <tbody><tr>
+        <td>المخزون المتوفر &middot; مخزون منخفض &middot; نفد المخزون &middot; فائض المخزون &middot; تقييم المخزون &middot; كتالوج المنتجات &middot; المخزون حسب الموقع &middot; تواريخ انتهاء الصلاحية</td>
+        <td>حركة المخزون &middot; إدخال مخزون &middot; إخراج مخزون &middot; تدقيق التعديلات &middot; سجل التحويلات &middot; تغيرات سعر التكلفة &middot; المبيعات والهامش</td>
+      </tr></tbody>
+    </table>
+  </div></details>
+
+  <details id="report-design"><summary>هل يمكنني وضع شعاري واسم شركتي على تقارير PDF؟</summary><div>
+    <p>نعم. في <span class="ui">التقارير</span> اضغط <span class="ui">تصميم التقرير</span> في الأعلى (وأيضاً في <span class="ui">الإعدادات ← تقرير PDF</span>). اضبط حجم الورق والاتجاه والهوامش والشعار واسم الشركة والخطوط ونمط الجدول والتذييل وترقيم الصفحات ولون التمييز، أو ابدأ من أحد القوالب الأربعة. المعاينة هي ملف PDF الحقيقي.</p>
+  </div></details>
+
+  <details id="labels"><summary>كيف أطبع ملصقات الباركود أو الأسعار؟</summary><div>
+    <ol>
+      <li>افتح <span class="ui">الملصقات</span> من القائمة <span class="ui">&#8942;</span>.</li>
+      <li>اضغط <span class="ui">قوالب جاهزة</span> وأضف تصميماً جاهزاً (بطاقة سعر للتجزئة، ملصق حافة الرف، ملصق باركود صغير، ملصق بكرة حرارية، بطاقة أصول QR&hellip;)، أو صمّم ملصقك عبر <span class="ui">ملصق جديد</span>: الحجم والتخطيط والخط والحقول ونوع الباركود.</li>
+      <li>اضغط <span class="ui">طباعة</span>، واختر المنتجات، واطبع. تخرج كل الملصقات في ملف PDF واحد.</li>
+    </ol>
+    <p>لمنتج واحد، افتحه واضغط <span class="ui">طباعة ملصق</span> في الأعلى. الطباعة على طابعة فعلية تحتاج خدمة طباعة (تطبيق الشركة المصنّعة لطابعتك، أو Mopria) من Google Play؛ وإلا فاحفظ PDF.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="import">
+  <h2>الاستيراد من جدول بيانات</h2>
+  <p class="lead">جلب المنتجات أو الفئات أو الموردين أو المواقع من ملف CSV.</p>
+
+  <details id="how-import"><summary>كيف أستورد منتجاتي من Excel أو Google Sheets؟</summary><div>
+    <ol>
+      <li>في Excel أو Google Sheets، احفظ الورقة أو نزّلها بصيغة <strong>CSV</strong>. يقرأ التطبيق ملفات CSV وليس ‎.xlsx.</li>
+      <li>افتح <span class="ui">الاستيراد</span> من القائمة <span class="ui">&#8942;</span> واختر ما تستورده (المنتجات، الفئات، الموردون أو المواقع).</li>
+      <li>اضغط <span class="ui">اختيار ملف CSV</span>. لست متأكداً من الأعمدة؟ اضغط <span class="ui">حفظ ملف CSV نموذجي</span>، واملأه، واختره.</li>
+      <li>راجع المعاينة. كل صف معلَّم جديد أو تحديث، مع شرح التحذيرات والصفوف المرفوضة. اختر خياراتك ثم اضغط <span class="ui">استيراد</span>.</li>
+    </ol>
+    <p>لا يُكتب شيء قبل أن تؤكّد.</p>
+  </div></details>
+
+  <details id="import-columns"><summary>ما الأعمدة المطلوبة في الملف؟</summary><div>
+    <p>للمنتجات لا يُطلب إلا <code>sku</code> و<code>name</code>. ويمكنك إضافة: description، category، location، quantity، unit، min، max، cost، price، barcode، supplier، image. يجب أن يسمّي الصف الأول الأعمدة. تُفهم كتابات شائعة كثيرة (<code>qty</code>، <code>stock</code>، <code>unit price</code>&hellip;، وكذلك العناوين العربية التي يصدّرها التطبيق نفسه)، وتعرض شاشة الاستيراد كل الأسماء المقبولة. مثال:</p>
+    <p><code>sku,name,category,quantity,unit,cost,price,barcode</code><br><code>A-100,Screw,Hardware,25,pcs,4.50,9.99,4006381333931</code></p>
+    <p>الفواصل والفواصل المنقوطة وعلامات الجدولة، والفاصلة العشرية، ورموز العملات، ومعظم صيغ التاريخ كلها مدعومة. وحين يُضطر التطبيق إلى تخمين قيمة، تخبرك المعاينة كيف قرأها.</p>
+  </div></details>
+
+  <details id="import-update"><summary>هل يستبدل الاستيراد المنتجات الموجودة لدي؟</summary><div>
+    <p>فقط إن أردت. تُطابق المنتجات حسب SKU. عند تفعيل <span class="ui">تحديث السجلات الموجودة</span> يأخذ المنتج المطابق القيم من ملفك، وفقط في الأعمدة الموجودة فيه. ملف فيه <code>sku,name,quantity</code> فقط لن يمسح الأسعار أو الفئات. أوقفه لإضافة المنتجات الجديدة فقط.</p>
+    <p>إن كان مخزون منتج موزعاً على عدة مواقع أو دفعات، فلا يستطيع الملف تحديد مكان الكمية الجديدة؛ غيّر مخزون ذلك المنتج من صفحته.</p>
+  </div></details>
+
+  <details id="export-to-excel"><summary>كيف أنقل قائمة منتجاتي كاملة إلى Excel؟</summary><div>
+    <p>صدّر تقرير <span class="ui">كتالوج المنتجات</span> أو <span class="ui">المخزون المتوفر</span> بصيغة CSV (انظر <a href="#export-report">التقارير</a>). ويمكن استيراد ملف CSV هذا إلى التطبيق مجدداً.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="backup">
+  <h2>النسخ الاحتياطي والاستعادة وتغيير الهاتف</h2>
+  <p class="lead">بياناتك تعيش على الهاتف. النسخة الاحتياطية في مكان آخر هي ما ينقذها إن ضاع الهاتف أو أُعيد ضبطه.</p>
+
+  <div class="note"><strong>إلغاء تثبيت التطبيق أو مسح بياناته يحذف كل بياناتك.</strong> اضبط نسخاً احتياطياً قبل أن تفعل أياً منهما.</div>
+
+  <details id="setup-backup"><summary>كيف أنسخ بياناتي احتياطياً؟</summary><div>
+    <ol>
+      <li>افتح <span class="ui">النسخ الاحتياطي</span> من القائمة <span class="ui">&#8942;</span>.</li>
+      <li>اضغط <span class="ui">إضافة وجهة</span> واختر أين تُحفظ النسخ: <span class="ui">مجلد على هذا الجهاز</span> (الذاكرة الداخلية، بطاقة SD، ذاكرة USB، أو مجلد يزامنه تطبيق التخزين السحابي)، أو <span class="ui">خادم FTP</span>، أو <span class="ui">مجلد مشترك (SMB)</span> (جهاز NAS أو مجلد مشترك على حاسوب Windows).</li>
+      <li>للخادم، أدخل العنوان وبيانات الدخول، ثم <span class="ui">اختبار الاتصال</span>. يتأكد الاختبار من إمكانية كتابة ملف هناك فعلاً.</li>
+      <li>اضغط <span class="ui">نسخ احتياطي الآن</span>، وفعّل <span class="ui">النسخ الاحتياطي التلقائي</span> لحفظ نسخة مرة يومياً تقريباً.</li>
+    </ol>
+    <p>كل نسخة تذهب إلى جميع وجهاتك. إذا توقفت إحداها عن العمل يصلك إشعار ويظهر شريط في لوحة المعلومات حتى تُصلح.</p>
+  </div></details>
+
+  <details id="restore"><summary>كيف أستعيد نسخة احتياطية؟</summary><div>
+    <p>في <span class="ui">النسخ الاحتياطي</span> ابحث عن النسخة في القائمة واضغط <span class="ui">استعادة</span>. تختار البيانات التي تريد إرجاعها وترى محتوى النسخة قبل أي تغيير. الاستعادة تستبدل بياناتك الحالية ببيانات النسخة.</p>
+    <p>«أُنشئت هذه النسخة الاحتياطية بإصدار أحدث من التطبيق. حدّث التطبيق ثم استعدها.» تعني أنك تحتاج أولاً إلى تثبيت أحدث إصدار من Google Play.</p>
+  </div></details>
+
+  <details id="new-phone"><summary>كيف أنقل بياناتي إلى هاتف جديد؟</summary><div>
+    <ol>
+      <li>على الهاتف القديم، انسخ احتياطياً إلى مكان يصل إليه الهاتف الجديد: خادم FTP/SMB، أو مجلد متزامن مع السحابة، أو ملف تنسخه بنفسك.</li>
+      <li>على الهاتف الجديد، ثبّت Stock Management. في شاشة الترحيب اختر <span class="ui">استعادة نسخة احتياطية</span>، ثم <span class="ui">من ملف</span> أو <span class="ui">من خادم</span> أو <span class="ui">من مجلد</span>.</li>
+    </ol>
+    <p>كلمات مرور الخوادم لا تُحفظ داخل النسخ الاحتياطية، حفاظاً على أمانك. أدخلها مجدداً على الهاتف الجديد.</p>
+  </div></details>
+
+  <details id="two-phones"><summary>هل يمكن لهاتفين مشاركة المخزون نفسه؟</summary><div>
+    <p>ليس للتطبيق حساب على الإنترنت، لذلك لا يتزامن هاتفان معاً. ليعمل عدة أشخاص على المخزون نفسه، احتفظ به على هاتف واحد ودع الآخرين يستخدمونه عبر <a href="#remote">الوصول عن بُعد</a> من متصفح على شبكة Wi-Fi نفسها. النسخة المستعادة على هاتف آخر مجرد نسخة: التغييرات على أحدهما لا تظهر على الآخر.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="remote">
+  <h2>الاستخدام من حاسوب أو جهاز لوحي أو جهاز يدوي (الوصول عن بُعد)</h2>
+  <p class="lead">أجهزة أخرى على شبكة Wi-Fi نفسها تفتح مخزونك في متصفح الويب، ولكل منها دخوله وصلاحياته.</p>
+
+  <details id="remote-setup"><summary>كيف أفتح التطبيق على حاسوبي؟</summary><div>
+    <ol>
+      <li>على الهاتف، افتح <span class="ui">الوصول عن بُعد</span> من القائمة <span class="ui">&#8942;</span>. إن كان للهاتف قفل شاشة فأكّده.</li>
+      <li>اضغط <span class="ui">تشغيل الخادم</span>. تعرض الشاشة عنواناً مثل <code>http://192.168.1.24:8080</code> ورمز QR.</li>
+      <li>اضغط <span class="ui">إضافة شخص</span> وأنشئ دخولاً: اسماً واسم مستخدم وكلمة مرور.</li>
+      <li>اضغط <span class="ui">اختر</span> عند ذلك الشخص وحدّد الشاشات والإجراءات المسموحة له (أو قالباً: <span class="ui">الاطّلاع فقط</span>، <span class="ui">جرد المخزون</span>، <span class="ui">فاحص الأسعار</span>، <span class="ui">كل شيء</span>). لا يُسمح بشيء حتى تحدّده.</li>
+      <li>على الحاسوب، اكتب العنوان في متصفح (Chrome أو Edge أو Firefox أو Safari) وسجّل الدخول.</li>
+      <li>عند الانتهاء، اضغط <span class="ui">إيقاف الخادم</span>.</li>
+    </ol>
+    <p>كل تغيير يُجرى في المتصفح يصل إلى الهاتف باسم ذلك الشخص. لا يبدأ الخادم من تلقاء نفسه أبداً.</p>
+  </div></details>
+
+  <details id="remote-cant-connect"><summary>المتصفح لا يفتح العنوان.</summary><div>
+    <ul>
+      <li>يجب أن يكون الجهازان على <strong>شبكة Wi-Fi نفسها</strong> (أو الحاسوب متصلاً بنقطة اتصال الهاتف). بيانات الجوال لا تعمل.</li>
+      <li>شبكات الضيوف والشبكات العامة غالباً تمنع الأجهزة من رؤية بعضها. استخدم شبكتك الرئيسية أو نقطة اتصال الهاتف.</li>
+      <li>اكتب العنوان كاملاً مع <code>http://</code> والمنفذ (<code>:8080</code>).</li>
+      <li>تأكد أن الخادم ما زال يعمل. إغلاق التطبيق بسحبه من شاشة التطبيقات الأخيرة يوقفه، وكذلك تغيّر الشبكة.</li>
+      <li>العنوان بالاسم (المنتهي بـ <code>.local</code>) لا يعمل إلا إن دعمه الراوتر. استخدم العنوان الرقمي بدلاً منه.</li>
+      <li>اسمح بإشعارات التطبيق. أثناء عمل الخادم يحمل إشعاره زر الإيقاف.</li>
+    </ul>
+  </div></details>
+
+  <details id="remote-can-do"><summary>ماذا يمكن فعله من المتصفح؟</summary><div>
+    <p>ما تسمح به: لوحة المعلومات، المنتجات (عرض وإضافة وتعديل)، الماسح، مخزون سريع، الجرد، السجل، التقارير (CSV/PDF)، الفئات، الموردون، المواقع، نقل المخزون بين المواقع، طباعة الملصقات وفحص السعر. النسخ الاحتياطي والاستيراد والمهملات وتصميم الملصقات والإعدادات والبيع والوصول عن بُعد نفسه تبقى على الهاتف. لا يمكن حذف أي شيء من المتصفح.</p>
+    <p>يختار كل متصفح وضعه الفاتح أو الداكن وسمته وحجم النص وطريقة عرض القوائم من <span class="ui">العرض</span>.</p>
+  </div></details>
+
+  <details id="handheld"><summary>استخدام جهاز يدوي (PDA) أو قارئ USB</summary><div>
+    <p>افتح العنوان في متصفح الجهاز وسجّل الدخول بحساب مسموح له باستخدام الماسح. اضغط أيقونة الجهاز اليدوي في الأعلى، واختر <span class="ui">استلام</span> أو <span class="ui">صرف</span>، وامسح. يُضاف كل رمز إلى قائمة (امسحه مجدداً لزيادة واحد)، وزر واحد يحفظ الدفعة كلها. فعّل <span class="ui">قراءة أزرار الماسح في أي مكان</span> كي لا تعترض لوحة المفاتيح على الشاشة.</p>
+    <p>القوائم غير المحفوظة تبقى على الجهاز إن انقطع Wi-Fi، فتحفظها حين يعود. لا يستطيع المتصفح استخدام كاميرا الجهاز للمسح (فهو يحتاج اتصالاً آمناً)، فاستخدم قارئاً أو اكتب الرمز.</p>
+  </div></details>
+
+  <details id="price-checker-screen"><summary>هل يستطيع الزبائن معرفة الأسعار بأنفسهم على شاشة؟</summary><div>
+    <p>نعم. أنشئ دخولاً بقالب <span class="ui">فاحص الأسعار</span>، وافتح فحص السعر على حاسوب أو جهاز لوحي عند الصندوق مع قارئ، واختر <span class="ui">شاشة فحص الأسعار</span>. تعرض شعارك واسم شركتك (من تصميم التقارير) وتقدّم زر ملء الشاشة. ما تعرضه ومتى تُمسح يُضبط في <span class="ui">الإعدادات ← شاشة فحص الأسعار</span>.</p>
+  </div></details>
+
+  <details id="remote-safety"><summary>هل الوصول عن بُعد آمن؟</summary><div>
+    <ul>
+      <li>لا يعمل إلا على الشبكات الخاصة (Wi-Fi المنزل أو المكتب، نقطة اتصال الهاتف)، ولا يعمل أبداً على الإنترنت المفتوح.</li>
+      <li>لكل شخص كلمة مروره، ولا يرى إلا ما حدّدته. ترى من المتصل ويمكنك فصله أو إيقاف حسابه أو تغيير كلمة مروره، وقراءة النشاط الأخير.</li>
+      <li>الاتصال <strong>غير مشفّر</strong>: استخدمه على شبكة تثق بها، لا على Wi-Fi عامة.</li>
+      <li>إن لم يكن للهاتف قفل شاشة، فبإمكان أي شخص يمسكه فتح الوصول عن بُعد. إضافة قفل شاشة تحميه.</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="notifications">
+  <h2>الإشعارات</h2>
+  <p class="lead">تنبيهات المخزون المنخفض وتذكيرات الجرد وتحذيرات النسخ الاحتياطي.</p>
+
+  <details id="low-stock-alert"><summary>كيف تعمل تنبيهات المخزون المنخفض؟ هل أستطيع اختيار الوقت؟</summary><div>
+    <p>يرسل التطبيق مرة يومياً ملخصاً بالمنتجات التي تحت حدها الأدنى. اختر الوقت في <span class="ui">الإعدادات ← الإشعارات ← تنبيه انخفاض المخزون</span>. يصل <em>قرابة</em> ذلك الوقت، لأن Android قد يؤخّره بضع دقائق لتوفير البطارية.</p>
+  </div></details>
+
+  <details id="no-notifications"><summary>لا تصلني أي إشعارات.</summary><div>
+    <ul>
+      <li>تأكد أن <span class="ui">الإعدادات ← الإشعارات ← تفعيل الإشعارات</span> مفعّل.</li>
+      <li>اسمح بإشعارات التطبيق: اضغط <span class="ui">تفعيل التنبيهات</span> في بطاقة لوحة المعلومات، أو اذهب إلى إعدادات Android ← التطبيقات ← Stock Management ← الإشعارات.</li>
+      <li>كل نوع (تنبيهات المخزون المنخفض، تذكيرات الجرد، مشاكل النسخ الاحتياطي، الوصول عن بُعد) يمكن تشغيله أو إيقافه وحده في إعدادات إشعارات Android للتطبيق.</li>
+      <li>بعض الهواتف (Xiaomi وHuawei وOppo وVivo وSamsung&hellip;) توقف التطبيقات في الخلفية لتوفير البطارية. اسمح للتطبيق بالعمل في الخلفية، أو اجعل استخدامه للبطارية «بلا قيود».</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="customize">
+  <h2>تخصيص التطبيق</h2>
+  <p class="lead">كل ما يلي موجود في الإعدادات.</p>
+
+  <details id="themes"><summary>السمات والوضع الداكن والألوان</summary><div>
+    <p><span class="ui">الإعدادات ← السمة</span>: <span class="ui">المظهر</span> (النظام، فاتح، داكن)، و<span class="ui">سمة التطبيق</span> (المرفأ، الغرافيت، الورق البني، منتصف الليل)، و<span class="ui">الألوان الديناميكية</span> لأخذ الألوان من خلفية الشاشة (Android 12 وما بعده).</p>
+  </div></details>
+
+  <details id="all-settings"><summary>ماذا يمكنني أن أغيّر أيضاً؟</summary><div>
+    <table>
+      <tbody>
+        <tr><td><span class="ui">إعداد القوائم</span></td><td>أي الشاشات في الشريط السفلي والقائمة، وترتيبها</td></tr>
+        <tr><td><span class="ui">لوحة التحكم</span></td><td>أي البطاقات والرسوم تظهر، وترتيبها وعرضها</td></tr>
+        <tr><td><span class="ui">بطاقة المنتج</span></td><td>ما يعرضه كل منتج في القائمة</td></tr>
+        <tr><td><span class="ui">حد المخزون المنخفض الافتراضي</span></td><td>الحد الأدنى المقترح للمنتجات الجديدة</td></tr>
+        <tr><td><span class="ui">حركات المخزون</span></td><td>السؤال عن المكان حين يكون المخزون موزعاً؛ طريقة تقييم المخزون</td></tr>
+        <tr><td><span class="ui">صيغ الباركود</span> &middot; <span class="ui">تأكيد المسح</span></td><td>الرموز التي يقرؤها الماسح؛ الصوت والاهتزاز</td></tr>
+        <tr><td><span class="ui">تقرير PDF</span></td><td>شكل تقارير PDF المصدّرة</td></tr>
+        <tr><td><span class="ui">شاشة فحص الأسعار</span></td><td>ما تعرضه شاشة الأسعار للزبائن</td></tr>
+        <tr><td><span class="ui">عام</span></td><td>رمز العملة، اللغة</td></tr>
+        <tr><td><span class="ui">الإشعارات</span></td><td>وقت تنبيه المخزون المنخفض، تذكير الجرد</td></tr>
+      </tbody>
+    </table>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trash">
+  <h2>المهملات</h2>
+  <p class="lead">لا يختفي شيء تحذفه نهائياً حتى تفرغها.</p>
+
+  <details id="restore-deleted"><summary>كيف أسترجع شيئاً حذفته؟</summary><div>
+    <p>افتح <span class="ui">المهملات</span> من القائمة <span class="ui">&#8942;</span>. ستجد فيها المنتجات والفئات والموردين والمواقع والملصقات المحذوفة، والحركات التي تم التراجع عنها. اضغط <span class="ui">استعادة</span>: يخبرك التطبيق أولاً بما سيحدث بالضبط. الاستعادة تضيف فقط ولا تستبدل أبداً شيئاً لديك الآن (رمز SKU أو اسم مكرر يُعطى بديلاً جديداً مثل <code>A-100-2</code>).</p>
+    <p><span class="ui">حذف نهائي</span> يزيل عنصراً واحداً؛ <span class="ui">إفراغ</span> يفرغ المهملات كلها. ولا يمسّ أيٌّ منهما بياناتك الحالية.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trouble">
+  <h2>المشكلات والتواصل</h2>
+
+  <details id="old-version"><summary>ميزة في هذه الصفحة غير موجودة في تطبيقي.</summary><div>
+    <p>حدّث Stock Management من Google Play. أضافت التحديثات الأخيرة نقل المخزون بين المواقع، والدفعات والأرقام التسلسلية، والبيع والفواتير، ومعرفة الأسعار وغير ذلك. تبقى بياناتك محفوظة عند التحديث.</p>
+  </div></details>
+
+  <details id="privacy"><summary>أين تُحفظ بياناتي؟ ومن يستطيع رؤيتها؟</summary><div>
+    <p>على هاتفك فقط، في التخزين الخاص بالتطبيق. لا نتلقى منتجاتك ولا مخزونك ولا مبيعاتك. اقرأ <a href="../../">سياسة الخصوصية</a> (بالإنجليزية).</p>
+  </div></details>
+
+  <details id="contact" open><summary>كيف أطرح سؤالاً أو أبلغ عن مشكلة؟</summary><div>
+    <p>في التطبيق: <span class="ui">الإعدادات ← إرسال ملاحظات</span> (أو فقاعة الحديث أعلى الشاشات الرئيسية). اختر النوع، واكتب رسالتك، و<strong>ضع بريدك الإلكتروني في حقل <span class="ui">وسيلة تواصل (اختياري)</span> إن أردت رداً</strong>. بدونه نقرأ رسالتك لكن لا نستطيع الرد. يحتاج الإرسال إلى اتصال بالإنترنت.</p>
+    <p>أو راسلنا على <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>. نقرأ كل الرسائل بأي لغة.</p>
+  </div></details>
+</section>
+
+
+<footer>
+  <p class="langs"><a href="../" lang="en">English</a> &middot; <a href="../es/" lang="es">Español</a> &middot; <a href="../fr/" lang="fr">Français</a> &middot; <a href="../pt/" lang="pt">Português</a> &middot; <a href="../ru/" lang="ru">Русский</a> &middot; <a href="../zh/" lang="zh-Hans">中文</a> &middot; <strong>العربية</strong> &middot; <a href="../hi/" lang="hi">हिन्दी</a> &middot; <a href="../bn/" lang="bn">বাংলা</a> &middot; <a href="../ur/" lang="ur">اردو</a> &middot; <a href="../id/" lang="id">Bahasa Indonesia</a></p>
+  <p>Stock Management &middot; <a href="../../">سياسة الخصوصية</a> &middot; <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a></p>
+  <p>&copy; 2026 Cool App Helpdesk</p>
+</footer>
+
+</main>
+<script>
+(function () {
+  var CODE = 'ar';
+  var PERMALINK = "رابط هذه الإجابة";
+  var OFFERS = {"en":{"href":"../","banner":"Read this help in English"},"es":{"href":"../es/","banner":"Leer esta ayuda en español"},"fr":{"href":"../fr/","banner":"Lire cette aide en français"},"pt":{"href":"../pt/","banner":"Ler esta ajuda em português"},"ru":{"href":"../ru/","banner":"Читать справку на русском"},"zh":{"href":"../zh/","banner":"阅读中文版帮助"},"hi":{"href":"../hi/","banner":"यह सहायता हिन्दी में पढ़ें"},"bn":{"href":"../bn/","banner":"এই সাহায্য বাংলায় পড়ুন"},"ur":{"href":"../ur/","banner":"یہ مدد اردو میں پڑھیں"},"id":{"href":"../id/","banner":"Baca bantuan ini dalam Bahasa Indonesia"}};
+  var q = document.getElementById('q');
+  var none = document.getElementById('noresults');
+  var items = Array.prototype.slice.call(document.querySelectorAll('section.card details'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('section.card'));
+  var toc = document.querySelector('nav.topics');
+
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  // The switcher keeps the answer you are on: help/#move-stock → help/es/#move-stock.
+  document.getElementById('lang').addEventListener('change', function () {
+    store('helpLang', this.options[this.selectedIndex].value.replace(/^(\.\.\/)?/, '').replace(/\/$/, '') || 'en');
+    location.href = this.value + location.hash;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('footer .langs a'), function (a) {
+    a.addEventListener('click', function (e) {
+      store('helpLang', (a.getAttribute('href').replace(/^(\.\.\/)?/, '').replace(/\/$/, '')) || 'en');
+      a.href = a.getAttribute('href') + location.hash;
+    });
+  });
+
+  // Offer the reader's own language once, unless they have already picked one.
+  if (!store('helpLang')) {
+    var langs = (navigator.languages || [navigator.language || '']).map(function (l) { return l.toLowerCase().split('-')[0]; });
+    for (var i = 0; i < langs.length; i++) {
+      var c = langs[i] === 'in' ? 'id' : langs[i];
+      if (c === CODE) break;
+      if (OFFERS[c]) {
+        var o = document.getElementById('offer');
+        var a = document.createElement('a');
+        a.textContent = OFFERS[c].banner;
+        a.href = OFFERS[c].href;
+        a.setAttribute('lang', c);
+        a.addEventListener('click', function () { store('helpLang', c); a.href = OFFERS[c].href + location.hash; });
+        o.appendChild(a);
+        o.style.display = 'block';
+        break;
+      }
+    }
+  }
+
+  // Each answer links to itself, so one answer can be sent to someone.
+  items.forEach(function (d) {
+    var p = document.createElement('p');
+    p.className = 'permalink';
+    var a = document.createElement('a');
+    a.href = '#' + d.id;
+    a.textContent = PERMALINK;
+    p.appendChild(a);
+    d.querySelector(':scope > div').appendChild(p);
+  });
+
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  var texts = items.map(function (d) { return norm(d.textContent); });
+
+  q.addEventListener('input', function () {
+    var words = norm(q.value).split(/\s+/).filter(Boolean);
+    var searching = words.length > 0;
+    var hits = items.map(function (d, i) {
+      return words.every(function (w) { return texts[i].indexOf(w) !== -1; });
+    });
+    var count = hits.filter(Boolean).length;
+    items.forEach(function (d, i) {
+      d.classList.toggle('hidden', searching && !hits[i]);
+      d.classList.toggle('hit', searching && hits[i]);
+      // A narrow search opens its answers; a broad one leaves them closed to scan.
+      d.open = searching ? hits[i] && count <= 3 : d.id === 'contact';
+    });
+    cards.forEach(function (c) {
+      c.classList.toggle('hidden', searching && !c.querySelector('details:not(.hidden)'));
+    });
+    if (toc) toc.classList.toggle('hidden', searching);
+    none.style.display = searching && count === 0 ? 'block' : 'none';
+  });
+
+  function openTarget() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    // A link followed mid-search must not land on an answer the filter hides.
+    if (q.value) { q.value = ''; q.dispatchEvent(new Event('input')); }
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'DETAILS') el.open = true;
+    el.scrollIntoView({ block: 'start', behavior: 'instant' });
+  }
+  window.addEventListener('hashchange', openTarget);
+  openTarget();
+})();
+</script>
+</body>
+</html>

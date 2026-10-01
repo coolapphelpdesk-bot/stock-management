@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bantuan — Stock Management</title>
+<meta name="description" content="Cara memakai Stock Management: produk, stok masuk dan keluar, lokasi dan transfer, pemindai barcode, stok opname, penjualan dan nota, laporan, impor, cadangan, dan akses jarak jauh.">
+<style>
+  :root {
+    --bg: #f6f9f9; --surface: #ffffff; --text: #10201f; --muted: #5b6b6a;
+    --primary: #0f5f63; --primary-soft: #dcefef; --border: #dde7e6;
+    --note-bg: #fff7e6; --note-border: #f0d79a; --note-text: #6b4b00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1717; --surface: #162222; --text: #e2ecec; --muted: #94a8a7;
+      --primary: #86d4d6; --primary-soft: #1d3b3c; --border: #2a3b3b;
+      --note-bg: #2e2612; --note-border: #5e4b1c; --note-text: #f2d9a0;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+    line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  html[lang="ur"] body { font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Noto Sans Arabic", sans-serif; line-height: 2; }
+  html[lang="ar"] body { font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 40px 24px 96px; }
+  header { border-radius: 16px; padding: 28px 28px 30px; margin-bottom: 18px;
+    background: linear-gradient(135deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); color: #fff; }
+  html[dir="rtl"] header { background: linear-gradient(225deg, #2bb3a8 0%, #0f5f63 60%, #0a3b3e 100%); }
+  .langbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+  .langbar select { font: inherit; font-size: 14px; color: #fff; background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 12px; cursor: pointer; }
+  .langbar select option { color: #10201f; background: #fff; }
+  header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+  header p { margin: 0; opacity: 0.92; font-size: 15px; }
+  #offer { display: none; margin: 0 0 12px; padding: 10px 14px; border-radius: 10px;
+    background: var(--primary-soft); border: 1px solid var(--border); font-weight: 600; }
+  .searchbar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; }
+  .searchbar input { width: 100%; font: inherit; font-size: 16px; padding: 12px 16px;
+    border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); }
+  .searchbar input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+  #noresults { display: none; text-align: center; color: var(--muted); padding: 24px 0; }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; padding: 0; list-style: none; }
+  .toc li { margin: 0; }
+  .toc a { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 14px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+  .toc a:hover { border-color: var(--primary); text-decoration: none; }
+  .card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 24px; margin: 14px 0; }
+  h2 { font-size: 20px; font-weight: 650; margin: 0 0 4px; letter-spacing: -0.005em; }
+  .card > .lead { color: var(--muted); font-size: 14.5px; margin: 0 0 10px; }
+  details { border-top: 1px solid var(--border); }
+  details:first-of-type { border-top: none; }
+  summary { cursor: pointer; padding-block: 11px; padding-inline: 0 28px; font-weight: 600;
+    list-style: none; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; inset-inline-end: 4px; top: 9px; font-size: 20px;
+    font-weight: 400; color: var(--muted); }
+  details[open] > summary::after { content: "\2212"; }
+  details > div { padding: 0 0 14px; }
+  details:target > summary, details.hit > summary { color: var(--primary); }
+  p, ul, ol { margin: 0 0 10px; }
+  ul, ol { padding-inline-start: 22px; padding-inline-end: 0; } li { margin-bottom: 5px; }
+  .ui { font-weight: 600; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .note { background: var(--note-bg); border: 1px solid var(--note-border); color: var(--note-text);
+    border-radius: 10px; padding: 10px 14px; font-size: 14.5px; margin: 10px 0; }
+  .permalink { font-size: 13px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 14px; }
+  th, td { text-align: start; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); background: var(--primary-soft); }
+  tr:last-child td { border-bottom: none; }
+  code { background: var(--primary-soft); padding: 1px 6px; border-radius: 4px; direction: ltr; unicode-bidi: isolate;
+    font-size: 13px; font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
+  a { color: var(--primary); text-decoration: none; } a:hover { text-decoration: underline; }
+  footer { margin-top: 32px; text-align: center; color: var(--muted); font-size: 13px; }
+  footer .langs { line-height: 2; }
+  .hidden { display: none !important; }
+  @media (max-width: 480px) {
+    .wrap { padding: 20px 16px 64px; }
+    header { padding: 20px 20px 24px; } header h1 { font-size: 24px; }
+    .card { padding: 16px 18px; } h2 { font-size: 18px; }
+    table { font-size: 13px; } th, td { padding: 7px 8px; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header>
+  <div class="langbar">
+    <select id="lang" aria-label="Bahasa">
+<option value="../">English</option>
+<option value="../es/">Español</option>
+<option value="../fr/">Français</option>
+<option value="../pt/">Português</option>
+<option value="../ru/">Русский</option>
+<option value="../zh/">中文</option>
+<option value="../ar/">العربية</option>
+<option value="../hi/">हिन्दी</option>
+<option value="../bn/">বাংলা</option>
+<option value="../ur/">اردو</option>
+<option value="../id/" selected>Bahasa Indonesia</option>
+    </select>
+  </div>
+  <h1>Bantuan Stock Management</h1>
+  <p>Cara melakukan semua hal di aplikasi &middot; untuk versi 1.98 &middot; diperbarui Oktober 2026</p>
+</header>
+
+<p id="offer"></p>
+
+<div class="searchbar">
+  <input id="q" type="search" placeholder="Cari bantuan — mis. pindahkan stok, barcode, cadangan, nota" aria-label="Cari bantuan — mis. pindahkan stok, barcode, cadangan, nota" autocomplete="off">
+</div>
+
+<nav class="topics" aria-label="Topik">
+  <ul class="toc">
+    <li><a href="#start">Memulai</a></li>
+    <li><a href="#products">Produk</a></li>
+    <li><a href="#stock">Stok masuk &amp; keluar</a></li>
+    <li><a href="#locations">Lokasi &amp; transfer</a></li>
+    <li><a href="#lots">Lot, kedaluwarsa, serial</a></li>
+    <li><a href="#scanner">Pemindai</a></li>
+    <li><a href="#stocktake">Stok opname</a></li>
+    <li><a href="#sell">Penjualan &amp; nota</a></li>
+    <li><a href="#history">Riwayat &amp; koreksi</a></li>
+    <li><a href="#reports">Laporan &amp; label</a></li>
+    <li><a href="#import">Impor</a></li>
+    <li><a href="#backup">Cadangan &amp; HP baru</a></li>
+    <li><a href="#remote">Pakai dari komputer</a></li>
+    <li><a href="#notifications">Notifikasi</a></li>
+    <li><a href="#customize">Sesuaikan</a></li>
+    <li><a href="#trash">Sampah</a></li>
+    <li><a href="#trouble">Masalah &amp; kontak</a></li>
+  </ul>
+</nav>
+
+<div class="note"><strong>Tidak menemukan yang dijelaskan di sini?</strong> Perbarui dulu aplikasinya dari Google Play. Halaman ini menjelaskan versi terbaru, dan banyak fitur (memindahkan stok antarlokasi, lot, penjualan, nota) baru hadir di pembaruan terakhir. Isi setiap pembaruan bisa dilihat di <span class="ui">Pengaturan → Yang baru</span>.</div>
+
+<p id="noresults">Tidak ada yang cocok. Coba kata yang lebih pendek, atau <a href="#contact">tanyakan kepada kami</a>.</p>
+
+<!-- ============================================================ -->
+<section class="card" id="start">
+  <h2>Memulai</h2>
+  <p class="lead">Apa aplikasi ini, layar pertama, dan cara menemukan semuanya.</p>
+
+  <details id="what-is-it"><summary>Apa itu Stock Management?</summary><div>
+    <p>Aplikasi pengelolaan stok untuk toko, gudang, dan usaha kecil. Anda menyimpan daftar produk dengan SKU dan barcode, mencatat stok yang masuk dan keluar, dan selalu tahu berapa banyak barang yang ada, di mana, dan berapa nilainya. Aplikasi ini juga melakukan stok opname, penjualan dengan nota tercetak, laporan, label, dan cadangan.</p>
+    <p>Semuanya tersimpan <strong>di ponsel Anda</strong>. Tidak perlu membuat akun dan tidak ada langganan.</p>
+  </div></details>
+
+  <details id="internet"><summary>Apakah perlu akun atau koneksi internet?</summary><div>
+    <p>Tidak. Aplikasi berjalan sepenuhnya offline dan tanpa login. Data Anda tidak keluar dari perangkat kecuali Anda sendiri mengirimnya (cadangan, laporan yang diekspor).</p>
+    <p>Hanya beberapa hal yang memakai jaringan: mengirim masukan, membuka halaman Google Play, cadangan ke server FTP atau SMB, dan Akses jarak jauh (yang memakai Wi-Fi lokal Anda, bukan internet).</p>
+  </div></details>
+
+  <details id="first-screen"><summary>Layar pertama menanyakan cara memulai. Pilih yang mana?</summary><div>
+    <ul>
+      <li><span class="ui">Pulihkan cadangan</span> &mdash; Anda pernah memakai aplikasi ini di ponsel lain dan punya cadangan. Lihat <a href="#new-phone">pindah ke ponsel baru</a>.</li>
+      <li><span class="ui">Impor dari spreadsheet</span> &mdash; produk Anda sudah ada di Excel atau Google Sheets. Lihat <a href="#import">Impor</a>.</li>
+      <li><span class="ui">Mulai dengan inventaris saya sendiri</span> &mdash; aplikasi kosong; tambahkan produk satu per satu.</li>
+      <li><strong>Data contoh</strong> (Toko kelontong, Toko pakaian, Toko buku) &mdash; mengisi aplikasi dengan produk demo agar Anda bisa melihat-lihat.</li>
+    </ul>
+    <p>Layar ini hanya muncul sekali, tetapi tidak ada yang hilang karena pilihan Anda: Anda bisa mengimpor, memulihkan, atau menambah produk kapan saja nanti.</p>
+  </div></details>
+
+  <details id="sample-data"><summary>Bagaimana memuat atau menghapus data contoh?</summary><div>
+    <p>Data contoh hanya bisa ditambahkan saat aplikasi masih kosong: di layar sambutan, atau dari kartu <span class="ui">Coba dengan data contoh</span> di Dasbor. Sebelum menambahkan, aplikasi memberi tahu persis berapa produk, kategori, pemasok, dan lokasi yang akan dibuat.</p>
+    <p>Untuk menghapusnya, ketuk <span class="ui">Hapus data contoh</span> di spanduk Dasbor. Hanya data contoh yang dihapus.</p>
+  </div></details>
+
+  <details id="menu"><summary>Di mana semua layarnya? Di bawah hanya ada empat.</summary><div>
+    <p>Di ponsel, bilah bawah menampilkan Dasbor dan tiga layar pertama di menu Anda. Sisanya ada di menu <span class="ui">&#8942;</span> di kanan atas setiap layar: Jual, Stok opname, Transaksi, Laporan, Kategori, Pemasok, Lokasi, Label, Impor, Cadangan, Sampah, Akses jarak jauh, dan Pengaturan. Di tablet, semuanya ada di bilah samping.</p>
+    <p>Untuk memilih layar di bilah bawah, buka <span class="ui">Pengaturan → Konfigurasi menu</span> lalu geser ke atas atau ke bawah. Layar yang tidak pernah dipakai juga bisa disembunyikan (Dasbor dan Pengaturan selalu ada).</p>
+  </div></details>
+
+  <details id="language"><summary>Bagaimana mengganti bahasa?</summary><div>
+    <p><span class="ui">Pengaturan → Bahasa</span>. Aplikasi tersedia dalam English, Español, Français, Português, Русский, 中文, العربية, हिन्दी, বাংলা, اردو, dan Bahasa Indonesia.</p>
+  </div></details>
+
+  <details id="dashboard"><summary>Apa yang ditampilkan Dasbor?</summary><div>
+    <p>Total produk, stok menipis, nilai stok, pergerakan terbaru, peringatan, dan grafik (tingkat stok, produk dan nilai per kategori, pergerakan 7 dan 30 hari, yang perlu dipesan ulang, nilai stok per lokasi dan per pemasok, produk paling sering bergerak, dan lot yang segera kedaluwarsa).</p>
+    <p>Ketuk <span class="ui">Sesuaikan dasbor</span> di bagian bawah Dasbor, atau buka <span class="ui">Pengaturan → Dasbor</span>, untuk menyembunyikan kartu, mengubah urutan, dan mengatur lebar masing-masing.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="products">
+  <h2>Produk</h2>
+  <p class="lead">Menambah, mengubah, mengatur, dan mencari produk.</p>
+
+  <details id="add-product"><summary>Bagaimana menambah produk?</summary><div>
+    <ol>
+      <li>Buka <span class="ui">Produk</span> dan ketuk <span class="ui">+</span>.</li>
+      <li>Isi <span class="ui">SKU</span> dan <span class="ui">Nama</span> (keduanya wajib). SKU adalah kode Anda sendiri untuk barang itu dan tidak boleh sama.</li>
+      <li>Jika mau, tambahkan foto, deskripsi, kategori, lokasi, pemasok, satuan (pcs, kg, liter&hellip;), stok minimum dan maksimum, harga pokok, harga jual, dan barcode. Kolom barcode punya tombol pindai.</li>
+      <li>Isi <span class="ui">Jumlah</span> dengan jumlah yang Anda miliki sekarang. Ini dicatat sebagai stok awal produk.</li>
+      <li>Ketuk <span class="ui">Simpan produk</span>.</li>
+    </ol>
+    <p>Cara lebih cepat: pindai barcode yang belum dikenal di <a href="#scanner">Pemindai</a> lalu ketuk <span class="ui">Tambah produk dengan barcode ini</span>, atau <a href="#import">impor</a> seluruh daftar dari spreadsheet.</p>
+  </div></details>
+
+  <details id="edit-quantity"><summary>Mengapa jumlah tidak bisa diubah saat mengedit produk?</summary><div>
+    <p>Memang disengaja. Setiap perubahan stok dicatat sebagai pergerakan (siapa, kapan, mengapa, sebelum dan sesudah), sehingga riwayat selalu cocok. Ubah jumlah melalui <a href="#stock-in-out">Stok masuk / Stok keluar</a>, <a href="#quick-stock">Stok cepat</a>, <a href="#scanner">Pemindai</a>, atau <a href="#stocktake">Stok opname</a>. Data produk lainnya (nama, harga, barcode, kategori&hellip;) diubah dengan ikon pensil di halaman produk.</p>
+  </div></details>
+
+  <details id="product-photo"><summary>Bagaimana menambahkan foto produk?</summary><div>
+    <p>Di formulir produk, ketuk <span class="ui">Tambah foto</span>, lalu <span class="ui">Ambil foto</span> atau <span class="ui">Pilih dari galeri</span>. Produk tanpa foto menampilkan gambar paket dengan warna kategorinya.</p>
+  </div></details>
+
+  <details id="delete-product"><summary>Bagaimana menghapus produk, dan bisakah dikembalikan?</summary><div>
+    <p>Buka produk lalu ketuk ikon tempat sampah di atas. Pergerakan lamanya tetap ada di riwayat. Produk masuk ke <a href="#trash">Sampah</a>, dan bisa dipulihkan dari sana nanti.</p>
+  </div></details>
+
+  <details id="find-product"><summary>Bagaimana mencari, mengurutkan, dan memfilter daftar produk?</summary><div>
+    <p>Kotak pencarian menemukan produk berdasarkan nama, SKU, atau barcode; tombol pindai di sebelahnya mencari dengan memindai. Tombol urut dan filter mengurutkan berdasarkan nama, jumlah, nilai stok, atau perubahan terakhir, dan membatasi daftar ke satu kategori. Mengetuk <span class="ui">Stok menipis</span> di Dasbor membuka daftar yang hanya berisi produk menipis. Di tablet, Anda juga bisa memilih jumlah kolom.</p>
+  </div></details>
+
+  <details id="product-card"><summary>Bisakah saya memilih apa yang ditampilkan tiap produk di daftar?</summary><div>
+    <p>Bisa: <span class="ui">Pengaturan → Kartu produk → Sesuaikan kartu produk</span>. Tampilkan atau sembunyikan foto, kategori, pemasok, lokasi, harga, biaya, deskripsi, bilah stok, dan lainnya, dengan urutan pilihan Anda. Pratinjau langsung menunjukkan hasilnya.</p>
+  </div></details>
+
+  <details id="categories"><summary>Bagaimana cara kerja kategori, pemasok, dan lokasi?</summary><div>
+    <p>Ini adalah daftar untuk mengelompokkan produk. Buat dari layarnya masing-masing di menu <span class="ui">&#8942;</span> (<span class="ui">Kategori</span>, <span class="ui">Pemasok</span>, <span class="ui">Lokasi</span>) dengan <span class="ui">+</span>, atau biarkan impor yang membuatnya. Lalu pilih di formulir produk.</p>
+    <p>Ketuk kategori, pemasok, atau lokasi mana pun untuk melihat produk di dalamnya dan stok masing-masing.</p>
+    <p>Menghapus salah satunya tidak pernah menghapus produk: produk hanya kehilangan kategori, pemasok, atau lokasi itu, dan memulihkannya dari Sampah akan menautkannya kembali.</p>
+  </div></details>
+
+  <details id="low-stock"><summary>Bagaimana "stok menipis" ditentukan?</summary><div>
+    <p>Setiap produk punya <span class="ui">Stok min</span> sendiri. Jika jumlahnya sama dengan atau di bawah angka itu, produk ditandai menipis (dan habis jika nol). Jika ada <span class="ui">Stok maks</span> dan jumlahnya melewati, produk ditandai kelebihan stok.</p>
+    <p>Nilai bawaan untuk produk baru diatur di <span class="ui">Pengaturan → Ambang Stok Menipis Default</span>. Produk menipis muncul di Dasbor, di daftar produk (ketuk kotak stok menipis), di laporan stok menipis, dan di <a href="#notifications">peringatan stok menipis harian</a>.</p>
+  </div></details>
+
+  <details id="currency"><summary>Bagaimana mengganti mata uang?</summary><div>
+    <p><span class="ui">Pengaturan → Umum → Simbol Mata Uang</span>. Ketik simbol yang Anda pakai (misalnya Rp, RM, $). Ini hanya mengubah tampilan harga; nominal tidak dikonversi.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stock">
+  <h2>Stok masuk &amp; keluar</h2>
+  <p class="lead">Mencatat barang yang datang dan yang keluar.</p>
+
+  <details id="stock-in-out"><summary>Bagaimana menambah atau mengurangi stok?</summary><div>
+    <ol>
+      <li>Buka produk lalu ketuk <span class="ui">Sesuaikan stok</span>.</li>
+      <li>Pilih <span class="ui">Stok masuk</span> (barang datang, retur) atau <span class="ui">Stok keluar</span> (penjualan, rusak, pemakaian).</li>
+      <li>Isi jumlahnya, dan alasan jika mau ("Pesanan #123", "Rusak").</li>
+      <li>Jika memakai lokasi, pilih ke mana stok masuk atau dari mana keluar.</li>
+      <li>Konfirmasi. Jumlah baru langsung tampil dan pergerakannya ditambahkan ke <a href="#history">Transaksi</a>.</li>
+    </ol>
+    <p>Jendela yang sama terbuka dari daftar produk, dari <a href="#quick-stock">Stok cepat</a>, dan setelah memindai di <a href="#scanner">Pemindai</a>.</p>
+  </div></details>
+
+  <details id="quick-stock"><summary>Apa itu Stok cepat?</summary><div>
+    <p>Kisi produk Anda dengan <span class="ui">+</span> dan <span class="ui">&minus;</span> di setiap kotak: sekali ketuk menambah atau mengurangi satu. Praktis di kasir dan untuk barang tanpa barcode (filter <span class="ui">Tanpa barcode</span> hanya menampilkan barang itu). Ketuk kotak untuk membuka jendela stok lengkap.</p>
+    <p>Setelah + atau &minus;, panah urungkan menggantikan harga di kotak itu selama beberapa detik. Ketukan saat daftar sedang digulir diabaikan, supaya stok tidak berubah tanpa sengaja.</p>
+  </div></details>
+
+  <details id="set-exact"><summary>Bagaimana mengatur jumlah pasti setelah menghitung?</summary><div>
+    <p>Gunakan <a href="#stocktake">Stok opname</a>. Anda mengetik hasil hitungan, lalu aplikasi menghitung selisihnya dan mencatatnya sebagai penyesuaian. Anda tidak perlu mengurangkan sendiri.</p>
+  </div></details>
+
+  <details id="negative"><summary>Mengapa aplikasi menolak stok keluar, atau bilang di sini tinggal sedikit?</summary><div>
+    <p>Stok tidak bisa kurang dari nol. Jika produk disimpan di beberapa tempat, stok keluar diambil dari tempat yang Anda pilih (atau lokasi bawaan). Jika di sana tidak cukup, pesannya memberi tahu di mana sisanya, misalnya: "Hanya 3 pcs di sini. Stok: Toko A 5, Mobil 2". Pilih tempat itu di <span class="ui">Keluarkan dari</span>, atau <a href="#move-stock">pindahkan stok</a> dulu.</p>
+  </div></details>
+
+  <details id="mistake"><summary>Saya salah memasukkan jumlah. Bagaimana memperbaikinya?</summary><div>
+    <p>Lihat <a href="#fix-movement">mengoreksi atau membatalkan pergerakan</a>.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="locations">
+  <h2>Lokasi &amp; transfer</h2>
+  <p class="lead">Menyimpan stok di beberapa tempat &mdash; gudang, toko, mobil, rak &mdash; dan memindahkannya antartempat.</p>
+
+  <details id="move-stock"><summary>Bagaimana memindahkan stok dari satu lokasi ke lokasi lain?</summary><div>
+    <p><strong>1. Buat lokasi Anda</strong> (sekali saja): <span class="ui">&#8942; → Lokasi → +</span>, beri setiap lokasi nama dan kode pendek (mis. <code>Gudang Utama</code>, <code>GDG-1</code>), lalu simpan.</p>
+    <p><strong>2. Pindahkan stok:</strong></p>
+    <ol>
+      <li>Buka produk. Kartu <span class="ui">Lokasi stok</span> menampilkan setiap tempat yang menyimpan sebagian stoknya.</li>
+      <li>Ketuk baris tempat stok berada <em>sekarang</em>, lalu <span class="ui">Pindahkan</span>.</li>
+      <li>Di <span class="ui">Ke</span>, pilih tujuan dan isi jumlahnya (jumlah yang tersedia ditampilkan).</li>
+      <li>Konfirmasi. Hanya jumlah itu yang dipindahkan; sisanya tetap di tempat.</li>
+    </ol>
+    <p><strong>Dari lokasi:</strong> <span class="ui">&#8942; → Lokasi</span>, ketuk lokasinya, lalu pakai <span class="ui">Pindahkan</span> di samping produk mana pun yang ada di sana.</p>
+    <p>Setiap transfer muncul di <span class="ui">Transaksi</span> sebagai <span class="ui">Transfer</span> ("Gudang → Toko A") dan di laporan <span class="ui">Log transfer</span>. Salah? Buka di Transaksi lalu ketuk <span class="ui">Batalkan</span>.</p>
+    <p class="muted">Untuk memindahkan <em>seluruh</em> produk, Anda juga bisa mengedit produk dan mengubah <span class="ui">Lokasi</span>-nya. Jika semua stoknya ada di satu tempat, stoknya ikut pindah.</p>
+  </div></details>
+
+  <details id="no-where-card"><summary>Saya tidak melihat kartu "Lokasi stok" atau tombol pindah.</summary><div>
+    <ul>
+      <li>Buat setidaknya satu lokasi dulu. Kartu hanya muncul jika ada tempat tujuan pemindahan stok.</li>
+      <li>Perbarui aplikasi. Memindahkan sebagian stok produk hadir di versi 1.79; versi lama hanya bisa mengubah lokasi seluruh produk.</li>
+    </ul>
+  </div></details>
+
+  <details id="no-location"><summary>Stok saya tertulis "Tanpa lokasi". Bagaimana menaruhnya di suatu tempat?</summary><div>
+    <p>Stok yang ditambahkan sebelum Anda membuat lokasi (atau yang lokasinya dihapus) tersimpan di <span class="ui">Tanpa lokasi</span>. Pindahkan seperti stok lain: buka produk, ketuk baris <span class="ui">Tanpa lokasi</span> di <span class="ui">Lokasi stok</span>, lalu <span class="ui">Pindahkan</span> dan pilih lokasinya.</p>
+  </div></details>
+
+  <details id="default-location"><summary>Apa itu lokasi bawaan?</summary><div>
+    <p>Tempat stok baru masuk dan tempat stok keluar diambil jika Anda tidak memilih yang lain. Di <span class="ui">Lokasi</span>, edit sebuah lokasi lalu aktifkan <span class="ui">Jadikan default</span>. Produk yang hanya ada di satu tempat selalu memakai tempat itu.</p>
+  </div></details>
+
+  <details id="stock-out-from"><summary>Bagaimana memilih dari mana stok keluar atau penjualan diambil?</summary><div>
+    <p>Jika produk ada di lebih dari satu tempat atau lot, jendela stok menampilkan <span class="ui">Keluarkan dari</span>. Biarkan di <span class="ui">Otomatis (kedaluwarsa paling awal dulu)</span> atau pilih tempat atau lot yang tepat. Di <a href="#sell">Jual</a>, ketuk <span class="ui">Ambil dari: tempat biasa</span> untuk memilih lokasi penjualan.</p>
+    <p>Tombol + dan &minus; di Stok cepat menanyakan dari mana jika produk terbagi. Agar selalu memakai lokasi bawaan, matikan <span class="ui">Pengaturan → Pergerakan stok → Tanyakan lokasi saat stok terbagi</span>.</p>
+  </div></details>
+
+  <details id="condition"><summary>Bisakah stok ditandai rusak, dipesan, atau karantina?</summary><div>
+    <p>Bisa. Pindahkan seperti di atas dan ubah <span class="ui">Kondisi</span> (Baik, Rusak, Dipesan, Karantina) sebagai ganti lokasi, atau bersamaan. Stok tetap terhitung, tetapi hanya stok yang baik yang dijual atau dikeluarkan otomatis.</p>
+  </div></details>
+
+  <details id="delete-location"><summary>Apa yang terjadi pada stok jika lokasi dihapus?</summary><div>
+    <p>Tidak ada yang hilang. Stoknya dipindah ke <span class="ui">Tanpa lokasi</span>, dan produknya tidak lagi punya lokasi itu. Memulihkan lokasi dari Sampah menautkan kembali produknya, tetapi stok tetap di "Tanpa lokasi" sampai Anda memindahkannya kembali.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="lots">
+  <h2>Lot, tanggal kedaluwarsa &amp; nomor seri</h2>
+  <p class="lead">Untuk makanan, obat, kosmetik, elektronik&hellip; apa pun yang punya masa berlaku atau nomor seri.</p>
+
+  <details id="record-lot"><summary>Bagaimana mencatat lot, tanggal kedaluwarsa, atau nomor seri?</summary><div>
+    <p>Saat stok masuk, buka bagian <span class="ui">Lot, kedaluwarsa, nomor seri</span> di jendela Stok masuk. Isi yang diperlukan: <span class="ui">Kode lot</span>, <span class="ui">Tanggal kedaluwarsa</span>, <span class="ui">Pemasok</span>, <span class="ui">Biaya per unit</span>, <span class="ui">Nomor seri</span>. Biarkan tertutup untuk stok biasa.</p>
+    <p>Nomor seri ditulis satu per baris, satu per unit: jumlah baris harus sama dengan jumlah barang. Jika Anda mengisi kolom ini di sebagian besar penerimaan, bagian ini akan terbuka sendiri.</p>
+  </div></details>
+
+  <details id="fefo"><summary>Lot mana yang keluar lebih dulu?</summary><div>
+    <p>Secara bawaan, yang paling cepat kedaluwarsa, lalu penerimaan paling lama. Anda selalu bisa memilih lot tertentu di <span class="ui">Keluarkan dari</span>.</p>
+  </div></details>
+
+  <details id="expiring"><summary>Bagaimana melihat barang yang hampir kedaluwarsa?</summary><div>
+    <p>Dasbor menampilkan kartu <span class="ui">Segera kedaluwarsa</span> (sudah kedaluwarsa atau dalam 30 hari) bila ada. Laporan <span class="ui">Tanggal kedaluwarsa</span> menampilkan setiap lot dengan sisa harinya, yang paling dekat lebih dulu.</p>
+  </div></details>
+
+  <details id="valuation"><summary>Bagaimana nilai stok dihitung?</summary><div>
+    <p>Setiap penerimaan menyimpan biaya saat masuk. Di <span class="ui">Pengaturan → Pergerakan stok → Nilai stok dengan</span>, pilih: Biaya rata-rata stok yang ada, Biaya penerimaan terakhir, atau Harga pokok produk. Ini dipakai di laporan Valuasi inventaris dan nilai stok di halaman produk.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="scanner">
+  <h2>Pemindai barcode</h2>
+  <p class="lead">Memakai kamera ponsel untuk mencari produk, mencatat stok, dan cek harga.</p>
+
+  <details id="scan-basics"><summary>Bagaimana memindai barcode?</summary><div>
+    <p>Buka <span class="ui">Pemindai</span> dan arahkan kamera ke kode. Jika ada produk dengan barcode itu, jendela stoknya terbuka: pilih <span class="ui">Stok masuk</span> atau <span class="ui">Stok keluar</span> dan jumlahnya. Tombol senter membantu di tempat gelap.</p>
+  </div></details>
+
+  <details id="unknown-barcode"><summary>Muncul "Barcode tidak dikenal".</summary><div>
+    <p>Belum ada produk dengan barcode itu. Ketuk <span class="ui">Tambah produk dengan barcode ini</span> untuk membuat produk dengan kode yang sudah terisi, atau <span class="ui">Cari produk dengan kode ini</span> untuk menautkannya ke produk yang sudah ada.</p>
+    <p>Jika kode yang dipindai sama dengan SKU suatu produk, aplikasi menampilkan "Ditemukan lewat SKU — produk ini belum punya barcode tersimpan." dan menawarkan untuk menyimpannya sebagai barcode produk itu.</p>
+  </div></details>
+
+  <details id="batch-scan"><summary>Bisakah memindai banyak barang berturut-turut (satu kiriman)?</summary><div>
+    <p>Bisa: aktifkan <span class="ui">Batch aktif</span> di pemindai. Setiap pindaian menambahkan produk ke daftar; memindai produk yang sama lagi menambah satu. Lalu simpan seluruh daftar sebagai Stok masuk atau Stok keluar sekaligus. Kode yang tidak dikenal ditampilkan terpisah dan dilewati.</p>
+  </div></details>
+
+  <details id="price-check"><summary>Bagaimana cek harga dengan memindai?</summary><div>
+    <p>Aktifkan chip <span class="ui">Cek harga</span> di pemindai. Setiap pindaian menampilkan harga jual dengan huruf besar, lalu biaya dan laba, nilai stok, biaya per lot, dan penjualan terakhir. Kamera terus memindai, jadi Anda bisa cek satu barang demi satu barang. Ikon mata menyembunyikan biaya dan laba saat pelanggan bisa melihat layar.</p>
+  </div></details>
+
+  <details id="formats"><summary>Barcode apa saja yang didukung? Pemindaian lambat atau salah baca.</summary><div>
+    <p>EAN-13, EAN-8, UPC-A, UPC-E, Code-128, Code-39, Code-93, kode QR, dan Data Matrix. Di <span class="ui">Pengaturan → Format barcode</span>, matikan yang tidak pernah Anda pakai: makin sedikit format, makin cepat dan makin jarang salah. Bunyi dan getar ada di <span class="ui">Pengaturan → Umpan balik pemindaian</span>.</p>
+  </div></details>
+
+  <details id="camera-permission"><summary>Pemindai meminta izin kamera.</summary><div>
+    <p>Ketuk <span class="ui">Izinkan kamera</span>. Jika sebelumnya Anda menolak, Android tidak akan bertanya lagi: ketuk <span class="ui">Buka pengaturan aplikasi</span> dan izinkan kamera di Izin. Kamera hanya dipakai saat pemindai (atau foto) terbuka, dan gambar diproses di ponsel.</p>
+  </div></details>
+
+  <details id="hardware-scanner"><summary>Bisakah memakai scanner barcode genggam (USB / Bluetooth / PDA)?</summary><div>
+    <p>Bisa, melalui <a href="#remote">Akses jarak jauh</a>: buka aplikasi di browser perangkat itu dan pakai halaman pemindai atau tampilan handheld, yang membaca kode yang diketik oleh scanner Anda. Lihat <a href="#handheld">scanner genggam</a>.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="stocktake">
+  <h2>Stok opname</h2>
+  <p class="lead">Hitung apa yang benar-benar ada di rak dan perbaiki aplikasi dalam satu langkah.</p>
+
+  <details id="do-stocktake"><summary>Bagaimana melakukan stok opname?</summary><div>
+    <ol>
+      <li>Buka <span class="ui">Stok opname</span> dari menu <span class="ui">&#8942;</span>.</li>
+      <li>Pilih tempat yang dihitung di <span class="ui">Menghitung di</span> (atau Semua lokasi).</li>
+      <li>Untuk setiap produk, geser penghitungnya ke atas atau ke bawah, ketuk untuk mengetik jumlah pasti, atau pindai barang untuk menjumlahkannya. Biarkan kosong untuk melewati produk.</li>
+      <li>Ketuk <span class="ui">Terapkan stok opname</span>. Hanya produk yang Anda ubah yang disesuaikan, dan setiap selisih dicatat sebagai penyesuaian.</li>
+    </ol>
+    <p>Produk yang tersimpan dalam beberapa lot dihitung per lot. Penjualan yang terjadi selama penghitungan diperhitungkan, jadi tidak terhitung dua kali.</p>
+    <div class="note">Ketuk <strong>Terapkan stok opname</strong> sebelum meninggalkan layar. Hitungan yang belum diterapkan tidak disimpan.</div>
+  </div></details>
+
+  <details id="stocktake-reminder"><summary>Bisakah aplikasi mengingatkan saya untuk menghitung?</summary><div>
+    <p>Bisa: <span class="ui">Pengaturan → Pengingat cek stok → Ingatkan saya untuk cek stok</span>. Pilih Setiap hari, Setiap minggu (pada hari tertentu) atau Setiap bulan (pada tanggal tertentu), dan jamnya.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="sell">
+  <h2>Penjualan &amp; nota</h2>
+  <p class="lead">Kasir sederhana: jual, kurangi stok, lalu cetak atau bagikan nota.</p>
+
+  <details id="make-sale"><summary>Bagaimana menjual dan membuat nota?</summary><div>
+    <ol>
+      <li>Buka <span class="ui">Jual</span> dari menu <span class="ui">&#8942;</span>.</li>
+      <li>Ketuk produk, atau pindai barcodenya, untuk menambahkannya ke keranjang. Di keranjang, Anda bisa mengubah jumlah, harga, dan diskon per baris.</li>
+      <li>Ketuk <span class="ui">Bayar</span>. Jika mau, isi nama dan telepon pelanggan, cara bayar (Tunai, Kartu, Transfer bank, Dompet digital, Utang), diskon, pajak, dan uang yang diterima. Kembaliannya dihitung otomatis.</li>
+      <li>Ketuk <span class="ui">Selesaikan penjualan</span>, lalu cetak atau bagikan notanya.</li>
+    </ol>
+    <p>Stok berkurang saat itu juga, dan penjualan muncul di Transaksi dan di laporan Penjualan &amp; margin. Jika ada barang yang stoknya kurang, tidak ada yang terjual dan aplikasi memberi tahu barang yang mana.</p>
+  </div></details>
+
+  <details id="bills"><summary>Di mana nota-nota lama? Bisakah dicetak ulang?</summary><div>
+    <p>Di layar Jual, ketuk <span class="ui">Nota</span> di atas. Cari berdasarkan nomor nota, pelanggan, atau telepon, filter Hari ini, 7 hari, 30 hari, atau Semua, lalu buka nota untuk mencetak atau membagikannya lagi. Memindai barcode yang tercetak di nota juga membukanya.</p>
+  </div></details>
+
+  <details id="void-bill"><summary>Bagaimana membatalkan penjualan atau mengurus retur?</summary><div>
+    <p>Buka nota di <span class="ui">Nota</span> lalu ketuk <span class="ui">Batalkan nota</span>. Semua barang kembali ke stok, dan nota tetap disimpan dengan tanda BATAL agar nomornya masih bisa dicari. Pembatalan berlaku untuk seluruh nota: untuk retur sebagian, batalkan lalu buat penjualan baru, atau catat Stok masuk untuk barang yang dikembalikan.</p>
+  </div></details>
+
+  <details id="bill-design"><summary>Bagaimana mengubah tampilan nota (nama toko, logo, ukuran kertas)?</summary><div>
+    <p>Di layar Jual, ketuk <span class="ui">Desain nota</span>. Pilih desain bawaan: <span class="ui">Struk 58 mm</span> atau <span class="ui">Struk 80 mm</span> untuk printer struk thermal, <span class="ui">Setengah halaman (A5)</span> atau <span class="ui">Faktur (A4)</span> untuk printer biasa. Lalu isi nama toko, baris alamat dan kontak, nomor pajak atau registrasi (misalnya NPWP), judul, teks kaki, nama dan tarif pajak, awalan nomor, dan nomor nota berikutnya. Pratinjau adalah nota yang sebenarnya. <span class="ui">Cetak begitu penjualan tersimpan</span> menghemat satu langkah di kasir.</p>
+  </div></details>
+
+  <details id="receipt-printer"><summary>Bagaimana mencetak ke printer struk thermal / Bluetooth / USB?</summary><div>
+    <p>Nota dicetak lewat dialog cetak Android, jadi printer apa pun yang punya layanan cetak Android bisa dipakai. Pasang aplikasi layanan cetak printer Anda (atau yang universal) dari Google Play, pilih desain 58 mm atau 80 mm, lalu pilih printernya di dialog cetak. Tanpa printer, Anda selalu bisa menyimpan sebagai PDF dan membagikannya.</p>
+  </div></details>
+
+  <details id="tax-invoice"><summary>Apakah nota ini faktur pajak resmi?</summary><div>
+    <p>Nota bisa menampilkan nomor pajak atau registrasi Anda dan baris pajak, tetapi tidak tersertifikasi oleh sistem pajak atau e-faktur resmi negara mana pun. Periksa aturan yang berlaku di negara Anda.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="history">
+  <h2>Riwayat &amp; koreksi</h2>
+  <p class="lead">Setiap perubahan stok tercatat, dan setiap kesalahan bisa dibatalkan.</p>
+
+  <details id="transactions"><summary>Di mana melihat semua pergerakan stok?</summary><div>
+    <p><span class="ui">Transaksi</span> menampilkan setiap pergerakan: masuk, keluar, penyesuaian, dan transfer, siapa yang melakukannya, alasannya, serta stok sebelum dan sesudah. Filter berdasarkan rentang tanggal dan jenis, atau cari berdasarkan produk, SKU, atau alasan. Halaman setiap produk juga menampilkan aktivitasnya sendiri.</p>
+  </div></details>
+
+  <details id="fix-movement"><summary>Bagaimana mengoreksi atau membatalkan pergerakan?</summary><div>
+    <ul>
+      <li><strong>Batalkan sepenuhnya:</strong> ketuk di <span class="ui">Transaksi</span> (atau di aktivitas produk) lalu pilih <span class="ui">Batalkan</span>. Stok kembali seperti semula dan pergerakan masuk ke Sampah.</li>
+      <li><strong>Koreksi di tempat:</strong> di aktivitas produk, ketuk pergerakannya lalu pilih <span class="ui">Ubah</span> untuk membetulkan jumlah, alasan, lot, pemasok, kedaluwarsa, atau biaya. Tanggalnya tetap dan diberi tanda sudah diedit.</li>
+      <li><strong>Baru saja di Stok cepat?</strong> Ketuk panah urungkan di kotaknya.</li>
+    </ul>
+    <p>Pembatalan atau pengeditan ditolak jika membuat stok di bawah nol (misalnya penerimaan yang ingin dibatalkan sudah terjual).</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="reports">
+  <h2>Laporan, ekspor &amp; label</h2>
+  <p class="lead">Mengeluarkan data sebagai CSV atau PDF, dan mencetak label.</p>
+
+  <details id="export-report"><summary>Bagaimana mengekspor laporan (Excel / PDF)?</summary><div>
+    <ol>
+      <li>Buka <span class="ui">Laporan</span>.</li>
+      <li>Atur cakupannya: kategori untuk laporan persediaan, rentang tanggal untuk laporan pergerakan. Setiap laporan menunjukkan berapa baris isinya.</li>
+      <li>Ketuk laporan, lalu <span class="ui">CSV</span> (terbuka di Excel, Google Sheets, LibreOffice) atau <span class="ui">PDF</span>.</li>
+    </ol>
+    <table>
+      <thead><tr><th>Inventaris</th><th>Pergerakan</th></tr></thead>
+      <tbody><tr>
+        <td>Stok tersedia &middot; Stok menipis &middot; Stok habis &middot; Stok berlebih &middot; Valuasi inventaris &middot; Katalog produk &middot; Stok per lokasi &middot; Tanggal kedaluwarsa</td>
+        <td>Pergerakan stok &middot; Stok masuk &middot; Stok keluar &middot; Audit penyesuaian &middot; Log transfer &middot; Perubahan harga pokok &middot; Penjualan &amp; margin</td>
+      </tr></tbody>
+    </table>
+  </div></details>
+
+  <details id="report-design"><summary>Bisakah logo dan nama perusahaan saya ada di laporan PDF?</summary><div>
+    <p>Bisa. Di <span class="ui">Laporan</span>, ketuk <span class="ui">Desain laporan</span> di atas (juga ada di <span class="ui">Pengaturan → Laporan PDF</span>). Atur ukuran kertas, orientasi, margin, logo, nama perusahaan, huruf, gaya tabel, kaki halaman, nomor halaman, dan warna aksen, atau mulai dari salah satu dari empat desain siap pakai. Pratinjau adalah PDF yang sebenarnya.</p>
+  </div></details>
+
+  <details id="labels"><summary>Bagaimana mencetak label barcode atau label harga?</summary><div>
+    <ol>
+      <li>Buka <span class="ui">Label</span> dari menu <span class="ui">&#8942;</span>.</li>
+      <li>Ketuk <span class="ui">Preset</span> dan tambahkan desain siap pakai (Label harga eceran, Label tepi rak, Stiker barcode kecil, Label gulung termal, Label aset QR&hellip;), atau buat sendiri dengan <span class="ui">Label baru</span>: ukuran, tata letak, huruf, kolom, dan jenis barcode.</li>
+      <li>Ketuk <span class="ui">Cetak</span>, pilih produk, lalu cetak. Semua label keluar dalam satu PDF.</li>
+    </ol>
+    <p>Untuk satu produk, buka produknya lalu ketuk <span class="ui">Cetak label</span> di atas. Untuk mencetak ke printer fisik, Anda perlu layanan cetak (aplikasi dari pembuat printer, atau Mopria) dari Google Play; jika tidak, simpan sebagai PDF.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="import">
+  <h2>Impor dari spreadsheet</h2>
+  <p class="lead">Memasukkan produk, kategori, pemasok, atau lokasi dari file CSV.</p>
+
+  <details id="how-import"><summary>Bagaimana mengimpor produk dari Excel atau Google Sheets?</summary><div>
+    <ol>
+      <li>Di Excel atau Google Sheets, simpan atau unduh lembar Anda sebagai <strong>CSV</strong>. Aplikasi membaca file CSV, bukan .xlsx.</li>
+      <li>Buka <span class="ui">Impor</span> dari menu <span class="ui">&#8942;</span> lalu pilih yang akan diimpor (Produk, Kategori, Pemasok, atau Lokasi).</li>
+      <li>Ketuk <span class="ui">Pilih file CSV</span>. Ragu soal kolomnya? Ketuk <span class="ui">Simpan templat CSV</span>, isi, lalu pilih file itu.</li>
+      <li>Periksa pratinjaunya. Setiap baris ditandai BARU atau PERBARUI, dengan peringatan dan baris yang ditolak dijelaskan. Pilih opsi Anda, lalu ketuk <span class="ui">Impor</span>.</li>
+    </ol>
+    <p>Tidak ada yang ditulis sebelum Anda mengonfirmasi.</p>
+  </div></details>
+
+  <details id="import-columns"><summary>Kolom apa saja yang dibutuhkan file?</summary><div>
+    <p>Untuk produk, hanya <code>sku</code> dan <code>name</code> yang wajib. Kolom lain yang bisa disertakan: description, category, location, quantity, unit, min, max, cost, price, barcode, supplier, image. Baris pertama harus berisi nama kolom. Banyak penulisan umum dikenali (<code>qty</code>, <code>stock</code>, <code>unit price</code>&hellip;, juga judul berbahasa Indonesia yang diekspor aplikasi ini sendiri), dan layar impor menampilkan semua nama yang diterima. Contoh:</p>
+    <p><code>sku,name,category,quantity,unit,cost,price,barcode</code><br><code>A-100,Sekrup,Perkakas,25,pcs,4.50,9.99,4006381333931</code></p>
+    <p>Koma, titik koma, atau tab, koma desimal, simbol mata uang, dan sebagian besar format tanggal bisa ditangani. Jika suatu nilai harus ditebak, pratinjau memberi tahu cara membacanya.</p>
+  </div></details>
+
+  <details id="import-update"><summary>Apakah impor menimpa produk yang sudah ada?</summary><div>
+    <p>Hanya jika Anda mau. Produk dicocokkan berdasarkan SKU. Jika <span class="ui">Perbarui data yang sudah ada</span> aktif, produk yang cocok mendapat nilai dari file Anda, dan hanya untuk kolom yang ada di file. File yang hanya berisi <code>sku,name,quantity</code> tidak akan menghapus harga atau kategori. Matikan untuk hanya menambah produk baru.</p>
+    <p>Jika stok suatu produk terbagi di beberapa lokasi atau lot, file tidak bisa menentukan ke mana jumlah baru itu masuk; ubah stok produk itu dari halamannya.</p>
+  </div></details>
+
+  <details id="export-to-excel"><summary>Bagaimana memindahkan seluruh daftar produk ke Excel?</summary><div>
+    <p>Ekspor laporan <span class="ui">Katalog produk</span> atau <span class="ui">Stok tersedia</span> sebagai CSV (lihat <a href="#export-report">laporan</a>). CSV itu juga bisa diimpor kembali ke aplikasi.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="backup">
+  <h2>Cadangan, pemulihan &amp; ganti ponsel</h2>
+  <p class="lead">Data Anda tinggal di ponsel. Cadangan di tempat lain-lah yang menyelamatkannya jika ponsel hilang atau direset.</p>
+
+  <div class="note"><strong>Mencopot aplikasi atau menghapus penyimpanannya akan menghapus semua data Anda.</strong> Siapkan cadangan sebelum melakukan salah satunya.</div>
+
+  <details id="setup-backup"><summary>Bagaimana mencadangkan data?</summary><div>
+    <ol>
+      <li>Buka <span class="ui">Cadangan</span> dari menu <span class="ui">&#8942;</span>.</li>
+      <li>Ketuk <span class="ui">Tambah tujuan</span> dan pilih tujuan cadangan: <span class="ui">Folder di perangkat ini</span> (memori internal, kartu SD, flashdisk, atau folder yang disinkronkan aplikasi cloud Anda), <span class="ui">Server FTP</span>, atau <span class="ui">Folder bersama (SMB)</span> (NAS atau folder bersama di PC Windows).</li>
+      <li>Untuk server, isi alamat dan login, lalu <span class="ui">Uji koneksi</span>. Ini memastikan file benar-benar bisa ditulis di sana.</li>
+      <li>Ketuk <span class="ui">Cadangkan sekarang</span>, dan aktifkan <span class="ui">Pencadangan otomatis</span> untuk menyimpan salinan kira-kira sekali sehari.</li>
+    </ol>
+    <p>Setiap cadangan dikirim ke semua tujuan Anda. Jika salah satunya berhenti bekerja, Anda mendapat notifikasi dan spanduk di Dasbor sampai diperbaiki.</p>
+  </div></details>
+
+  <details id="restore"><summary>Bagaimana memulihkan cadangan?</summary><div>
+    <p>Di <span class="ui">Cadangan</span>, cari cadangan di daftar lalu ketuk <span class="ui">Pulihkan</span>. Anda memilih data mana yang dikembalikan dan melihat isinya sebelum ada yang berubah. Pemulihan mengganti data Anda saat ini dengan data cadangan.</p>
+    <p>"Cadangan ini dibuat oleh versi aplikasi yang lebih baru. Perbarui aplikasi, lalu pulihkan kembali." artinya Anda perlu memasang versi terbaru dari Google Play dulu.</p>
+  </div></details>
+
+  <details id="new-phone"><summary>Bagaimana memindahkan data ke ponsel baru?</summary><div>
+    <ol>
+      <li>Di ponsel lama, cadangkan ke tempat yang bisa dijangkau ponsel baru: server FTP/SMB, folder yang tersinkron ke cloud, atau file yang Anda salin sendiri.</li>
+      <li>Di ponsel baru, pasang Stock Management. Di layar sambutan pilih <span class="ui">Pulihkan cadangan</span>, lalu <span class="ui">Dari file</span>, <span class="ui">Dari server</span>, atau <span class="ui">Dari folder</span>.</li>
+    </ol>
+    <p>Demi keamanan, kata sandi server tidak disimpan di dalam cadangan. Masukkan lagi di ponsel baru.</p>
+  </div></details>
+
+  <details id="two-phones"><summary>Bisakah dua ponsel berbagi stok yang sama?</summary><div>
+    <p>Aplikasi tidak punya akun online, jadi dua ponsel tidak tersinkron satu sama lain. Agar beberapa orang bekerja pada stok yang sama, simpan datanya di satu ponsel dan biarkan yang lain memakainya lewat <a href="#remote">Akses jarak jauh</a> dari browser di Wi-Fi yang sama. Cadangan yang dipulihkan di ponsel lain hanyalah salinan: perubahan di satu ponsel tidak muncul di ponsel lainnya.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="remote">
+  <h2>Pakai dari komputer, tablet, atau handheld (Akses jarak jauh)</h2>
+  <p class="lead">Perangkat lain di Wi-Fi yang sama membuka stok Anda di browser, masing-masing dengan login dan izin sendiri.</p>
+
+  <details id="remote-setup"><summary>Bagaimana membuka aplikasi di komputer?</summary><div>
+    <ol>
+      <li>Di ponsel, buka <span class="ui">Akses jarak jauh</span> dari menu <span class="ui">&#8942;</span>. Jika ponsel memakai kunci layar, konfirmasikan.</li>
+      <li>Ketuk <span class="ui">Mulai server</span>. Layar menampilkan alamat seperti <code>http://192.168.1.24:8080</code> dan kode QR.</li>
+      <li>Ketuk <span class="ui">Tambah orang</span> dan buat login: nama, nama pengguna, dan kata sandi.</li>
+      <li>Ketuk <span class="ui">Pilih</span> pada orang itu dan centang layar serta tindakan yang boleh ia pakai (atau preset: <span class="ui">Hanya melihat</span>, <span class="ui">Penghitung stok</span>, <span class="ui">Pengecek harga</span>, <span class="ui">Semuanya</span>). Tidak ada yang diizinkan sebelum Anda mencentangnya.</li>
+      <li>Di komputer, ketik alamat itu di browser (Chrome, Edge, Firefox, Safari) dan masuk.</li>
+      <li>Setelah selesai, ketuk <span class="ui">Hentikan server</span>.</li>
+    </ol>
+    <p>Setiap perubahan dari browser tercatat di ponsel atas nama orang itu. Server tidak pernah menyala sendiri.</p>
+  </div></details>
+
+  <details id="remote-cant-connect"><summary>Browser tidak bisa membuka alamatnya.</summary><div>
+    <ul>
+      <li>Kedua perangkat harus di <strong>Wi-Fi yang sama</strong> (atau komputer terhubung ke hotspot ponsel). Data seluler tidak bisa.</li>
+      <li>Wi-Fi tamu atau publik sering mencegah perangkat saling terhubung. Pakai jaringan utama Anda atau hotspot ponsel.</li>
+      <li>Ketik alamat lengkap, termasuk <code>http://</code> dan port (<code>:8080</code>).</li>
+      <li>Pastikan server masih berjalan. Menutup aplikasi dengan menggesernya dari layar aplikasi terbaru akan menghentikannya, begitu juga saat jaringan berganti.</li>
+      <li>Alamat berupa nama (berakhiran <code>.local</code>) hanya bekerja jika router Anda mendukungnya. Pakai alamat angka saja.</li>
+      <li>Izinkan notifikasi aplikasi. Selama server berjalan, notifikasinya berisi tombol untuk menghentikannya.</li>
+    </ul>
+  </div></details>
+
+  <details id="remote-can-do"><summary>Apa saja yang bisa dilakukan dari browser?</summary><div>
+    <p>Apa pun yang Anda izinkan: Dasbor, Produk (lihat, tambah, ubah), Pemindai, Stok cepat, Stok opname, riwayat, Laporan (CSV/PDF), Kategori, Pemasok, Lokasi, memindahkan stok antarlokasi, mencetak label, dan Cek harga. Cadangan, impor, Sampah, desain label, pengaturan, penjualan, dan Akses jarak jauh itu sendiri tetap di ponsel. Tidak ada yang bisa dihapus dari browser.</p>
+    <p>Setiap browser bisa memilih mode terang atau gelap, tema, ukuran teks, dan tampilan daftarnya sendiri di <span class="ui">Tampilan</span>.</p>
+  </div></details>
+
+  <details id="handheld"><summary>Memakai handheld (PDA) atau scanner USB</summary><div>
+    <p>Buka alamatnya di browser perangkat dan masuk dengan akun yang boleh memakai pemindai. Ketuk ikon handheld di atas, pilih <span class="ui">Penerimaan</span> atau <span class="ui">Pengiriman</span>, lalu pindai. Setiap kode masuk ke daftar (pindai lagi untuk menambah satu), dan satu tombol menyimpan semuanya. Aktifkan <span class="ui">Baca tombol pemindai di mana saja</span> agar keyboard layar tidak menghalangi.</p>
+    <p>Daftar yang belum disimpan tetap ada di perangkat jika Wi-Fi terputus, jadi bisa disimpan saat tersambung lagi. Browser tidak bisa memakai kamera perangkat untuk memindai (butuh koneksi aman), jadi pakai scanner atau ketik kodenya.</p>
+  </div></details>
+
+  <details id="price-checker-screen"><summary>Bisakah pelanggan cek harga sendiri di layar?</summary><div>
+    <p>Bisa. Buat login dengan preset <span class="ui">Pengecek harga</span>, buka Cek harga di komputer atau tablet kasir yang memakai scanner, lalu pilih <span class="ui">Layar cek harga</span>. Layar ini menampilkan logo dan nama perusahaan Anda (dari desain laporan) dan menyediakan tombol layar penuh. Apa yang ditampilkan dan kapan dibersihkan diatur di <span class="ui">Pengaturan → Layar cek harga</span>.</p>
+  </div></details>
+
+  <details id="remote-safety"><summary>Apakah Akses jarak jauh aman?</summary><div>
+    <ul>
+      <li>Hanya bekerja di jaringan pribadi (Wi-Fi rumah atau kantor, hotspot ponsel), tidak pernah di internet terbuka.</li>
+      <li>Setiap orang punya kata sandi sendiri dan hanya melihat yang Anda centang. Anda bisa melihat siapa yang terhubung, memutusnya, menonaktifkan akun atau mengganti kata sandinya, dan membaca aktivitas terbaru.</li>
+      <li>Koneksinya <strong>tidak terenkripsi</strong>: pakai di jaringan tepercaya, bukan Wi-Fi publik.</li>
+      <li>Jika ponsel tidak punya kunci layar, siapa pun yang memegangnya bisa membuka Akses jarak jauh. Menambahkan kunci layar akan melindunginya.</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="notifications">
+  <h2>Notifikasi</h2>
+  <p class="lead">Peringatan stok menipis, pengingat stok opname, dan peringatan cadangan.</p>
+
+  <details id="low-stock-alert"><summary>Bagaimana peringatan stok menipis bekerja? Bisakah memilih jamnya?</summary><div>
+    <p>Sekali sehari aplikasi mengirim ringkasan produk di bawah minimum. Pilih jamnya di <span class="ui">Pengaturan → Notifikasi → Peringatan stok menipis</span>. Notifikasi datang <em>sekitar</em> jam itu, karena Android bisa menundanya beberapa menit untuk menghemat baterai.</p>
+  </div></details>
+
+  <details id="no-notifications"><summary>Saya tidak menerima notifikasi apa pun.</summary><div>
+    <ul>
+      <li>Pastikan <span class="ui">Pengaturan → Notifikasi → Aktifkan Notifikasi</span> aktif.</li>
+      <li>Izinkan notifikasi aplikasi: ketuk <span class="ui">Aktifkan peringatan</span> di kartu Dasbor, atau buka Setelan Android → Aplikasi → Stock Management → Notifikasi.</li>
+      <li>Setiap jenis (Peringatan stok menipis, Pengingat cek stok, Masalah pencadangan, Akses jarak jauh) bisa dinyalakan atau dimatikan terpisah di setelan notifikasi Android untuk aplikasi ini.</li>
+      <li>Beberapa ponsel (Xiaomi, Oppo, Vivo, Realme, Infinix, Samsung&hellip;) menghentikan aplikasi latar belakang untuk menghemat baterai. Izinkan aplikasi berjalan di latar belakang, atau atur pemakaian baterainya ke "tanpa batasan".</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="customize">
+  <h2>Sesuaikan aplikasi</h2>
+  <p class="lead">Semua di bawah ini ada di Pengaturan.</p>
+
+  <details id="themes"><summary>Tema, mode gelap, dan warna</summary><div>
+    <p><span class="ui">Pengaturan → Tema</span>: <span class="ui">Tampilan</span> (Sistem, Terang, Gelap), <span class="ui">Tema aplikasi</span> (Harbor, Graphite, Kraft, Midnight), dan <span class="ui">Warna Dinamis</span> untuk mengambil warna dari wallpaper (Android 12+).</p>
+  </div></details>
+
+  <details id="all-settings"><summary>Apa lagi yang bisa diubah?</summary><div>
+    <table>
+      <tbody>
+        <tr><td><span class="ui">Konfigurasi menu</span></td><td>Layar mana di bilah bawah dan menu, dan urutannya</td></tr>
+        <tr><td><span class="ui">Dasbor</span></td><td>Kartu dan grafik mana yang tampil, urutan dan lebarnya</td></tr>
+        <tr><td><span class="ui">Kartu produk</span></td><td>Apa yang ditampilkan tiap produk di daftar</td></tr>
+        <tr><td><span class="ui">Ambang Stok Menipis Default</span></td><td>Stok minimum bawaan untuk produk baru</td></tr>
+        <tr><td><span class="ui">Pergerakan stok</span></td><td>Tanya dari mana jika stok terbagi; cara menilai stok</td></tr>
+        <tr><td><span class="ui">Format barcode</span> &middot; <span class="ui">Umpan balik pemindaian</span></td><td>Kode yang dibaca pemindai; bunyi dan getar</td></tr>
+        <tr><td><span class="ui">Laporan PDF</span></td><td>Tampilan laporan PDF yang diekspor</td></tr>
+        <tr><td><span class="ui">Layar cek harga</span></td><td>Apa yang ditampilkan layar cek harga untuk pelanggan</td></tr>
+        <tr><td><span class="ui">Umum</span></td><td>Simbol mata uang, bahasa</td></tr>
+        <tr><td><span class="ui">Notifikasi</span></td><td>Jam peringatan stok menipis, pengingat stok opname</td></tr>
+      </tbody>
+    </table>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trash">
+  <h2>Sampah</h2>
+  <p class="lead">Tidak ada yang Anda hapus hilang selamanya sampai Anda mengosongkannya.</p>
+
+  <details id="restore-deleted"><summary>Bagaimana mengembalikan sesuatu yang sudah dihapus?</summary><div>
+    <p>Buka <span class="ui">Sampah</span> dari menu <span class="ui">&#8942;</span>. Produk, kategori, pemasok, lokasi, dan label yang dihapus, serta pergerakan yang dibatalkan, semuanya ada di sana. Ketuk <span class="ui">Pulihkan</span>: aplikasi lebih dulu memberi tahu persis apa yang akan terjadi. Pemulihan hanya menambah; tidak pernah menimpa apa pun yang Anda punya sekarang (SKU atau nama yang bentrok diberi yang baru, misalnya <code>A-100-2</code>).</p>
+    <p><span class="ui">Hapus selamanya</span> menghapus satu entri; <span class="ui">Kosongkan</span> mengosongkan seluruh Sampah. Keduanya tidak menyentuh data Anda saat ini.</p>
+  </div></details>
+</section>
+
+<!-- ============================================================ -->
+<section class="card" id="trouble">
+  <h2>Masalah &amp; kontak</h2>
+
+  <details id="old-version"><summary>Fitur di halaman ini tidak ada di aplikasi saya.</summary><div>
+    <p>Perbarui Stock Management dari Google Play. Pembaruan terbaru menambahkan pemindahan stok antarlokasi, lot dan nomor seri, penjualan dan nota, cek harga, dan banyak lagi. Data Anda tetap aman saat memperbarui.</p>
+  </div></details>
+
+  <details id="privacy"><summary>Di mana data saya disimpan? Siapa yang bisa melihatnya?</summary><div>
+    <p>Hanya di ponsel Anda, di penyimpanan pribadi aplikasi. Kami tidak menerima produk, stok, atau penjualan Anda. Baca <a href="../../">kebijakan privasi</a> (dalam bahasa Inggris).</p>
+  </div></details>
+
+  <details id="contact" open><summary>Bagaimana bertanya atau melaporkan masalah?</summary><div>
+    <p>Di aplikasi: <span class="ui">Pengaturan → Kirim masukan</span> (atau gelembung obrolan di atas layar utama). Pilih jenisnya, tulis pesan, dan <strong>isi email Anda di kolom <span class="ui">Kontak (opsional)</span> jika ingin dibalas</strong>. Tanpa itu kami bisa membaca pesan Anda, tetapi tidak bisa membalas. Mengirim butuh koneksi internet.</p>
+    <p>Atau kirim email ke <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>. Kami membaca setiap pesan, dalam bahasa apa pun.</p>
+  </div></details>
+</section>
+
+
+<footer>
+  <p class="langs"><a href="../" lang="en">English</a> &middot; <a href="../es/" lang="es">Español</a> &middot; <a href="../fr/" lang="fr">Français</a> &middot; <a href="../pt/" lang="pt">Português</a> &middot; <a href="../ru/" lang="ru">Русский</a> &middot; <a href="../zh/" lang="zh-Hans">中文</a> &middot; <a href="../ar/" lang="ar">العربية</a> &middot; <a href="../hi/" lang="hi">हिन्दी</a> &middot; <a href="../bn/" lang="bn">বাংলা</a> &middot; <a href="../ur/" lang="ur">اردو</a> &middot; <strong>Bahasa Indonesia</strong></p>
+  <p>Stock Management &middot; <a href="../../">Kebijakan privasi</a> &middot; <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a></p>
+  <p>&copy; 2026 Cool App Helpdesk</p>
+</footer>
+
+</main>
+<script>
+(function () {
+  var CODE = 'id';
+  var PERMALINK = "Tautan ke jawaban ini";
+  var OFFERS = {"en":{"href":"../","banner":"Read this help in English"},"es":{"href":"../es/","banner":"Leer esta ayuda en español"},"fr":{"href":"../fr/","banner":"Lire cette aide en français"},"pt":{"href":"../pt/","banner":"Ler esta ajuda em português"},"ru":{"href":"../ru/","banner":"Читать справку на русском"},"zh":{"href":"../zh/","banner":"阅读中文版帮助"},"ar":{"href":"../ar/","banner":"اقرأ هذه المساعدة بالعربية"},"hi":{"href":"../hi/","banner":"यह सहायता हिन्दी में पढ़ें"},"bn":{"href":"../bn/","banner":"এই সাহায্য বাংলায় পড়ুন"},"ur":{"href":"../ur/","banner":"یہ مدد اردو میں پڑھیں"}};
+  var q = document.getElementById('q');
+  var none = document.getElementById('noresults');
+  var items = Array.prototype.slice.call(document.querySelectorAll('section.card details'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('section.card'));
+  var toc = document.querySelector('nav.topics');
+
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  // The switcher keeps the answer you are on: help/#move-stock → help/es/#move-stock.
+  document.getElementById('lang').addEventListener('change', function () {
+    store('helpLang', this.options[this.selectedIndex].value.replace(/^(\.\.\/)?/, '').replace(/\/$/, '') || 'en');
+    location.href = this.value + location.hash;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('footer .langs a'), function (a) {
+    a.addEventListener('click', function (e) {
+      store('helpLang', (a.getAttribute('href').replace(/^(\.\.\/)?/, '').replace(/\/$/, '')) || 'en');
+      a.href = a.getAttribute('href') + location.hash;
+    });
+  });
+
+  // Offer the reader's own language once, unless they have already picked one.
+  if (!store('helpLang')) {
+    var langs = (navigator.languages || [navigator.language || '']).map(function (l) { return l.toLowerCase().split('-')[0]; });
+    for (var i = 0; i < langs.length; i++) {
+      var c = langs[i] === 'in' ? 'id' : langs[i];
+      if (c === CODE) break;
+      if (OFFERS[c]) {
+        var o = document.getElementById('offer');
+        var a = document.createElement('a');
+        a.textContent = OFFERS[c].banner;
+        a.href = OFFERS[c].href;
+        a.setAttribute('lang', c);
+        a.addEventListener('click', function () { store('helpLang', c); a.href = OFFERS[c].href + location.hash; });
+        o.appendChild(a);
+        o.style.display = 'block';
+        break;
+      }
+    }
+  }
+
+  // Each answer links to itself, so one answer can be sent to someone.
+  items.forEach(function (d) {
+    var p = document.createElement('p');
+    p.className = 'permalink';
+    var a = document.createElement('a');
+    a.href = '#' + d.id;
+    a.textContent = PERMALINK;
+    p.appendChild(a);
+    d.querySelector(':scope > div').appendChild(p);
+  });
+
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  var texts = items.map(function (d) { return norm(d.textContent); });
+
+  q.addEventListener('input', function () {
+    var words = norm(q.value).split(/\s+/).filter(Boolean);
+    var searching = words.length > 0;
+    var hits = items.map(function (d, i) {
+      return words.every(function (w) { return texts[i].indexOf(w) !== -1; });
+    });
+    var count = hits.filter(Boolean).length;
+    items.forEach(function (d, i) {
+      d.classList.toggle('hidden', searching && !hits[i]);
+      d.classList.toggle('hit', searching && hits[i]);
+      // A narrow search opens its answers; a broad one leaves them closed to scan.
+      d.open = searching ? hits[i] && count <= 3 : d.id === 'contact';
+    });
+    cards.forEach(function (c) {
+      c.classList.toggle('hidden', searching && !c.querySelector('details:not(.hidden)'));
+    });
+    if (toc) toc.classList.toggle('hidden', searching);
+    none.style.display = searching && count === 0 ? 'block' : 'none';
+  });
+
+  function openTarget() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    // A link followed mid-search must not land on an answer the filter hides.
+    if (q.value) { q.value = ''; q.dispatchEvent(new Event('input')); }
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'DETAILS') el.open = true;
+    el.scrollIntoView({ block: 'start', behavior: 'instant' });
+  }
+  window.addEventListener('hashchange', openTarget);
+  openTarget();
+})();
+</script>
+</body>
+</html>
