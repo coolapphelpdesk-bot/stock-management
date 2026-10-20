@@ -106,7 +106,7 @@
     </select>
   </div>
   <h1>Stock Management — Aide</h1>
-  <p>Tout faire dans l&rsquo;app &middot; pour la version 1.98 &middot; mis à jour en octobre 2026</p>
+  <p>Tout faire dans l&rsquo;app &middot; pour la version 1.106 &middot; mis à jour en octobre 2026</p>
 </header>
 
 <p id="offer"></p>
@@ -172,7 +172,7 @@
   </div></details>
 
   <details id="menu"><summary>Où sont tous les écrans ? Je n&rsquo;en vois que quatre en bas.</summary><div>
-    <p>Sur un téléphone, la barre du bas affiche l&rsquo;écran Accueil et les trois premiers écrans de votre menu. Tout le reste est dans le menu <span class="ui">&#8942;</span> en haut à droite de chaque écran : Vendre, Inventaire, Transactions, Rapports, Catégories, Fournisseurs, Emplacements, Étiquettes, Importer, Sauvegarde, Corbeille, Accès à distance et Paramètres. Sur une tablette, ils sont tous dans le rail latéral.</p>
+    <p>Sur un téléphone, la barre du bas affiche l&rsquo;écran Accueil et les trois premiers écrans de votre menu. Tout le reste est dans le menu <span class="ui">&#8942;</span> en haut à droite de chaque écran : Vendre, Tickets, Inventaire, Transactions, Rapports, Catégories, Fournisseurs, Emplacements, Étiquettes, Importer, Sauvegarde, Corbeille, Accès à distance et Paramètres. Sur une tablette, ils sont tous dans le rail latéral.</p>
     <p>Pour choisir les écrans de la barre du bas, allez dans <span class="ui">Paramètres → Configuration du menu</span> et montez-les ou descendez-les. Vous pouvez aussi masquer ceux que vous n&rsquo;utilisez jamais (Accueil et Paramètres restent toujours).</p>
   </div></details>
 
@@ -234,7 +234,7 @@
   </div></details>
 
   <details id="currency"><summary>Comment changer la devise ?</summary><div>
-    <p><span class="ui">Paramètres → Général → Symbole monétaire</span>. Saisissez le symbole que vous utilisez (par exemple &euro;, $, CHF, FCFA, DH). Cela change l&rsquo;affichage des prix ; aucun montant n&rsquo;est converti.</p>
+    <p><span class="ui">Paramètres → Général → Symbole monétaire</span>. Choisissez votre devise dans la liste (cherchez-la par nom ou par code), ou saisissez votre propre symbole (par exemple &euro;, $, CHF, FCFA, DH). Une nouvelle installation démarre avec la devise de votre pays, affichée en haut de l&rsquo;écran d&rsquo;accueil. Cela change l&rsquo;affichage des prix ; aucun montant n&rsquo;est converti.</p>
   </div></details>
 </section>
 
@@ -415,7 +415,11 @@
   </div></details>
 
   <details id="bills"><summary>Où sont mes anciennes factures ? Puis-je en réimprimer une ?</summary><div>
-    <p>Sur l&rsquo;écran Vendre, touchez <span class="ui">Tickets</span> en haut. Cherchez par numéro de facture, client ou téléphone, filtrez sur Aujourd'hui, 7 jours, 30 jours ou Tout, puis ouvrez une facture pour l&rsquo;imprimer ou la partager à nouveau. Scanner le code-barres imprimé sur une facture l&rsquo;ouvre.</p>
+    <p>Ouvrez <span class="ui">Tickets</span> depuis le menu <span class="ui">&#8942;</span>, ou touchez-le en haut de l&rsquo;écran Vendre. Cherchez par numéro de facture, client ou téléphone, filtrez sur Aujourd'hui, 7 jours, 30 jours ou Tout, puis ouvrez une facture pour l&rsquo;imprimer ou la partager à nouveau. Scanner le code-barres imprimé sur une facture l&rsquo;ouvre.</p>
+  </div></details>
+
+  <details id="credit-payments"><summary>Un client peut-il payer un ticket à crédit en plusieurs fois ?</summary><div>
+    <p>Oui. Un ticket dont le paiement est <span class="ui">À crédit</span>, ou avec moins reçu que le total, garde un reste dû. Ouvrez-le dans <span class="ui">Tickets</span> et touchez <span class="ui">Enregistrer un paiement</span> : le montant, le moyen de paiement et le jour. Chaque paiement apparaît sur le ticket avec sa date, imprime ou partage son propre reçu avec le reste dû, et le ticket affiche <span class="ui">Payé en totalité</span> une fois soldé. Choisissez Impayés dans <span class="ui">Tickets</span> pour voir tous les tickets qui ont encore un reste dû, quelle que soit leur date. Un paiement saisi par erreur se supprime depuis son menu et se récupère dans Corbeille.</p>
   </div></details>
 
   <details id="void-bill"><summary>Comment annuler une vente ou gérer un retour ?</summary><div>
@@ -474,8 +478,23 @@
     </table>
   </div></details>
 
+  <details id="report-columns"><summary>Puis-je choisir les colonnes d’un rapport ?</summary><div>
+    <p>Oui. Dans <span class="ui">Rapports</span>, touchez un rapport, puis <span class="ui">Choisir</span> à côté de <span class="ui">Colonnes</span>. Activez ou désactivez chaque colonne et utilisez les flèches pour changer l’ordre. Les rapports de stock proposent aussi description, emplacement, fournisseur, coût et prix de vente, désactivés tant que vous ne les activez pas. Le choix est conservé pour ce rapport, en CSV comme en PDF, et les fichiers téléchargés depuis un navigateur via l’accès à distance l’utilisent aussi. <span class="ui">Réinitialiser</span> rend au rapport ses colonnes habituelles.</p>
+  </div></details>
+
   <details id="report-design"><summary>Puis-je mettre mon logo et le nom de mon entreprise sur les rapports PDF ?</summary><div>
     <p>Oui. Dans <span class="ui">Rapports</span>, touchez <span class="ui">Mise en page du rapport</span> en haut (aussi dans <span class="ui">Paramètres → Rapport PDF</span>). Réglez le format du papier, l&rsquo;orientation, les marges, le logo, le nom de l&rsquo;entreprise, les polices, le style du tableau, le pied de page, la numérotation et une couleur d&rsquo;accent, ou partez d&rsquo;un des quatre modèles. L&rsquo;aperçu est le vrai PDF.</p>
+  </div></details>
+
+  <details id="product-catalogue"><summary>Comment créer un catalogue de mes produits (PDF) ?</summary><div>
+    <ol>
+      <li>Ouvrez <span class="ui">Rapports</span> et touchez <span class="ui">Catalogue produits</span> en haut.</li>
+      <li>Dans <span class="ui">Mise en page</span>, choisissez une mise en page rapide ou réglez colonnes et lignes par page. Dans <span class="ui">Carte</span>, choisissez ce que montre chaque carte : photo, prix, catégorie, description, référence, stock, code-barres. Dans <span class="ui">Produits</span>, l&rsquo;ordre et les catégories incluses. Dans <span class="ui">Pages</span>, le papier, la couverture, votre logo et le pied de page.</li>
+      <li>Touchez <span class="ui">Imprimer</span>, <span class="ui">Enregistrer</span> ou <span class="ui">Partager</span>. L&rsquo;aperçu au-dessus des réglages est le vrai PDF.</li>
+    </ol>
+    <p>Pour imprimer, la couleur <span class="ui">Économie d'encre</span> consomme moins d&rsquo;encre. Pour envoyer un gros catalogue par messagerie, choisissez <span class="ui">Fichier léger</span> dans Qualité des photos.</p>
+    <p>Dans <span class="ui">Carte</span>, choisissez une <span class="ui">Palette</span> pour l&rsquo;encre, le papier, l&rsquo;étiquette de prix et les fonds des photos, ou touchez <span class="ui">Nouvelle palette</span> pour créer la vôtre avec les couleurs de votre choix.</p>
+    <p>Dans <span class="ui">Photo sur la carte</span>, choisissez <span class="ui">Remplir la case</span>, <span class="ui">Photo entière</span> ou <span class="ui">Taille de l'image</span>, puis sa taille, sa <span class="ui">Position</span> et le côté de la carte.</p>
   </div></details>
 
   <details id="labels"><summary>Comment imprimer des étiquettes code-barres ou prix ?</summary><div>
@@ -583,7 +602,7 @@
   </div></details>
 
   <details id="remote-can-do"><summary>Que peut-on faire depuis le navigateur ?</summary><div>
-    <p>Ce que vous autorisez : Accueil, Produits (voir, ajouter, modifier), Scanner, Stock rapide, Inventaire, historique, Rapports (CSV/PDF), Catégories, Fournisseurs, Emplacements, déplacer du stock entre emplacements, imprimer des étiquettes et Vérifier le prix. La sauvegarde, l&rsquo;import, la Corbeille, la conception d&rsquo;étiquettes, les paramètres, la vente et l&rsquo;Accès à distance lui-même restent sur le téléphone. Rien ne peut être supprimé depuis un navigateur.</p>
+    <p>Ce que vous autorisez : Accueil, Produits (voir, ajouter, modifier), Scanner, Stock rapide, Inventaire, historique, Rapports (CSV/PDF), Tickets (consulter et télécharger en PDF), Catégories, Fournisseurs, Emplacements, déplacer du stock entre emplacements, imprimer des étiquettes et Vérifier le prix. La sauvegarde, l&rsquo;import, la Corbeille, la conception d&rsquo;étiquettes, les paramètres, la vente, l&rsquo;annulation d&rsquo;un ticket, l&rsquo;enregistrement d&rsquo;un paiement et l&rsquo;Accès à distance lui-même restent sur le téléphone. Rien ne peut être supprimé depuis un navigateur.</p>
     <p>Chaque navigateur peut choisir son mode clair ou sombre, son thème, sa taille de texte et sa vue de liste dans <span class="ui">Affichage</span>.</p>
   </div></details>
 
@@ -676,8 +695,12 @@
   </div></details>
 
   <details id="contact" open><summary>Comment poser une question ou signaler un problème ?</summary><div>
-    <p>Dans l&rsquo;app : <span class="ui">Paramètres → Envoyer un avis</span> (ou la bulle en haut des écrans principaux). Choisissez le type, écrivez votre message, et <strong>indiquez votre e-mail dans le champ <span class="ui">Contact (facultatif)</span> si vous souhaitez une réponse</strong>. Sans lui, nous lisons votre message mais ne pouvons pas vous répondre. L&rsquo;envoi nécessite une connexion Internet.</p>
+    <p>Dans l&rsquo;app : <span class="ui">Paramètres → Envoyer un avis</span> (ou <span class="ui">Envoyer un avis</span> en bas du menu &#8942; en haut de chaque écran). Choisissez le type, écrivez votre message, et <strong>indiquez votre e-mail dans le champ <span class="ui">Contact (facultatif)</span> si vous souhaitez une réponse</strong>. Sans lui, nous lisons votre message mais ne pouvons pas vous répondre. L&rsquo;envoi nécessite une connexion Internet.</p>
     <p>Ou écrivez-nous à <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>. Nous lisons tous les messages, dans toutes les langues.</p>
+  </div></details>
+
+  <details id="support"><summary>Comment soutenir l&rsquo;app ?</summary><div>
+    <p>Touchez la tasse de café en haut des écrans principaux, ou allez dans <span class="ui">Paramètres → Soutenir l'appli</span>. Vous pouvez contribuer via PayPal, qui s&rsquo;ouvre dans votre navigateur, noter l&rsquo;app sur Google Play ou la partager avec quelqu&rsquo;un qui gère un stock. Merci.</p>
   </div></details>
 </section>
 

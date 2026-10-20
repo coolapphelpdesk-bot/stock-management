@@ -106,7 +106,7 @@
     </select>
   </div>
   <h1>Stock Management — Ajuda</h1>
-  <p>Como fazer tudo no app &middot; para a versão 1.98 &middot; atualizado em outubro de 2026</p>
+  <p>Como fazer tudo no app &middot; para a versão 1.106 &middot; atualizado em outubro de 2026</p>
 </header>
 
 <p id="offer"></p>
@@ -172,7 +172,7 @@
   </div></details>
 
   <details id="menu"><summary>Onde estão todas as telas? Só vejo quatro embaixo.</summary><div>
-    <p>No celular, a barra inferior mostra o Painel e as três primeiras telas do seu menu. Todo o resto está no menu <span class="ui">&#8942;</span>, no canto superior direito de cada tela: Vender, Inventário, Movimentos, Relatórios, Categorias, Fornecedores, Locais, Etiquetas, Importar, Backup, Lixeira, Acesso remoto e Configurações. No tablet, ficam todas na barra lateral.</p>
+    <p>No celular, a barra inferior mostra o Painel e as três primeiras telas do seu menu. Todo o resto está no menu <span class="ui">&#8942;</span>, no canto superior direito de cada tela: Vender, Contas, Inventário, Movimentos, Relatórios, Categorias, Fornecedores, Locais, Etiquetas, Importar, Backup, Lixeira, Acesso remoto e Configurações. No tablet, ficam todas na barra lateral.</p>
     <p>Para escolher quais telas vão na barra inferior, vá em <span class="ui">Configurações → Configuração dos menus</span> e suba ou desça as telas. Você também pode esconder as que nunca usa (Painel e Configurações sempre ficam).</p>
   </div></details>
 
@@ -234,7 +234,7 @@
   </div></details>
 
   <details id="currency"><summary>Como mudo a moeda?</summary><div>
-    <p><span class="ui">Configurações → Geral → Símbolo da moeda</span>. Digite o símbolo que você usa (por exemplo R$, Kz, MT, &euro;). Isso muda como os preços aparecem; nenhum valor é convertido.</p>
+    <p><span class="ui">Configurações → Geral → Símbolo da moeda</span>. Escolha sua moeda na lista (pesquise pelo nome ou código) ou digite seu próprio símbolo (por exemplo R$, Kz, MT, &euro;). Uma instalação nova começa com a moeda do seu país, mostrada no topo da tela de boas-vindas. Isso muda como os preços aparecem; nenhum valor é convertido.</p>
   </div></details>
 </section>
 
@@ -415,7 +415,11 @@
   </div></details>
 
   <details id="bills"><summary>Onde ficam as notas anteriores? Posso reimprimir uma?</summary><div>
-    <p>Na tela Vender, toque em <span class="ui">Contas</span> no topo. Pesquise por número, cliente ou telefone, filtre por Hoje, 7 dias, 30 dias ou Tudo, e abra uma nota para imprimir ou compartilhar de novo. Ler o código de barras impresso na nota também a abre.</p>
+    <p>Abra <span class="ui">Contas</span> pelo menu <span class="ui">&#8942;</span>, ou toque nele no topo da tela Vender. Pesquise por número, cliente ou telefone, filtre por Hoje, 7 dias, 30 dias ou Tudo, e abra uma nota para imprimir ou compartilhar de novo. Ler o código de barras impresso na nota também a abre.</p>
+  </div></details>
+
+  <details id="credit-payments"><summary>O cliente pode pagar uma conta fiado em parcelas?</summary><div>
+    <p>Sim. Uma conta com pagamento <span class="ui">Fiado</span>, ou com menos recebido que o total, mantém um saldo. Abra-a em <span class="ui">Contas</span> e toque em <span class="ui">Registrar pagamento</span>: o valor, a forma de pagamento e o dia. Cada pagamento aparece na conta com a data, imprime ou compartilha o próprio recibo com o saldo restante, e a conta aparece como <span class="ui">Quitada</span> quando termina. Escolha A receber em <span class="ui">Contas</span> para ver todas as contas com saldo, de qualquer data. Um pagamento lançado por engano pode ser excluído pelo menu dele e restaurado em Lixeira.</p>
   </div></details>
 
   <details id="void-bill"><summary>Como cancelo uma venda ou faço uma devolução?</summary><div>
@@ -474,8 +478,23 @@
     </table>
   </div></details>
 
+  <details id="report-columns"><summary>Posso escolher quais colunas um relatório tem?</summary><div>
+    <p>Sim. Em <span class="ui">Relatórios</span>, toque num relatório e depois em <span class="ui">Escolher</span> ao lado de <span class="ui">Colunas</span>. Ative ou desative cada coluna e use as setas para mudar a ordem. Os relatórios de estoque também oferecem descrição, local, fornecedor, custo e preço de venda, desativados até você ativá-los. A escolha fica guardada para esse relatório, em CSV e em PDF, e os arquivos baixados pelo navegador no acesso remoto também a usam. <span class="ui">Restaurar</span> devolve o relatório às colunas de sempre.</p>
+  </div></details>
+
   <details id="report-design"><summary>Posso colocar meu logo e o nome da empresa nos relatórios PDF?</summary><div>
     <p>Sim. Em <span class="ui">Relatórios</span>, toque em <span class="ui">Design do relatório</span> no topo (também em <span class="ui">Configurações → Relatório PDF</span>). Defina tamanho do papel, orientação, margens, logo, nome da empresa, fontes, estilo da tabela, rodapé, números de página e uma cor de destaque, ou comece por um dos quatro modelos. A prévia é o PDF de verdade.</p>
+  </div></details>
+
+  <details id="product-catalogue"><summary>Como faço um catálogo dos meus produtos (PDF)?</summary><div>
+    <ol>
+      <li>Abra <span class="ui">Relatórios</span> e toque em <span class="ui">Catálogo de produtos</span> no topo.</li>
+      <li>Em <span class="ui">Layout</span>, escolha um layout rápido ou defina colunas e linhas por página. Em <span class="ui">Cartão</span>, escolha o que cada cartão mostra: foto, preço, categoria, descrição, SKU, stock, código de barras. Em <span class="ui">Produtos</span>, a ordem e as categorias incluídas. Em <span class="ui">Páginas</span>, o papel, a capa, o seu logótipo e o rodapé.</li>
+      <li>Toque em <span class="ui">Imprimir</span>, <span class="ui">Guardar PDF</span> ou <span class="ui">Partilhar</span>. A pré-visualização acima das opções é o PDF real.</li>
+    </ol>
+    <p>Para imprimir, a cor <span class="ui">Poupar tinta</span> gasta menos tinta. Para enviar um catálogo grande por chat, escolha <span class="ui">Ficheiro leve</span> em Qualidade das fotos.</p>
+    <p>Em <span class="ui">Cartão</span>, escolha uma <span class="ui">Paleta</span> para a tinta, o papel, a etiqueta de preço e os fundos das fotos, ou toque em <span class="ui">Nova paleta</span> para criar a sua com as cores que quiser.</p>
+    <p>Em <span class="ui">Foto no cartão</span>, escolha <span class="ui">Preencher</span>, <span class="ui">Foto inteira</span> ou <span class="ui">Tamanho da imagem</span>, e depois o tamanho, a <span class="ui">Posição</span> e o lado do cartão.</p>
   </div></details>
 
   <details id="labels"><summary>Como imprimo etiquetas de código de barras ou de preço?</summary><div>
@@ -583,7 +602,7 @@
   </div></details>
 
   <details id="remote-can-do"><summary>O que dá para fazer pelo navegador?</summary><div>
-    <p>O que você permitir: Painel, Produtos (ver, cadastrar, editar), Leitor, Estoque rápido, Inventário, histórico, Relatórios (CSV/PDF), Categorias, Fornecedores, Locais, mover estoque entre locais, imprimir etiquetas e Consultar preço. Backup, importação, a Lixeira, o design de etiquetas, as configurações, as vendas e o próprio Acesso remoto ficam no celular. Nada pode ser apagado pelo navegador.</p>
+    <p>O que você permitir: Painel, Produtos (ver, cadastrar, editar), Leitor, Estoque rápido, Inventário, histórico, Relatórios (CSV/PDF), Contas (ver e baixar em PDF), Categorias, Fornecedores, Locais, mover estoque entre locais, imprimir etiquetas e Consultar preço. Backup, importação, a Lixeira, o design de etiquetas, as configurações, as vendas, cancelar uma conta, registrar um pagamento e o próprio Acesso remoto ficam no celular. Nada pode ser apagado pelo navegador.</p>
     <p>Cada navegador escolhe o próprio modo claro ou escuro, tema, tamanho do texto e visualização da lista em <span class="ui">Exibição</span>.</p>
   </div></details>
 
@@ -676,8 +695,12 @@
   </div></details>
 
   <details id="contact" open><summary>Como faço uma pergunta ou relato um problema?</summary><div>
-    <p>No app: <span class="ui">Configurações → Enviar comentários</span> (ou o balão no topo das telas principais). Escolha o tipo, escreva a mensagem e <strong>coloque seu e-mail no campo <span class="ui">Contato (opcional)</span> se quiser resposta</strong>. Sem ele, lemos sua mensagem mas não conseguimos responder. O envio precisa de internet.</p>
+    <p>No app: <span class="ui">Configurações → Enviar comentários</span> (ou <span class="ui">Enviar comentários</span> no fim do menu &#8942; no topo de qualquer tela). Escolha o tipo, escreva a mensagem e <strong>coloque seu e-mail no campo <span class="ui">Contato (opcional)</span> se quiser resposta</strong>. Sem ele, lemos sua mensagem mas não conseguimos responder. O envio precisa de internet.</p>
     <p>Ou escreva para <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>. Lemos todas as mensagens, em qualquer idioma.</p>
+  </div></details>
+
+  <details id="support"><summary>Como posso apoiar o app?</summary><div>
+    <p>Toque na xícara de café no topo das telas principais ou vá em <span class="ui">Configurações → Apoie o app</span>. Você pode contribuir pelo PayPal, que abre no navegador, avaliar o app no Google Play ou compartilhá-lo com alguém que controla estoque. Obrigado.</p>
   </div></details>
 </section>
 

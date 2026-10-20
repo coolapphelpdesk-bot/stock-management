@@ -106,7 +106,7 @@
     </select>
   </div>
   <h1>Stock Management — Help</h1>
-  <p>How to do everything in the app &middot; written for version 1.98 &middot; updated Oct 2026</p>
+  <p>How to do everything in the app &middot; written for version 1.106 &middot; updated Oct 2026</p>
 </header>
 
 <p id="offer"></p>
@@ -172,7 +172,7 @@
   </div></details>
 
   <details id="menu"><summary>Where are all the screens? I only see four at the bottom.</summary><div>
-    <p>On a phone the bottom bar shows the Dashboard and the first three screens of your menu. Everything else is in the <span class="ui">&#8942;</span> menu at the top right of each screen: Sell, Stocktake, Transactions, Reports, Categories, Suppliers, Locations, Labels, Import, Backup, Trash, Remote access and Settings. On a tablet they are all in the side rail.</p>
+    <p>On a phone the bottom bar shows the Dashboard and the first three screens of your menu. Everything else is in the <span class="ui">&#8942;</span> menu at the top right of each screen: Sell, Bills, Stocktake, Transactions, Reports, Categories, Suppliers, Locations, Labels, Import, Backup, Trash, Remote access and Settings. On a tablet they are all in the side rail.</p>
     <p>To choose which screens get the bottom bar, go to <span class="ui">Settings → Menu configuration</span> and move them up or down. You can hide screens you never use too (Dashboard and Settings always stay).</p>
   </div></details>
 
@@ -234,7 +234,7 @@
   </div></details>
 
   <details id="currency"><summary>How do I change the currency?</summary><div>
-    <p><span class="ui">Settings → General → Currency Symbol</span>. Type the symbol you use (for example $, &euro;, MAD, &#8377;). It changes how prices are shown; it does not convert amounts.</p>
+    <p><span class="ui">Settings → General → Currency Symbol</span>. Pick your currency from the list (search it by name or code), or type a symbol of your own (for example $, &euro;, MAD, &#8377;). A new install starts in the currency of your country, shown at the top of the welcome screen. It changes how prices are shown; it does not convert amounts.</p>
   </div></details>
 </section>
 
@@ -415,7 +415,11 @@
   </div></details>
 
   <details id="bills"><summary>Where are my past bills? Can I reprint one?</summary><div>
-    <p>On the Sell screen, tap <span class="ui">Bills</span> at the top. Search by bill number, customer or phone, filter by Today, 7 days, 30 days or All, then open a bill to print or share it again. Scanning the barcode printed on a bill opens it.</p>
+    <p>Open <span class="ui">Bills</span> from the <span class="ui">&#8942;</span> menu, or tap it at the top of the Sell screen. Search by bill number, customer or phone, filter by Today, 7 days, 30 days or All, then open a bill to print or share it again. Scanning the barcode printed on a bill opens it.</p>
+  </div></details>
+
+  <details id="credit-payments"><summary>Can a customer pay a credit bill in instalments?</summary><div>
+    <p>Yes. A bill whose payment is <span class="ui">On credit</span>, or with less received than the total, keeps a balance. Open it in <span class="ui">Bills</span> and tap <span class="ui">Record payment</span>: enter the amount, how it was paid and the day. Each payment is listed on the bill with its date, prints or shares its own receipt with the balance left, and the bill shows <span class="ui">Paid in full</span> once it is cleared. Pick Owed in <span class="ui">Bills</span> to see every bill that still has a balance, whatever its date. A payment typed by mistake can be deleted from its menu and put back from Trash.</p>
   </div></details>
 
   <details id="void-bill"><summary>How do I cancel a sale or handle a return?</summary><div>
@@ -474,8 +478,23 @@
     </table>
   </div></details>
 
+  <details id="report-columns"><summary>Can I choose which columns a report has?</summary><div>
+    <p>Yes. In <span class="ui">Reports</span>, tap a report, then <span class="ui">Choose</span> beside <span class="ui">Columns</span>. Switch each column on or off and use the arrows to change the order. Stock reports also offer description, location, supplier, cost and selling price, off until you switch them on. The choice is kept for that report, for both CSV and PDF, and files downloaded from a browser through Remote access use it too. <span class="ui">Reset</span> puts the report back to its usual columns.</p>
+  </div></details>
+
   <details id="report-design"><summary>Can I put my logo and company name on PDF reports?</summary><div>
     <p>Yes. In <span class="ui">Reports</span>, tap <span class="ui">Report design</span> at the top (also in <span class="ui">Settings → PDF Report</span>). Set paper size, orientation, margins, logo, company name, fonts, table style, footer, page numbers and an accent colour, or start from one of four presets. The preview is the real PDF.</p>
+  </div></details>
+
+  <details id="product-catalogue"><summary>How do I make a catalogue of my products (PDF)?</summary><div>
+    <ol>
+      <li>Open <span class="ui">Reports</span> and tap <span class="ui">Product catalogue</span> at the top.</li>
+      <li>In <span class="ui">Layout</span>, pick a quick layout or set the columns and rows per page. In <span class="ui">Card</span>, choose what each card shows: photo, price, category, description, SKU, stock, barcode. In <span class="ui">Products</span>, choose the order and which categories go in. In <span class="ui">Pages</span>, set the paper, the cover, your logo and the footer.</li>
+      <li>Tap <span class="ui">Print</span>, <span class="ui">Save PDF</span> or <span class="ui">Share</span>. The preview above the settings is the real PDF.</li>
+    </ol>
+    <p>For printing, the <span class="ui">Ink saver</span> colour uses less ink. To send a big catalogue in a chat, choose <span class="ui">Small file</span> under Photo quality.</p>
+    <p>In <span class="ui">Card</span>, pick a <span class="ui">Palette</span> for the ink, paper, price sticker and photo tiles, or tap <span class="ui">New palette</span> to make your own with any colours.</p>
+    <p>Under <span class="ui">Photo on the card</span>, choose <span class="ui">Fill the tile</span>, <span class="ui">Whole photo</span> or <span class="ui">Image size</span>, then its size, its <span class="ui">Position</span> and which side of the card it is on.</p>
   </div></details>
 
   <details id="labels"><summary>How do I print barcode or price labels?</summary><div>
@@ -583,7 +602,7 @@
   </div></details>
 
   <details id="remote-can-do"><summary>What can people do from the browser?</summary><div>
-    <p>Whatever you allow: Dashboard, Products (view, add, edit), Scanner, Quick stock, Stocktake, History, Reports (CSV/PDF), Categories, Suppliers, Locations, moving stock between locations, printing labels, and Price check. Backup, import, the Trash, label design, settings, selling and Remote access itself stay on the phone. Nothing can be deleted from a browser.</p>
+    <p>Whatever you allow: Dashboard, Products (view, add, edit), Scanner, Quick stock, Stocktake, History, Reports (CSV/PDF), Bills (view and download as PDF), Categories, Suppliers, Locations, moving stock between locations, printing labels, and Price check. Backup, import, the Trash, label design, settings, selling, voiding a bill, recording a payment and Remote access itself stay on the phone. Nothing can be deleted from a browser.</p>
     <p>Each browser can choose its own light or dark mode, theme, text size and list view under <span class="ui">Display</span>.</p>
   </div></details>
 
@@ -676,8 +695,12 @@
   </div></details>
 
   <details id="contact" open><summary>How do I ask a question or report a problem?</summary><div>
-    <p>In the app: <span class="ui">Settings → Send feedback</span> (or the speech bubble at the top of the main screens). Choose the type, write your message, and <strong>put your email in the <span class="ui">Contact (optional)</span> field if you&rsquo;d like an answer</strong>. Without it we can read your message but can&rsquo;t reply. Sending needs an internet connection.</p>
+    <p>In the app: <span class="ui">Settings → Send feedback</span> (or <span class="ui">Send feedback</span> at the bottom of the &#8942; menu at the top of any screen). Choose the type, write your message, and <strong>put your email in the <span class="ui">Contact (optional)</span> field if you&rsquo;d like an answer</strong>. Without it we can read your message but can&rsquo;t reply. Sending needs an internet connection.</p>
     <p>Or email us at <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>. We read every message, in any language.</p>
+  </div></details>
+
+  <details id="support"><summary>How can I support the app?</summary><div>
+    <p>Tap the coffee cup at the top of the main screens, or go to <span class="ui">Settings → Support the app</span>. You can contribute through PayPal, which opens in your browser, rate the app on Google Play, or share it with someone who keeps stock. Thank you.</p>
   </div></details>
 </section>
 

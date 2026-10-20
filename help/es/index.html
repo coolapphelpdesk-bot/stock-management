@@ -106,7 +106,7 @@
     </select>
   </div>
   <h1>Stock Management — Ayuda</h1>
-  <p>Cómo hacer todo en la app &middot; para la versión 1.98 &middot; actualizado en octubre de 2026</p>
+  <p>Cómo hacer todo en la app &middot; para la versión 1.106 &middot; actualizado en octubre de 2026</p>
 </header>
 
 <p id="offer"></p>
@@ -172,7 +172,7 @@
   </div></details>
 
   <details id="menu"><summary>¿Dónde están todas las pantallas? Abajo solo veo cuatro.</summary><div>
-    <p>En un teléfono, la barra inferior muestra el Panel y las tres primeras pantallas de tu menú. Todo lo demás está en el menú <span class="ui">&#8942;</span> arriba a la derecha de cada pantalla: Vender, Inventario, Transacciones, Informes, Categorías, Proveedores, Ubicaciones, Etiquetas, Importar, Copia, Papelera, Acceso remoto y Ajustes. En una tableta están todas en el riel lateral.</p>
+    <p>En un teléfono, la barra inferior muestra el Panel y las tres primeras pantallas de tu menú. Todo lo demás está en el menú <span class="ui">&#8942;</span> arriba a la derecha de cada pantalla: Vender, Facturas, Inventario, Transacciones, Informes, Categorías, Proveedores, Ubicaciones, Etiquetas, Importar, Copia, Papelera, Acceso remoto y Ajustes. En una tableta están todas en el riel lateral.</p>
     <p>Para elegir qué pantallas van en la barra inferior, ve a <span class="ui">Ajustes → Configuración del menú</span> y súbelas o bájalas. También puedes ocultar las que nunca usas (Panel y Ajustes siempre se quedan).</p>
   </div></details>
 
@@ -234,7 +234,7 @@
   </div></details>
 
   <details id="currency"><summary>¿Cómo cambio la moneda?</summary><div>
-    <p><span class="ui">Ajustes → General → Símbolo de moneda</span>. Escribe el símbolo que usas (por ejemplo $, &euro;, MXN, S/). Cambia cómo se muestran los precios; no convierte importes.</p>
+    <p><span class="ui">Ajustes → General → Símbolo de moneda</span>. Elige tu moneda de la lista (búscala por nombre o código) o escribe tu propio símbolo (por ejemplo $, &euro;, MXN, S/). Una instalación nueva empieza con la moneda de tu país, que se muestra arriba en la pantalla de bienvenida. Cambia cómo se muestran los precios; no convierte importes.</p>
   </div></details>
 </section>
 
@@ -415,7 +415,11 @@
   </div></details>
 
   <details id="bills"><summary>¿Dónde están mis facturas anteriores? ¿Puedo reimprimir una?</summary><div>
-    <p>En la pantalla Vender, toca <span class="ui">Facturas</span> arriba. Busca por número de factura, cliente o teléfono, filtra por Hoy, 7 días, 30 días o Todo, y abre una factura para imprimirla o compartirla otra vez. Escanear el código de barras impreso en una factura la abre.</p>
+    <p>Abre <span class="ui">Facturas</span> desde el menú <span class="ui">&#8942;</span>, o tócalo arriba en la pantalla Vender. Busca por número de factura, cliente o teléfono, filtra por Hoy, 7 días, 30 días o Todo, y abre una factura para imprimirla o compartirla otra vez. Escanear el código de barras impreso en una factura la abre.</p>
+  </div></details>
+
+  <details id="credit-payments"><summary>¿Un cliente puede pagar una factura a crédito en abonos?</summary><div>
+    <p>Sí. Una factura con forma de pago <span class="ui">A crédito</span>, o con menos recibido que el total, conserva un saldo. Ábrela en <span class="ui">Facturas</span> y toca <span class="ui">Registrar abono</span>: escribe el monto, la forma de pago y el día. Cada abono aparece en la factura con su fecha, imprime o comparte su propio comprobante con el saldo restante, y la factura aparece como <span class="ui">Pagada por completo</span> cuando se cancela. Elige Por cobrar en <span class="ui">Facturas</span> para ver todas las facturas con saldo, sea cual sea su fecha. Un abono registrado por error se elimina desde su menú y se recupera desde la Papelera.</p>
   </div></details>
 
   <details id="void-bill"><summary>¿Cómo anulo una venta o gestiono una devolución?</summary><div>
@@ -474,8 +478,23 @@
     </table>
   </div></details>
 
+  <details id="report-columns"><summary>¿Puedo elegir qué columnas tiene un informe?</summary><div>
+    <p>Sí. En <span class="ui">Informes</span>, toca un informe y luego <span class="ui">Elegir</span> junto a <span class="ui">Columnas</span>. Activa o desactiva cada columna y usa las flechas para cambiar el orden. Los informes de existencias también ofrecen descripción, ubicación, proveedor, coste y precio de venta, desactivados hasta que los actives. La elección se guarda para ese informe, en CSV y en PDF, y también la usan los archivos descargados desde un navegador con el acceso remoto. <span class="ui">Restablecer</span> devuelve el informe a sus columnas habituales.</p>
+  </div></details>
+
   <details id="report-design"><summary>¿Puedo poner mi logo y el nombre de mi empresa en los informes PDF?</summary><div>
     <p>Sí. En <span class="ui">Informes</span>, toca <span class="ui">Diseño del informe</span> arriba (también en <span class="ui">Ajustes → Informe PDF</span>). Ajusta el tamaño del papel, la orientación, los márgenes, el logo, el nombre de la empresa, las fuentes, el estilo de la tabla, el pie, los números de página y un color de acento, o empieza con uno de los cuatro diseños predefinidos. La vista previa es el PDF real.</p>
+  </div></details>
+
+  <details id="product-catalogue"><summary>¿Cómo hago un catálogo de mis productos (PDF)?</summary><div>
+    <ol>
+      <li>Abre <span class="ui">Informes</span> y toca <span class="ui">Catálogo de productos</span> arriba.</li>
+      <li>En <span class="ui">Diseño</span>, elige un diseño rápido o fija columnas y filas por página. En <span class="ui">Tarjeta</span>, elige qué muestra cada tarjeta: foto, precio, categoría, descripción, SKU, stock, código de barras. En <span class="ui">Productos</span>, el orden y qué categorías entran. En <span class="ui">Páginas</span>, el papel, la portada, tu logo y el pie de página.</li>
+      <li>Toca <span class="ui">Imprimir</span>, <span class="ui">Guardar PDF</span> o <span class="ui">Compartir</span>. La vista previa sobre los ajustes es el PDF real.</li>
+    </ol>
+    <p>Para imprimir, el color <span class="ui">Ahorro de tinta</span> gasta menos tinta. Para enviar un catálogo grande por chat, elige <span class="ui">Archivo ligero</span> en Calidad de las fotos.</p>
+    <p>En <span class="ui">Tarjeta</span>, elige una <span class="ui">Paleta</span> para la tinta, el papel, la etiqueta de precio y los fondos de foto, o toca <span class="ui">Nueva paleta</span> para crear la tuya con los colores que quieras.</p>
+    <p>En <span class="ui">Foto en la tarjeta</span>, elige <span class="ui">Llenar el espacio</span>, <span class="ui">Foto completa</span> o <span class="ui">Tamaño de la imagen</span>, y luego su tamaño, su <span class="ui">Posición</span> y en qué lado de la tarjeta va.</p>
   </div></details>
 
   <details id="labels"><summary>¿Cómo imprimo etiquetas con código de barras o precio?</summary><div>
@@ -583,7 +602,7 @@
   </div></details>
 
   <details id="remote-can-do"><summary>¿Qué se puede hacer desde el navegador?</summary><div>
-    <p>Lo que tú permitas: Panel, Productos (ver, añadir, editar), Escanear, Stock rápido, Inventario, historial, Informes (CSV/PDF), Categorías, Proveedores, Ubicaciones, mover stock entre ubicaciones, imprimir etiquetas y Consultar precio. Las copias, la importación, la Papelera, el diseño de etiquetas, los ajustes, las ventas y el propio Acceso remoto se quedan en el teléfono. Desde un navegador no se puede borrar nada.</p>
+    <p>Lo que tú permitas: Panel, Productos (ver, añadir, editar), Escanear, Stock rápido, Inventario, historial, Informes (CSV/PDF), Facturas (ver y descargar en PDF), Categorías, Proveedores, Ubicaciones, mover stock entre ubicaciones, imprimir etiquetas y Consultar precio. Las copias, la importación, la Papelera, el diseño de etiquetas, los ajustes, las ventas, anular una factura, registrar un pago y el propio Acceso remoto se quedan en el teléfono. Desde un navegador no se puede borrar nada.</p>
     <p>Cada navegador puede elegir su propio modo claro u oscuro, tema, tamaño de texto y vista de lista en <span class="ui">Pantalla</span>.</p>
   </div></details>
 
@@ -676,8 +695,12 @@
   </div></details>
 
   <details id="contact" open><summary>¿Cómo hago una pregunta o informo de un problema?</summary><div>
-    <p>En la app: <span class="ui">Ajustes → Enviar comentarios</span> (o el bocadillo de arriba en las pantallas principales). Elige el tipo, escribe tu mensaje y <strong>pon tu correo en el campo <span class="ui">Contacto (opcional)</span> si quieres una respuesta</strong>. Sin él podemos leer tu mensaje, pero no responderte. Para enviarlo hace falta conexión a internet.</p>
+    <p>En la app: <span class="ui">Ajustes → Enviar comentarios</span> (o <span class="ui">Enviar comentarios</span> al final del menú &#8942; de arriba, en cualquier pantalla). Elige el tipo, escribe tu mensaje y <strong>pon tu correo en el campo <span class="ui">Contacto (opcional)</span> si quieres una respuesta</strong>. Sin él podemos leer tu mensaje, pero no responderte. Para enviarlo hace falta conexión a internet.</p>
     <p>O escríbenos a <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>. Leemos todos los mensajes, en cualquier idioma.</p>
+  </div></details>
+
+  <details id="support"><summary>¿Cómo puedo apoyar la app?</summary><div>
+    <p>Toca la taza de café de arriba en las pantallas principales, o ve a <span class="ui">Ajustes → Apoya la app</span>. Puedes aportar con PayPal, que se abre en tu navegador, valorar la app en Google Play o compartirla con alguien que lleve un inventario. Gracias.</p>
   </div></details>
 </section>
 

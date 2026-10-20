@@ -106,7 +106,7 @@
     </select>
   </div>
   <h1>Stock Management 帮助</h1>
-  <p>应用里每件事怎么做 &middot; 适用于 1.98 版 &middot; 2026 年 10 月更新</p>
+  <p>应用里每件事怎么做 &middot; 适用于 1.106 版 &middot; 2026 年 10 月更新</p>
 </header>
 
 <p id="offer"></p>
@@ -172,7 +172,7 @@
   </div></details>
 
   <details id="menu"><summary>所有界面在哪里？底部只有四个。</summary><div>
-    <p>在手机上，底部栏显示仪表盘和菜单中的前三个界面。其余界面都在每个界面右上角的 <span class="ui">&#8942;</span> 菜单里：销售、盘点、交易、报表、分类、供应商、位置、标签、导入、备份、回收站、远程访问和设置。在平板上，它们都在侧边栏中。</p>
+    <p>在手机上，底部栏显示仪表盘和菜单中的前三个界面。其余界面都在每个界面右上角的 <span class="ui">&#8942;</span> 菜单里：销售、账单、盘点、交易、报表、分类、供应商、位置、标签、导入、备份、回收站、远程访问和设置。在平板上，它们都在侧边栏中。</p>
     <p>要选择哪些界面放在底部栏，进入 <span class="ui">设置 → 菜单配置</span>，把它们上移或下移。从不使用的界面也可以隐藏（仪表盘和设置始终保留）。</p>
   </div></details>
 
@@ -234,7 +234,7 @@
   </div></details>
 
   <details id="currency"><summary>如何更改货币？</summary><div>
-    <p><span class="ui">设置 → 常规 → 货币符号</span>。输入你使用的符号（例如 ¥、HK$、NT$、$）。这只改变价格的显示方式，不会换算金额。</p>
+    <p><span class="ui">设置 → 常规 → 货币符号</span>。从列表中选择货币（可按名称或代码搜索），或输入自定义符号（例如 ¥、HK$、NT$、$）。新安装会默认使用你所在国家/地区的货币，显示在欢迎页顶部。这只改变价格的显示方式，不会换算金额。</p>
   </div></details>
 </section>
 
@@ -415,7 +415,11 @@
   </div></details>
 
   <details id="bills"><summary>以前的单据在哪里？可以重新打印吗？</summary><div>
-    <p>在销售界面点击顶部的 <span class="ui">账单</span>。可按单号、顾客或电话搜索，按今天、7 天、30 天或全部筛选，打开单据即可再次打印或分享。扫描单据上印的条码也能打开它。</p>
+    <p>从<span class="ui">&#8942;</span>菜单打开 <span class="ui">账单</span>，或在销售界面点击顶部的 <span class="ui">账单</span>。可按单号、顾客或电话搜索，按今天、7 天、30 天或全部筛选，打开单据即可再次打印或分享。扫描单据上印的条码也能打开它。</p>
+  </div></details>
+
+  <details id="credit-payments"><summary>客户可以分期支付赊账账单吗？</summary><div>
+    <p>可以。以<span class="ui">赊账</span>方式售出、或实收少于总额的账单会保留余额。在<span class="ui">账单</span>中打开它并点按<span class="ui">记录付款</span>：填写金额、付款方式和日期。每笔付款都会连同日期列在账单上，可打印或分享带剩余余额的收据，付清后账单显示<span class="ui">已全部付清</span>。在<span class="ui">账单</span>中选择欠款，可查看所有尚有余额的账单，不限日期。记错的付款可从其菜单删除，并可从回收站恢复。</p>
   </div></details>
 
   <details id="void-bill"><summary>如何取消一笔销售或处理退货？</summary><div>
@@ -474,8 +478,23 @@
     </table>
   </div></details>
 
+  <details id="report-columns"><summary>可以选择报表包含哪些列吗？</summary><div>
+    <p>可以。在 <span class="ui">报表</span> 中点按一个报表，然后点按 <span class="ui">列</span> 旁边的 <span class="ui">选择</span>。逐列打开或关闭，并用箭头调整顺序。库存报表还提供描述、位置、供应商、成本价和售价，默认关闭，需要时再打开。此选择按报表保存，CSV 和 PDF 都适用，通过远程访问从浏览器下载的文件也会使用它。<span class="ui">重置</span> 可恢复报表的默认列。</p>
+  </div></details>
+
   <details id="report-design"><summary>可以在 PDF 报表上放公司标志和名称吗？</summary><div>
     <p>可以。在 <span class="ui">报表</span> 中点击顶部的 <span class="ui">报表版式</span>（也可在 <span class="ui">设置 → PDF 报表</span> 中进入）。可设置纸张大小、方向、页边距、标志、公司名称、字体、表格样式、页脚、页码和强调色，或从四个预设之一开始。预览就是真实的 PDF。</p>
+  </div></details>
+
+  <details id="product-catalogue"><summary>怎样为我的产品制作目录（PDF）？</summary><div>
+    <ol>
+      <li>打开<span class="ui">报表</span>，点按顶部的<span class="ui">产品目录</span>。</li>
+      <li>在<span class="ui">布局</span>中选一个快速布局，或设置每页的列数和行数。在<span class="ui">卡片</span>中选择每张卡片显示什么：图片、价格、分类、描述、SKU、库存、条形码。在<span class="ui">产品</span>中设置排序和包含哪些分类。在<span class="ui">页面</span>中设置纸张、封面、标志和页脚。</li>
+      <li>点按<span class="ui">打印</span>、<span class="ui">保存 PDF</span>或<span class="ui">分享</span>。设置上方的预览就是真实的 PDF。</li>
+    </ol>
+    <p>打印时，<span class="ui">省墨</span>颜色更省墨。要在聊天中发送较大的目录，请在图片质量中选择<span class="ui">小文件</span>。</p>
+    <p>在<span class="ui">卡片</span>中，为文字、纸张、价签和图片底色选择一套<span class="ui">配色</span>，或点按<span class="ui">新建配色</span>用任意颜色创建自己的配色。</p>
+    <p>在<span class="ui">卡片上的图片</span>中选择<span class="ui">填满</span>、<span class="ui">完整显示</span>或<span class="ui">按图片尺寸</span>，再设置大小、<span class="ui">位置</span>以及图片在卡片的哪一侧。</p>
   </div></details>
 
   <details id="labels"><summary>如何打印条码标签或价格标签？</summary><div>
@@ -583,7 +602,7 @@
   </div></details>
 
   <details id="remote-can-do"><summary>在浏览器里能做什么？</summary><div>
-    <p>你允许的内容：仪表盘、产品（查看、添加、编辑）、扫描、快速库存、盘点、记录、报表（CSV/PDF）、分类、供应商、位置、在位置之间移动库存、打印标签和查价。备份、导入、回收站、标签设计、设置、销售以及远程访问本身只能在手机上使用。在浏览器中无法删除任何东西。</p>
+    <p>你允许的内容：仪表盘、产品（查看、添加、编辑）、扫描、快速库存、盘点、记录、报表（CSV/PDF）、账单（查看并下载 PDF）、分类、供应商、位置、在位置之间移动库存、打印标签和查价。备份、导入、回收站、标签设计、设置、销售、作废账单、记录付款以及远程访问本身只能在手机上使用。在浏览器中无法删除任何东西。</p>
     <p>每个浏览器都可以在 <span class="ui">显示</span> 中选择自己的浅色或深色模式、主题、文字大小和列表视图。</p>
   </div></details>
 
@@ -676,8 +695,12 @@
   </div></details>
 
   <details id="contact" open><summary>如何提问或报告问题？</summary><div>
-    <p>在应用中：<span class="ui">设置 → 发送反馈</span>（或主要界面顶部的对话气泡）。选择类型，写下你的消息，<strong>如果希望得到回复，请在 <span class="ui">联系方式（可选）</span> 栏填写你的邮箱</strong>。没有邮箱，我们能读到你的消息，但无法回复。发送需要联网。</p>
+    <p>在应用中：<span class="ui">设置 → 发送反馈</span>（或任意界面顶部 &#8942; 菜单最下方的 <span class="ui">发送反馈</span>）。选择类型，写下你的消息，<strong>如果希望得到回复，请在 <span class="ui">联系方式（可选）</span> 栏填写你的邮箱</strong>。没有邮箱，我们能读到你的消息，但无法回复。发送需要联网。</p>
     <p>也可以发邮件到 <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>。我们会阅读每一条消息，任何语言都可以。</p>
+  </div></details>
+
+  <details id="support"><summary>如何支持本应用？</summary><div>
+    <p>点按主要界面顶部的咖啡杯，或前往 <span class="ui">设置 → 支持本应用</span>。你可以通过在浏览器中打开的 PayPal 提供支持，在 Google Play 上为应用评分，或分享给需要管理库存的人。谢谢！</p>
   </div></details>
 </section>
 

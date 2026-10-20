@@ -106,7 +106,7 @@
     </select>
   </div>
   <h1>Bantuan Stock Management</h1>
-  <p>Cara melakukan semua hal di aplikasi &middot; untuk versi 1.98 &middot; diperbarui Oktober 2026</p>
+  <p>Cara melakukan semua hal di aplikasi &middot; untuk versi 1.106 &middot; diperbarui Oktober 2026</p>
 </header>
 
 <p id="offer"></p>
@@ -172,7 +172,7 @@
   </div></details>
 
   <details id="menu"><summary>Di mana semua layarnya? Di bawah hanya ada empat.</summary><div>
-    <p>Di ponsel, bilah bawah menampilkan Dasbor dan tiga layar pertama di menu Anda. Sisanya ada di menu <span class="ui">&#8942;</span> di kanan atas setiap layar: Jual, Stok opname, Transaksi, Laporan, Kategori, Pemasok, Lokasi, Label, Impor, Cadangan, Sampah, Akses jarak jauh, dan Pengaturan. Di tablet, semuanya ada di bilah samping.</p>
+    <p>Di ponsel, bilah bawah menampilkan Dasbor dan tiga layar pertama di menu Anda. Sisanya ada di menu <span class="ui">&#8942;</span> di kanan atas setiap layar: Jual, Nota, Stok opname, Transaksi, Laporan, Kategori, Pemasok, Lokasi, Label, Impor, Cadangan, Sampah, Akses jarak jauh, dan Pengaturan. Di tablet, semuanya ada di bilah samping.</p>
     <p>Untuk memilih layar di bilah bawah, buka <span class="ui">Pengaturan → Konfigurasi menu</span> lalu geser ke atas atau ke bawah. Layar yang tidak pernah dipakai juga bisa disembunyikan (Dasbor dan Pengaturan selalu ada).</p>
   </div></details>
 
@@ -234,7 +234,7 @@
   </div></details>
 
   <details id="currency"><summary>Bagaimana mengganti mata uang?</summary><div>
-    <p><span class="ui">Pengaturan → Umum → Simbol Mata Uang</span>. Ketik simbol yang Anda pakai (misalnya Rp, RM, $). Ini hanya mengubah tampilan harga; nominal tidak dikonversi.</p>
+    <p><span class="ui">Pengaturan → Umum → Simbol Mata Uang</span>. Pilih mata uang dari daftar (cari menurut nama atau kode), atau ketik simbol sendiri (misalnya Rp, RM, $). Instalasi baru dimulai dengan mata uang negara Anda, yang tampil di bagian atas layar sambutan. Ini hanya mengubah tampilan harga; nominal tidak dikonversi.</p>
   </div></details>
 </section>
 
@@ -415,7 +415,11 @@
   </div></details>
 
   <details id="bills"><summary>Di mana nota-nota lama? Bisakah dicetak ulang?</summary><div>
-    <p>Di layar Jual, ketuk <span class="ui">Nota</span> di atas. Cari berdasarkan nomor nota, pelanggan, atau telepon, filter Hari ini, 7 hari, 30 hari, atau Semua, lalu buka nota untuk mencetak atau membagikannya lagi. Memindai barcode yang tercetak di nota juga membukanya.</p>
+    <p>Buka <span class="ui">Nota</span> dari menu <span class="ui">&#8942;</span>, atau ketuk di bagian atas layar Jual. Cari berdasarkan nomor nota, pelanggan, atau telepon, filter Hari ini, 7 hari, 30 hari, atau Semua, lalu buka nota untuk mencetak atau membagikannya lagi. Memindai barcode yang tercetak di nota juga membukanya.</p>
+  </div></details>
+
+  <details id="credit-payments"><summary>Bisakah pelanggan membayar nota utang dengan cicilan?</summary><div>
+    <p>Bisa. Nota dengan cara bayar <span class="ui">Utang</span>, atau yang diterima kurang dari total, menyimpan sisa tagihan. Buka di <span class="ui">Nota</span> lalu ketuk <span class="ui">Catat pembayaran</span>: isi jumlah, cara bayar, dan tanggalnya. Setiap pembayaran tampil di nota dengan tanggalnya, mencetak atau membagikan kuitansinya sendiri dengan sisa tagihan, dan nota ditandai <span class="ui">Lunas</span> setelah selesai. Pilih Belum lunas di <span class="ui">Nota</span> untuk melihat semua nota yang masih bersisa, dari tanggal berapa pun. Pembayaran yang salah dicatat bisa dihapus dari menunya dan dikembalikan dari Sampah.</p>
   </div></details>
 
   <details id="void-bill"><summary>Bagaimana membatalkan penjualan atau mengurus retur?</summary><div>
@@ -474,8 +478,23 @@
     </table>
   </div></details>
 
+  <details id="report-columns"><summary>Bisakah saya memilih kolom yang ada di laporan?</summary><div>
+    <p>Bisa. Di <span class="ui">Laporan</span>, ketuk sebuah laporan, lalu <span class="ui">Pilih</span> di samping <span class="ui">Kolom</span>. Aktifkan atau matikan setiap kolom dan pakai panah untuk mengubah urutannya. Laporan stok juga menyediakan deskripsi, lokasi, pemasok, harga pokok, dan harga jual, yang mati sampai Anda mengaktifkannya. Pilihan ini disimpan untuk laporan itu, untuk CSV maupun PDF, dan file yang diunduh dari browser lewat akses jarak jauh juga memakainya. <span class="ui">Atur ulang</span> mengembalikan laporan ke kolom biasanya.</p>
+  </div></details>
+
   <details id="report-design"><summary>Bisakah logo dan nama perusahaan saya ada di laporan PDF?</summary><div>
     <p>Bisa. Di <span class="ui">Laporan</span>, ketuk <span class="ui">Desain laporan</span> di atas (juga ada di <span class="ui">Pengaturan → Laporan PDF</span>). Atur ukuran kertas, orientasi, margin, logo, nama perusahaan, huruf, gaya tabel, kaki halaman, nomor halaman, dan warna aksen, atau mulai dari salah satu dari empat desain siap pakai. Pratinjau adalah PDF yang sebenarnya.</p>
+  </div></details>
+
+  <details id="product-catalogue"><summary>Bagaimana membuat katalog produk saya (PDF)?</summary><div>
+    <ol>
+      <li>Buka <span class="ui">Laporan</span> lalu ketuk <span class="ui">Katalog produk</span> di atas.</li>
+      <li>Di <span class="ui">Tata letak</span>, pilih tata letak cepat atau atur kolom dan baris per halaman. Di <span class="ui">Kartu</span>, pilih isi tiap kartu: foto, harga, kategori, deskripsi, SKU, stok, barcode. Di <span class="ui">Produk</span>, urutan dan kategori yang dimasukkan. Di <span class="ui">Halaman</span>, kertas, sampul, logo, dan kaki halaman.</li>
+      <li>Ketuk <span class="ui">Cetak</span>, <span class="ui">Simpan PDF</span>, atau <span class="ui">Bagikan</span>. Pratinjau di atas pengaturan adalah PDF yang sebenarnya.</li>
+    </ol>
+    <p>Untuk dicetak, warna <span class="ui">Hemat tinta</span> lebih hemat tinta. Untuk mengirim katalog besar lewat chat, pilih <span class="ui">File kecil</span> di Kualitas foto.</p>
+    <p>Di <span class="ui">Kartu</span>, pilih <span class="ui">Palet</span> untuk tinta, kertas, stiker harga, dan latar foto, atau ketuk <span class="ui">Palet baru</span> untuk membuat palet sendiri dengan warna apa pun.</p>
+    <p>Di <span class="ui">Foto di kartu</span>, pilih <span class="ui">Penuhi kotak</span>, <span class="ui">Foto utuh</span>, atau <span class="ui">Ukuran gambar</span>, lalu ukurannya, <span class="ui">Posisi</span>, dan sisi kartu.</p>
   </div></details>
 
   <details id="labels"><summary>Bagaimana mencetak label barcode atau label harga?</summary><div>
@@ -583,7 +602,7 @@
   </div></details>
 
   <details id="remote-can-do"><summary>Apa saja yang bisa dilakukan dari browser?</summary><div>
-    <p>Apa pun yang Anda izinkan: Dasbor, Produk (lihat, tambah, ubah), Pemindai, Stok cepat, Stok opname, riwayat, Laporan (CSV/PDF), Kategori, Pemasok, Lokasi, memindahkan stok antarlokasi, mencetak label, dan Cek harga. Cadangan, impor, Sampah, desain label, pengaturan, penjualan, dan Akses jarak jauh itu sendiri tetap di ponsel. Tidak ada yang bisa dihapus dari browser.</p>
+    <p>Apa pun yang Anda izinkan: Dasbor, Produk (lihat, tambah, ubah), Pemindai, Stok cepat, Stok opname, riwayat, Laporan (CSV/PDF), Nota (lihat dan unduh sebagai PDF), Kategori, Pemasok, Lokasi, memindahkan stok antarlokasi, mencetak label, dan Cek harga. Cadangan, impor, Sampah, desain label, pengaturan, penjualan, membatalkan nota, mencatat pembayaran, dan Akses jarak jauh itu sendiri tetap di ponsel. Tidak ada yang bisa dihapus dari browser.</p>
     <p>Setiap browser bisa memilih mode terang atau gelap, tema, ukuran teks, dan tampilan daftarnya sendiri di <span class="ui">Tampilan</span>.</p>
   </div></details>
 
@@ -676,8 +695,12 @@
   </div></details>
 
   <details id="contact" open><summary>Bagaimana bertanya atau melaporkan masalah?</summary><div>
-    <p>Di aplikasi: <span class="ui">Pengaturan → Kirim masukan</span> (atau gelembung obrolan di atas layar utama). Pilih jenisnya, tulis pesan, dan <strong>isi email Anda di kolom <span class="ui">Kontak (opsional)</span> jika ingin dibalas</strong>. Tanpa itu kami bisa membaca pesan Anda, tetapi tidak bisa membalas. Mengirim butuh koneksi internet.</p>
+    <p>Di aplikasi: <span class="ui">Pengaturan → Kirim masukan</span> (atau <span class="ui">Kirim masukan</span> di bagian bawah menu &#8942; di atas layar mana pun). Pilih jenisnya, tulis pesan, dan <strong>isi email Anda di kolom <span class="ui">Kontak (opsional)</span> jika ingin dibalas</strong>. Tanpa itu kami bisa membaca pesan Anda, tetapi tidak bisa membalas. Mengirim butuh koneksi internet.</p>
     <p>Atau kirim email ke <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>. Kami membaca setiap pesan, dalam bahasa apa pun.</p>
+  </div></details>
+
+  <details id="support"><summary>Bagaimana cara mendukung aplikasi ini?</summary><div>
+    <p>Ketuk cangkir kopi di bagian atas layar utama, atau buka <span class="ui">Pengaturan → Dukung aplikasi</span>. Anda bisa berkontribusi lewat PayPal yang terbuka di browser, memberi rating di Google Play, atau membagikannya kepada orang yang mengelola stok. Terima kasih.</p>
   </div></details>
 </section>
 
