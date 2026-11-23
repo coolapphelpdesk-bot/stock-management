@@ -107,7 +107,7 @@
     </select>
   </div>
   <h1>Stock Management — Ayuda</h1>
-  <p>Cómo hacer todo en la app &middot; para la versión 1.117 &middot; actualizado en noviembre de 2026</p>
+  <p>Cómo hacer todo en la app &middot; para la versión 1.119 &middot; actualizado en noviembre de 2026</p>
 </header>
 
 <p id="offer"></p>
@@ -155,6 +155,7 @@
   <details id="internet"><summary>¿Necesito una cuenta o conexión a internet?</summary><div>
     <p>No. La app funciona sin conexión y no tiene inicio de sesión. Tus datos no salen del dispositivo salvo que tú los envíes a algún sitio (una copia de seguridad, un informe exportado).</p>
     <p>Solo algunas cosas usan la red: abrir la página de Google Play, las copias a un servidor FTP o SMB, y Acceso remoto (que usa tu Wi-Fi local, no internet).</p>
+    <p>Las copias a Google Drive también usan internet, y solo van a tu propia cuenta de Google.</p>
   </div></details>
 
   <details id="first-screen"><summary>La primera pantalla me pregunta cómo quiero empezar. ¿Qué elijo?</summary><div>
@@ -575,6 +576,16 @@
     <p>Cada copia va a todos tus destinos. Si uno deja de funcionar, recibes una notificación y un aviso en el Panel hasta que se arregle.</p>
   </div></details>
 
+  <details id="drive-backup"><summary>¿Cómo hago copias en Google Drive?</summary><div>
+    <ol>
+      <li>En <span class="ui">Copia</span>, toca <span class="ui">Añadir destino</span> y elige <span class="ui">Google Drive</span>.</li>
+      <li>Toca <span class="ui">Iniciar sesión con Google</span>, elige tu cuenta de Google y permite el acceso.</li>
+      <li>Deja el nombre de la carpeta o cámbialo, guarda y toca <span class="ui">Hacer copia ahora</span>. Activa <span class="ui">Copias de seguridad automáticas</span> para tener una copia cada día.</li>
+    </ol>
+    <p>La app solo ve los archivos que crea allí, nada más de tu Drive. Las copias van directamente de tu teléfono a tu propio Drive; nosotros nunca las vemos.</p>
+    <p>Para dejarlo, borra el destino: se retira el acceso de la app y las copias que ya están en tu Drive se quedan allí. También puedes retirar el acceso en <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>. Las copias en Google Drive necesitan los servicios de Google Play.</p>
+  </div></details>
+
   <details id="restore"><summary>¿Cómo restauro una copia?</summary><div>
     <p>En <span class="ui">Copia</span>, busca la copia en la lista de copias guardadas y toca <span class="ui">Restaurar</span>. Eliges qué datos recuperar y ves lo que contiene antes de que cambie nada. Restaurar sustituye tus datos actuales por los de la copia.</p>
     <p>«Esta copia se hizo con una versión más reciente de la app. Actualiza la app y vuelve a restaurarla.» significa que antes tienes que instalar la última versión desde Google Play.</p>
@@ -585,6 +596,7 @@
       <li>En el teléfono antiguo, haz una copia en algún sitio al que llegue el nuevo: un servidor FTP/SMB, una carpeta sincronizada con la nube, o un archivo que copies tú.</li>
       <li>En el teléfono nuevo, instala Stock Management. En la pantalla de bienvenida elige <span class="ui">Restaurar una copia</span> y luego <span class="ui">Desde un archivo</span>, <span class="ui">Desde un servidor</span> o <span class="ui">Desde una carpeta</span>.</li>
     </ol>
+    <p>¿Hiciste copias en Google Drive? En el teléfono nuevo elige <span class="ui">Restaurar una copia</span>, luego <span class="ui">Google Drive</span>, e inicia sesión con la misma cuenta de Google.</p>
     <p>Las contraseñas de los servidores no se guardan dentro de las copias, por seguridad. Vuelve a escribirlas en el teléfono nuevo.</p>
   </div></details>
 

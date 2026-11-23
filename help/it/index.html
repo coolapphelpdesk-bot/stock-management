@@ -107,7 +107,7 @@
     </select>
   </div>
   <h1>Gestione Magazzino — Aiuto</h1>
-  <p>Come fare tutto nell&rsquo;app &middot; scritto per la versione 1.117 &middot; aggiornato a novembre 2026</p>
+  <p>Come fare tutto nell&rsquo;app &middot; scritto per la versione 1.119 &middot; aggiornato a novembre 2026</p>
 </header>
 
 <p id="offer"></p>
@@ -155,6 +155,7 @@
   <details id="internet"><summary>Mi servono un account o una connessione a internet?</summary><div>
     <p>No. L&rsquo;app funziona completamente offline e non richiede di accedere. I tuoi dati non lasciano mai il dispositivo, a meno che non sia tu a inviarli da qualche parte (un backup, un report esportato).</p>
     <p>Solo poche cose usano la rete: aprire la pagina di Google Play, i backup su un server FTP o SMB, e l&rsquo;Accesso remoto (che usa il tuo Wi-Fi locale, non internet).</p>
+    <p>Anche i backup su Google Drive usano internet, e vanno solo nel tuo account Google.</p>
   </div></details>
 
   <details id="first-screen"><summary>La prima schermata mi chiede come voglio iniziare. Cosa scelgo?</summary><div>
@@ -576,6 +577,16 @@
     <p>Ogni backup va in tutte le tue destinazioni. Se una smette di funzionare, ricevi una notifica e un banner nella Dashboard finché non viene risolto.</p>
   </div></details>
 
+  <details id="drive-backup"><summary>Come faccio il backup su Google Drive?</summary><div>
+    <ol>
+      <li>In <span class="ui">Backup</span>, tocca <span class="ui">Aggiungi destinazione</span> e scegli <span class="ui">Google Drive</span>.</li>
+      <li>Tocca <span class="ui">Accedi con Google</span>, scegli il tuo account Google e consenti l&rsquo;accesso.</li>
+      <li>Lascia il nome della cartella o cambialo, salva, poi tocca <span class="ui">Esegui backup ora</span>. Attiva <span class="ui">Backup automatici</span> per una copia ogni giorno.</li>
+    </ol>
+    <p>L'app vede solo i file che crea lì, nient'altro del tuo Drive. I backup vanno direttamente dal tuo telefono al tuo Drive; noi non li vediamo mai.</p>
+    <p>Per smettere, elimina la destinazione: l&rsquo;accesso dell&rsquo;app viene revocato e i backup già nel tuo Drive restano lì. Puoi anche revocare l&rsquo;accesso su <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>. I backup su Google Drive richiedono i servizi Google Play.</p>
+  </div></details>
+
   <details id="restore"><summary>Come ripristino un backup?</summary><div>
     <p>In <span class="ui">Backup</span>, trova il backup nell&rsquo;elenco dei salvati e tocca <span class="ui">Ripristina</span>. Scegli quali dati recuperare e vedi cosa contiene prima che cambi qualcosa. Il ripristino sostituisce i tuoi dati attuali con quelli del backup.</p>
     <p>&ldquo;Questo backup è stato creato da una versione più recente dell'app. Aggiorna l'app, poi ripristinalo.&rdquo; significa che il telefono ha bisogno prima dell&rsquo;ultima versione da Google Play.</p>
@@ -586,6 +597,7 @@
       <li>Sul vecchio telefono, fai il backup in un posto che il nuovo telefono può raggiungere: un server FTP/SMB, una cartella sincronizzata nel cloud o un file che copi.</li>
       <li>Sul nuovo telefono, installa Gestione Magazzino. Nella schermata di benvenuto scegli <span class="ui">Ripristina un backup</span>, poi <span class="ui">Da un file</span>, <span class="ui">Da un server</span> o <span class="ui">Da una cartella</span>.</li>
     </ol>
+    <p>Hai fatto il backup su Google Drive? Sul nuovo telefono scegli <span class="ui">Ripristina un backup</span>, poi <span class="ui">Google Drive</span>, e accedi con lo stesso account Google.</p>
     <p>Per la tua sicurezza, le password dei server non vengono salvate nei backup. Inseriscile di nuovo sul nuovo telefono.</p>
   </div></details>
 

@@ -107,7 +107,7 @@
     </select>
   </div>
   <h1>Stock Management 帮助</h1>
-  <p>应用里每件事怎么做 &middot; 适用于 1.117 版 &middot; 2026 年 11 月更新</p>
+  <p>应用里每件事怎么做 &middot; 适用于 1.119 版 &middot; 2026 年 11 月更新</p>
 </header>
 
 <p id="offer"></p>
@@ -155,6 +155,7 @@
   <details id="internet"><summary>需要账号或网络吗？</summary><div>
     <p>不需要。应用可以完全离线使用，没有登录。除非你自己把数据发到别处（例如备份或导出的报表），数据不会离开设备。</p>
     <p>只有少数功能会用到网络：打开 Google Play 页面、备份到 FTP 或 SMB 服务器，以及远程访问（它使用的是你的本地 Wi-Fi，而不是互联网）。</p>
+    <p>备份到 Google Drive 也会使用网络，而且只会存到您自己的 Google 账号中。</p>
   </div></details>
 
   <details id="first-screen"><summary>第一个界面问我想如何开始，该选哪个？</summary><div>
@@ -575,6 +576,16 @@
     <p>每次备份都会写入你所有的目标位置。如果其中一个不再可用，你会收到通知，仪表盘上也会显示横幅，直到问题解决。</p>
   </div></details>
 
+  <details id="drive-backup"><summary>如何备份到 Google Drive？</summary><div>
+    <ol>
+      <li>在 <span class="ui">备份</span> 中点按 <span class="ui">添加目标位置</span>，选择 <span class="ui">Google 云端硬盘</span>。</li>
+      <li>点按 <span class="ui">使用 Google 账号登录</span>，选择您的 Google 账号并允许访问。</li>
+      <li>保留或修改文件夹名称，保存，然后点按 <span class="ui">立即备份</span>。开启 <span class="ui">自动备份</span> 即可每天自动备份。</li>
+    </ol>
+    <p>本应用只能看到它自己在那里创建的文件，看不到您云端硬盘中的其他内容。 备份直接从您的手机传到您自己的 Drive，我们看不到它们。</p>
+    <p>如需停止，删除该目标即可：应用的访问权限会被撤销，已在 Drive 中的备份仍会保留。您也可以在 <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a> 撤销访问权限。Google Drive 备份需要 Google Play 服务。</p>
+  </div></details>
+
   <details id="restore"><summary>如何恢复备份？</summary><div>
     <p>在 <span class="ui">备份</span> 中找到备份，点击 <span class="ui">恢复</span>。在任何数据改变之前，你可以选择恢复哪些数据并查看备份内容。恢复会用备份中的数据替换当前数据。</p>
     <p>“此备份由更新版本的应用创建。请先更新应用，再恢复。”表示需要先从 Google Play 安装最新版本。</p>
@@ -585,6 +596,7 @@
       <li>在旧手机上，把备份保存到新手机能访问的地方：FTP/SMB 服务器、与云同步的文件夹，或你自己复制过去的文件。</li>
       <li>在新手机上安装 Stock Management。在欢迎界面选择 <span class="ui">恢复备份</span>，然后选择 <span class="ui">从文件</span>、<span class="ui">从服务器</span> 或 <span class="ui">从文件夹</span>。</li>
     </ol>
+    <p>备份在 Google Drive 上？在新手机上选择 <span class="ui">恢复备份</span>，再选择 <span class="ui">Google 云端硬盘</span>，并登录同一个 Google 账号。</p>
     <p>为了安全，服务器密码不会保存在备份里。请在新手机上重新输入。</p>
   </div></details>
 

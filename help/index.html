@@ -107,7 +107,7 @@
     </select>
   </div>
   <h1>Stock Management — Help</h1>
-  <p>How to do everything in the app &middot; written for version 1.117 &middot; updated Nov 2026</p>
+  <p>How to do everything in the app &middot; written for version 1.119 &middot; updated Nov 2026</p>
 </header>
 
 <p id="offer"></p>
@@ -155,6 +155,7 @@
   <details id="internet"><summary>Do I need an account or an internet connection?</summary><div>
     <p>No. The app works fully offline and has no sign-in. Your data never leaves the device unless you send it somewhere yourself (a backup, an exported report).</p>
     <p>Only a few things use a network: opening the Google Play page, backups to an FTP or SMB server, and Remote access (which uses your local Wi-Fi, not the internet).</p>
+    <p>Backups to Google Drive use the internet too, and go only to your own Google account.</p>
   </div></details>
 
   <details id="first-screen"><summary>The first screen asks how I want to start. What should I choose?</summary><div>
@@ -575,6 +576,16 @@
     <p>Every backup goes to all your destinations. If one stops working, you get a notification and a Dashboard banner until it is fixed.</p>
   </div></details>
 
+  <details id="drive-backup"><summary>How do I back up to Google Drive?</summary><div>
+    <ol>
+      <li>In <span class="ui">Backup</span>, tap <span class="ui">Add destination</span> and choose <span class="ui">Google Drive</span>.</li>
+      <li>Tap <span class="ui">Sign in with Google</span>, pick your Google account and allow access.</li>
+      <li>Keep the folder name or change it, save, then tap <span class="ui">Back up now</span>. Turn on <span class="ui">Automatic backups</span> for a copy every day.</li>
+    </ol>
+    <p>The app can only see the files it creates there — nothing else in your Drive. Backups go straight from your phone to your own Drive; we never see them.</p>
+    <p>To stop, delete the destination: the app&rsquo;s access is removed, and the backups already in your Drive stay there. You can also remove access at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>. Google Drive backups need Google Play services.</p>
+  </div></details>
+
   <details id="restore"><summary>How do I restore a backup?</summary><div>
     <p>In <span class="ui">Backup</span>, find the backup in the saved list and tap <span class="ui">Restore</span>. You choose which data to bring back and see what it contains before anything changes. Restoring replaces your current data with the backup&rsquo;s.</p>
     <p>&ldquo;This backup was made by a newer version of the app. Update the app, then restore it.&rdquo; means the phone needs the latest version from Google Play first.</p>
@@ -585,6 +596,7 @@
       <li>On the old phone, back up to somewhere the new phone can reach: an FTP/SMB server, a cloud-synced folder, or a file you copy across.</li>
       <li>On the new phone, install Stock Management. On the welcome screen choose <span class="ui">Restore a backup</span>, then <span class="ui">From a file</span>, <span class="ui">From a server</span> or <span class="ui">From a folder</span>.</li>
     </ol>
+    <p>Backed up to Google Drive? On the new phone choose <span class="ui">Restore a backup</span>, then <span class="ui">Google Drive</span>, and sign in with the same Google account.</p>
     <p>Server passwords are not saved inside backups, for your security. Enter them again on the new phone.</p>
   </div></details>
 

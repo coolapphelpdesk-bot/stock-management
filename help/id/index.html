@@ -107,7 +107,7 @@
     </select>
   </div>
   <h1>Bantuan Stock Management</h1>
-  <p>Cara melakukan semua hal di aplikasi &middot; untuk versi 1.117 &middot; diperbarui November 2026</p>
+  <p>Cara melakukan semua hal di aplikasi &middot; untuk versi 1.119 &middot; diperbarui November 2026</p>
 </header>
 
 <p id="offer"></p>
@@ -155,6 +155,7 @@
   <details id="internet"><summary>Apakah perlu akun atau koneksi internet?</summary><div>
     <p>Tidak. Aplikasi berjalan sepenuhnya offline dan tanpa login. Data Anda tidak keluar dari perangkat kecuali Anda sendiri mengirimnya (cadangan, laporan yang diekspor).</p>
     <p>Hanya beberapa hal yang memakai jaringan: membuka halaman Google Play, cadangan ke server FTP atau SMB, dan Akses jarak jauh (yang memakai Wi-Fi lokal Anda, bukan internet).</p>
+    <p>Cadangan ke Google Drive juga memakai internet, dan hanya masuk ke akun Google Anda sendiri.</p>
   </div></details>
 
   <details id="first-screen"><summary>Layar pertama menanyakan cara memulai. Pilih yang mana?</summary><div>
@@ -575,6 +576,16 @@
     <p>Setiap cadangan dikirim ke semua tujuan Anda. Jika salah satunya berhenti bekerja, Anda mendapat notifikasi dan spanduk di Dasbor sampai diperbaiki.</p>
   </div></details>
 
+  <details id="drive-backup"><summary>Bagaimana cara mencadangkan ke Google Drive?</summary><div>
+    <ol>
+      <li>Di <span class="ui">Cadangan</span>, ketuk <span class="ui">Tambah tujuan</span> lalu pilih <span class="ui">Google Drive</span>.</li>
+      <li>Ketuk <span class="ui">Masuk dengan Google</span>, pilih akun Google Anda dan izinkan akses.</li>
+      <li>Biarkan nama folder atau ubah, simpan, lalu ketuk <span class="ui">Cadangkan sekarang</span>. Nyalakan <span class="ui">Pencadangan otomatis</span> agar ada salinan setiap hari.</li>
+    </ol>
+    <p>Aplikasi hanya dapat melihat file yang dibuatnya di sana — tidak ada yang lain di Drive Anda. Cadangan langsung dikirim dari ponsel Anda ke Drive Anda sendiri; kami tidak pernah melihatnya.</p>
+    <p>Untuk berhenti, hapus tujuan tersebut: akses aplikasi dicabut, dan cadangan yang sudah ada di Drive tetap di sana. Anda juga bisa mencabut akses di <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>. Cadangan Google Drive memerlukan layanan Google Play.</p>
+  </div></details>
+
   <details id="restore"><summary>Bagaimana memulihkan cadangan?</summary><div>
     <p>Di <span class="ui">Cadangan</span>, cari cadangan di daftar lalu ketuk <span class="ui">Pulihkan</span>. Anda memilih data mana yang dikembalikan dan melihat isinya sebelum ada yang berubah. Pemulihan mengganti data Anda saat ini dengan data cadangan.</p>
     <p>"Cadangan ini dibuat oleh versi aplikasi yang lebih baru. Perbarui aplikasi, lalu pulihkan kembali." artinya Anda perlu memasang versi terbaru dari Google Play dulu.</p>
@@ -585,6 +596,7 @@
       <li>Di ponsel lama, cadangkan ke tempat yang bisa dijangkau ponsel baru: server FTP/SMB, folder yang tersinkron ke cloud, atau file yang Anda salin sendiri.</li>
       <li>Di ponsel baru, pasang Stock Management. Di layar sambutan pilih <span class="ui">Pulihkan cadangan</span>, lalu <span class="ui">Dari file</span>, <span class="ui">Dari server</span>, atau <span class="ui">Dari folder</span>.</li>
     </ol>
+    <p>Mencadangkan ke Google Drive? Di ponsel baru pilih <span class="ui">Pulihkan cadangan</span>, lalu <span class="ui">Google Drive</span>, dan masuk dengan akun Google yang sama.</p>
     <p>Demi keamanan, kata sandi server tidak disimpan di dalam cadangan. Masukkan lagi di ponsel baru.</p>
   </div></details>
 

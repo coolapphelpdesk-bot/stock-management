@@ -107,7 +107,7 @@
     </select>
   </div>
   <h1>Stock Management — Ajuda</h1>
-  <p>Como fazer tudo no app &middot; para a versão 1.117 &middot; atualizado em novembro de 2026</p>
+  <p>Como fazer tudo no app &middot; para a versão 1.119 &middot; atualizado em novembro de 2026</p>
 </header>
 
 <p id="offer"></p>
@@ -155,6 +155,7 @@
   <details id="internet"><summary>Preciso de uma conta ou de internet?</summary><div>
     <p>Não. O app funciona totalmente off-line e não tem login. Seus dados só saem do aparelho se você mesmo enviá-los para algum lugar (um backup, um relatório exportado).</p>
     <p>Só algumas funções usam a rede: abrir a página do Google Play, backups para um servidor FTP ou SMB, e o Acesso remoto (que usa o seu Wi-Fi local, não a internet).</p>
+    <p>Os backups para o Google Drive também usam a internet, e vão apenas para a sua própria conta Google.</p>
   </div></details>
 
   <details id="first-screen"><summary>A primeira tela pergunta como quero começar. O que escolho?</summary><div>
@@ -575,6 +576,16 @@
     <p>Cada backup vai para todos os seus destinos. Se um parar de funcionar, você recebe uma notificação e um aviso no Painel até ser resolvido.</p>
   </div></details>
 
+  <details id="drive-backup"><summary>Como faço backup no Google Drive?</summary><div>
+    <ol>
+      <li>Em <span class="ui">Backup</span>, toque em <span class="ui">Adicionar destino</span> e escolha <span class="ui">Google Drive</span>.</li>
+      <li>Toque em <span class="ui">Entrar com o Google</span>, escolha sua conta Google e permita o acesso.</li>
+      <li>Mantenha o nome da pasta ou mude-o, salve e toque em <span class="ui">Fazer cópia agora</span>. Ative <span class="ui">Backups automáticos</span> para ter uma cópia todo dia.</li>
+    </ol>
+    <p>O app só vê os arquivos que cria lá, nada mais do seu Drive. Os backups vão direto do seu celular para o seu próprio Drive; nós nunca os vemos.</p>
+    <p>Para parar, apague o destino: o acesso do app é removido e os backups que já estão no seu Drive continuam lá. Você também pode remover o acesso em <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>. Backups no Google Drive precisam dos serviços do Google Play.</p>
+  </div></details>
+
   <details id="restore"><summary>Como restauro um backup?</summary><div>
     <p>Em <span class="ui">Backup</span>, encontre o backup na lista e toque em <span class="ui">Restaurar</span>. Você escolhe quais dados trazer de volta e vê o que ele contém antes de qualquer mudança. Restaurar substitui seus dados atuais pelos do backup.</p>
     <p>"Este backup foi feito por uma versão mais recente do app. Atualize o app e restaure-o novamente." significa que antes é preciso instalar a versão mais recente pelo Google Play.</p>
@@ -585,6 +596,7 @@
       <li>No celular antigo, faça backup num lugar que o novo alcance: um servidor FTP/SMB, uma pasta sincronizada com a nuvem, ou um arquivo que você copie.</li>
       <li>No celular novo, instale o Stock Management. Na tela de boas-vindas escolha <span class="ui">Restaurar uma cópia</span> e depois <span class="ui">De um ficheiro</span>, <span class="ui">De um servidor</span> ou <span class="ui">De uma pasta</span>.</li>
     </ol>
+    <p>Fez backup no Google Drive? No celular novo escolha <span class="ui">Restaurar uma cópia</span>, depois <span class="ui">Google Drive</span>, e entre com a mesma conta Google.</p>
     <p>As senhas dos servidores não ficam salvas dentro dos backups, por segurança. Digite-as de novo no celular novo.</p>
   </div></details>
 

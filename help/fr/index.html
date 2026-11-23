@@ -107,7 +107,7 @@
     </select>
   </div>
   <h1>Stock Management — Aide</h1>
-  <p>Tout faire dans l&rsquo;app &middot; pour la version 1.117 &middot; mis à jour en novembre 2026</p>
+  <p>Tout faire dans l&rsquo;app &middot; pour la version 1.119 &middot; mis à jour en novembre 2026</p>
 </header>
 
 <p id="offer"></p>
@@ -155,6 +155,7 @@
   <details id="internet"><summary>Faut-il un compte ou une connexion Internet ?</summary><div>
     <p>Non. L&rsquo;app fonctionne entièrement hors ligne et n&rsquo;a pas de connexion à un compte. Vos données ne quittent l&rsquo;appareil que si vous les envoyez vous-même quelque part (une sauvegarde, un rapport exporté).</p>
     <p>Seules quelques fonctions utilisent le réseau : ouvrir la page Google Play, les sauvegardes vers un serveur FTP ou SMB, et l&rsquo;Accès à distance (qui passe par votre Wi-Fi local, pas par Internet).</p>
+    <p>Les sauvegardes vers Google Drive utilisent aussi internet, et ne vont que sur votre propre compte Google.</p>
   </div></details>
 
   <details id="first-screen"><summary>Le premier écran me demande comment commencer. Que choisir ?</summary><div>
@@ -575,6 +576,16 @@
     <p>Chaque sauvegarde va vers toutes vos destinations. Si l&rsquo;une ne fonctionne plus, vous recevez une notification et un bandeau sur l&rsquo;écran Accueil jusqu&rsquo;à ce que ce soit réparé.</p>
   </div></details>
 
+  <details id="drive-backup"><summary>Comment sauvegarder sur Google Drive ?</summary><div>
+    <ol>
+      <li>Dans <span class="ui">Sauvegarde</span>, touchez <span class="ui">Ajouter une destination</span> et choisissez <span class="ui">Google Drive</span>.</li>
+      <li>Touchez <span class="ui">Se connecter avec Google</span>, choisissez votre compte Google et autorisez l&rsquo;accès.</li>
+      <li>Gardez le nom du dossier ou changez-le, enregistrez, puis touchez <span class="ui">Sauvegarder maintenant</span>. Activez <span class="ui">Sauvegardes automatiques</span> pour une copie chaque jour.</li>
+    </ol>
+    <p>L'application ne voit que les fichiers qu'elle y crée, rien d'autre dans votre Drive. Les sauvegardes vont directement de votre téléphone à votre propre Drive ; nous ne les voyons jamais.</p>
+    <p>Pour arrêter, supprimez la destination : l&rsquo;accès de l&rsquo;app est retiré et les sauvegardes déjà dans votre Drive y restent. Vous pouvez aussi retirer l&rsquo;accès sur <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>. Les sauvegardes Google Drive nécessitent les services Google Play.</p>
+  </div></details>
+
   <details id="restore"><summary>Comment restaurer une sauvegarde ?</summary><div>
     <p>Dans <span class="ui">Sauvegarde</span>, trouvez la sauvegarde dans la liste et touchez <span class="ui">Restaurer</span>. Vous choisissez quelles données récupérer et voyez ce qu&rsquo;elle contient avant que quoi que ce soit change. La restauration remplace vos données actuelles par celles de la sauvegarde.</p>
     <p>« Cette sauvegarde provient d’une version plus récente de l’application. Mettez l’application à jour, puis restaurez-la. » signifie qu&rsquo;il faut d&rsquo;abord installer la dernière version depuis Google Play.</p>
@@ -585,6 +596,7 @@
       <li>Sur l&rsquo;ancien téléphone, sauvegardez vers un endroit accessible au nouveau : un serveur FTP/SMB, un dossier synchronisé avec le cloud, ou un fichier que vous copiez.</li>
       <li>Sur le nouveau téléphone, installez Stock Management. Sur l&rsquo;écran d&rsquo;accueil, choisissez <span class="ui">Restaurer une sauvegarde</span>, puis <span class="ui">Depuis un fichier</span>, <span class="ui">Depuis un serveur</span> ou <span class="ui">Depuis un dossier</span>.</li>
     </ol>
+    <p>Vous sauvegardez sur Google Drive ? Sur le nouveau téléphone, choisissez <span class="ui">Restaurer une sauvegarde</span>, puis <span class="ui">Google Drive</span>, et connectez-vous avec le même compte Google.</p>
     <p>Les mots de passe des serveurs ne sont pas enregistrés dans les sauvegardes, par sécurité. Saisissez-les à nouveau sur le nouveau téléphone.</p>
   </div></details>
 
