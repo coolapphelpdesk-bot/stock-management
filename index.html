@@ -56,23 +56,23 @@
 
 <header>
   <h1>Privacy Policy</h1>
-  <p>Stock Management &middot; last updated <time datetime="2026-11-17">November 17, 2026</time></p>
+  <p>Stock Management &middot; last updated <time datetime="2026-11-23">November 23, 2026</time></p>
 </header>
 
 <section class="card">
   <h2>1. Summary</h2>
-  <p>Stock Management (&ldquo;the app&rdquo;) is an offline inventory-management utility with on-device barcode scanning, published by <strong>TeamCoolApps</strong>.</p>
+  <p>Stock Management (&ldquo;the app&rdquo;) is an inventory-management app with on-device barcode scanning, published by <strong>TeamCoolApps</strong>.</p>
   <ul>
-    <li>The app collects <strong>no personal data</strong> and operates no servers.</li>
-    <li>The developer does not declare the <code>INTERNET</code> permission for its own features; the app does not contact any developer-operated server.</li>
+    <li>The developer collects <strong>no personal data</strong> from the app and operates no servers that the app talks to. There are no developer accounts.</li>
+    <li>Your inventory stays on your device. It leaves the device only when <strong>you</strong> send it somewhere: a backup to a destination you set up (a folder, your own FTP or SMB server, or your own Google Drive), a report you export or share, or a browser you let in through Remote Access on your local network.</li>
     <li>Barcode recognition runs <strong>on-device</strong> via Google ML Kit; camera frames and decoded barcode values are never transmitted by the app.</li>
-    <li>The app contains <strong>no advertising, no analytics, and no crash-reporting SDKs</strong>.</li>
+    <li>The app contains <strong>no analytics and no crash-reporting SDKs</strong>.</li>
   </ul>
 </section>
 
 <section class="card">
   <h2>2. Data we collect</h2>
-  <p><strong>None.</strong> The developer does not collect personal data, telemetry, identifiers, device information, IP addresses, advertising IDs, or usage analytics. There are no user accounts and the developer operates no servers that the app communicates with.</p>
+  <p><strong>None.</strong> The developer does not collect personal data, telemetry, identifiers, device information, IP addresses, advertising IDs, or usage analytics, and never receives your inventory, your backups or your Google account details.</p>
   <p><strong>News sign-up on our website (optional, separate from the app).</strong> If you choose to leave your email address on <a href="https://coolapp-stock-management.web.app/news/">coolapp-stock-management.web.app/news/</a> &mdash; the app&rsquo;s Support and What&rsquo;s new screens link to it &mdash; we keep that address, the language of the page, whether you offered to test new versions, and the date you signed up. It is stored in Google Cloud Firestore (Google Firebase, EU region) and used only to email you news about the app and, if you asked, the link to join its testers on Google Play; a tester&rsquo;s address is also added to the app&rsquo;s tester list in Google Play Console. It is never sold or shared with anyone else. Nothing is sent from the app itself: the form is a web page opened in your browser.</p>
 </section>
 
@@ -81,56 +81,84 @@
   <table>
     <thead><tr><th>Item</th><th>Where</th><th>Sent off device?</th></tr></thead>
     <tbody>
-      <tr><td>Inventory items, stock counts, and movement history you enter</td><td>App-private Room database</td><td><span class="badge">Never</span></td></tr>
-      <tr><td>Scanned barcode values (when linked to an item)</td><td>App-private Room database</td><td><span class="badge">Never</span></td></tr>
+      <tr><td>Products, stock, movements, bills, customers, expenses and photos you enter</td><td>App-private Room database</td><td>Only in a backup, export or Remote Access session you start</td></tr>
+      <tr><td>Scanned barcode values (when linked to an item)</td><td>App-private Room database</td><td>Same as above</td></tr>
+      <tr><td>Backup destinations (server address, user name, Google account email)</td><td>App-private Room database; passwords encrypted with a key held in the Android Keystore of this device</td><td><span class="badge">Never</span> to the developer</td></tr>
+      <tr><td>Remote Access users and their passwords</td><td>App-private Room database; passwords stored only as one-way hashes</td><td><span class="badge">Never</span></td></tr>
       <tr><td>App preferences</td><td>App-private DataStore</td><td><span class="badge">Never</span></td></tr>
     </tbody>
   </table>
 </section>
 
 <section class="card">
-  <h2>4. Permissions used</h2>
+  <h2>4. Google Drive backups (optional)</h2>
+  <p>If you add Google Drive as a backup destination, you sign in with your own Google account through Google Play services, and the app asks for one permission only: <code>drive.file</code>. With it the app can see and change <strong>only the files it created itself</strong> &mdash; a &ldquo;Stock Management&rdquo; folder and the backup files in it. It cannot see, read or change any other file in your Drive.</p>
+  <ul>
+    <li><strong>What is sent:</strong> your backup files, uploaded from your device straight to your own Drive. They never pass through the developer, who has no access to your Drive or your backups.</li>
+    <li><strong>What the app reads from Google:</strong> your account&rsquo;s email address (to label the destination) and the list of backup files in its own folder (to show and restore them).</li>
+    <li><strong>What is kept on the device:</strong> the account email and the folder&rsquo;s id. Sign-in tokens are held by Google Play services, not by the app.</li>
+    <li><strong>Removing access:</strong> deleting the Drive destination in the app revokes the app&rsquo;s access; you can also remove it at any time at <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">myaccount.google.com/permissions</a>. Backups already in your Drive stay there until you delete them.</li>
+  </ul>
+  <p>Stock Management&rsquo;s use and transfer of information received from Google APIs to any other app will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements. Data from Google APIs is used only to provide the backup feature you set up; it is not used for advertising, not sold, not shared with anyone, and not read by any person.</p>
+</section>
+
+<section class="card">
+  <h2>5. Other backups, exports and Remote Access</h2>
+  <ul>
+    <li><strong>Backups to a folder, FTP/FTPS or SMB server.</strong> Sent only to the folder or server you enter. The developer never receives them.</li>
+    <li><strong>Exported reports, bills, labels and catalogues.</strong> Saved or shared only where you choose.</li>
+    <li><strong>Remote Access (off by default).</strong> When you switch it on, the app runs a small web server on your phone, reachable only from private local-network addresses (your Wi-Fi or your phone&rsquo;s hotspot), so other devices you allow can use the app in a browser. Browsers must sign in as a user you created, and the app keeps an activity log of sign-ins and changes on the device. Nothing is reachable from the internet and nothing is sent to the developer.</li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2>6. Permissions used</h2>
   <table>
     <thead><tr><th>Permission</th><th>Reason</th></tr></thead>
     <tbody>
-      <tr><td><code>CAMERA</code></td><td>Scan product barcodes. Used only while you have the scanner screen open; camera frames are processed on-device and not stored.</td></tr>
-      <tr><td><code>VIBRATE</code></td><td>Provide brief haptic feedback on a successful scan.</td></tr>
-      <tr><td><code>POST_NOTIFICATIONS</code> (Android 13+)</td><td>Show optional in-app reminders (low-stock alerts, scheduled stock-take tasks). Revocable at any time in system settings.</td></tr>
+      <tr><td><code>CAMERA</code></td><td>Scan product barcodes and take product photos. Used only while you have the scanner or photo screen open; scan frames are processed on-device and not stored.</td></tr>
+      <tr><td><code>INTERNET</code>, <code>ACCESS_NETWORK_STATE</code>, <code>ACCESS_WIFI_STATE</code></td><td>Backups to the destinations you set up (Google Drive, FTP, SMB), and Remote Access on your local network (finding the phone&rsquo;s Wi-Fi address).</td></tr>
+      <tr><td><code>FOREGROUND_SERVICE</code>, <code>FOREGROUND_SERVICE_SPECIAL_USE</code>, <code>WAKE_LOCK</code></td><td>Keep Remote Access running, with a visible notification, while you have it switched on.</td></tr>
+      <tr><td><code>USE_BIOMETRIC</code> / <code>USE_FINGERPRINT</code></td><td>Ask for your device&rsquo;s own screen lock before opening Remote Access settings. The app never sees your fingerprint or PIN.</td></tr>
+      <tr><td><code>POST_NOTIFICATIONS</code> (Android 13+)</td><td>Optional low-stock alerts, stock-take reminders and backup-failure notices. Revocable at any time in system settings.</td></tr>
+      <tr><td><code>VIBRATE</code></td><td>Brief haptic feedback on a successful scan.</td></tr>
     </tbody>
   </table>
-  <p>The app does <strong>not</strong> declare its own <code>INTERNET</code> permission. It does not request location, contacts, microphone, phone state, or any other sensitive permission.</p>
+  <p>The app does not request location, contacts, microphone, phone state, or any other sensitive permission.</p>
 </section>
 
 <section class="card">
-  <h2>5. Network activity and third parties</h2>
-  <p>The app does not contact any developer-operated server. There is no developer telemetry, no remote configuration, and no remote backup.</p>
-  <p><strong>Google ML Kit (barcode scanning).</strong> The app uses Google ML Kit for barcode recognition. The recognition itself runs entirely on-device &mdash; camera frames and decoded barcode values are never sent to Google or to the developer. The app links the Google Play Services variant of ML Kit, which Google Play Services may use to download or update the on-device barcode-scanning model in the background. That model download is managed by Google Play Services on your device, not by the app, and is governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google&rsquo;s privacy policy</a> and the <a href="https://developers.google.com/ml-kit/terms" target="_blank" rel="noopener">ML Kit terms</a>.</p>
-  <p>The app contains no advertising SDKs, no analytics SDKs, no crash-reporting SDKs, and no social or attribution SDKs.</p>
+  <h2>7. Third-party services</h2>
+  <p><strong>Google ML Kit (barcode scanning).</strong> Recognition runs entirely on-device &mdash; camera frames and decoded barcode values are never sent to Google or to the developer. Google Play services may download or update the on-device barcode model in the background; that is managed by Google Play services, not by the app.</p>
+  <p><strong>Google Play (in-app reviews and updates).</strong> The app uses Google Play&rsquo;s own libraries to offer a rating card and to install app updates. These are handled by the Google Play Store app on your device.</p>
+  <p><strong>Google Drive</strong> &mdash; only if you set it up; see section 4.</p>
+  <p><strong>Google Mobile Ads SDK.</strong> The app package includes this SDK, but it is not started before 1 January 2028: until then it requests no ads and sends nothing. This policy will be updated before that changes.</p>
+  <p>These services are governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google&rsquo;s privacy policy</a>. The app contains no analytics, crash-reporting, social or attribution SDKs.</p>
 </section>
 
 <section class="card">
-  <h2>6. Children&rsquo;s privacy</h2>
+  <h2>8. Children&rsquo;s privacy</h2>
   <p>The app is intended for business and productivity use and is not directed at children under 13. The developer does not knowingly collect personal information from children.</p>
 </section>
 
 <section class="card">
-  <h2>7. Data retention and deletion</h2>
-  <p>Inventory data, scanned barcodes, and settings remain on your device until you delete them inside the app, clear the app&rsquo;s storage in <em>Android Settings &rarr; Apps &rarr; Stock Management &rarr; Storage</em>, or uninstall the app.</p>
+  <h2>9. Data retention and deletion</h2>
+  <p>Data in the app remains on your device until you delete it inside the app, clear the app&rsquo;s storage in <em>Android Settings &rarr; Apps &rarr; Stock Management &rarr; Storage</em>, or uninstall the app. Backups you made stay wherever you sent them (a folder, your server, your Google Drive) until you delete them there.</p>
   <p>An address left on the website&rsquo;s news sign-up stays on the list until you ask for it to be removed: write to <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a> and it is deleted from the list (and from the tester list, if it was on it).</p>
 </section>
 
 <section class="card">
-  <h2>8. Security</h2>
-  <p>All inventory data is stored in the app&rsquo;s private database, protected by Android&rsquo;s built-in application sandboxing and not accessible to other apps. The app is distributed through the Google Play Store, which verifies the developer signing key on every update.</p>
+  <h2>10. Security</h2>
+  <p>Your data is stored in the app&rsquo;s private database, protected by Android&rsquo;s application sandboxing. Backup-server passwords are encrypted with a key that never leaves this device&rsquo;s Android Keystore; Remote Access passwords are stored only as salted one-way hashes. Uploads to Google Drive use HTTPS. The app is distributed through Google Play, which verifies the developer signing key on every update.</p>
 </section>
 
 <section class="card">
-  <h2>9. Changes to this policy</h2>
-  <p>If any material aspect of how the app handles data ever changes, this page will be updated and the &ldquo;last updated&rdquo; date above will be bumped. Continued use after a change constitutes acceptance.</p>
+  <h2>11. Changes to this policy</h2>
+  <p>If any material aspect of how the app handles data changes, this page will be updated and the &ldquo;last updated&rdquo; date above will be bumped. Continued use after a change constitutes acceptance.</p>
 </section>
 
 <section class="card">
-  <h2>10. Contact</h2>
+  <h2>12. Contact</h2>
   <p>Questions or feedback? Email <a href="mailto:coolapphelpdesk@gmail.com">coolapphelpdesk@gmail.com</a>.</p>
 </section>
 
